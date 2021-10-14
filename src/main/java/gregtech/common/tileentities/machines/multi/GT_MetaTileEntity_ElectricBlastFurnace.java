@@ -20,8 +20,10 @@ import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_StructureUtility;
 import gregtech.api.util.GT_Utility;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -43,6 +45,7 @@ import static gregtech.api.util.GT_StructureUtility.ofHatchAdderOptional;
 
 public class GT_MetaTileEntity_ElectricBlastFurnace extends GT_MetaTileEntity_AbstractMultiFurnace<GT_MetaTileEntity_ElectricBlastFurnace> implements IConstructable {
     private int mHeatingCapacity = 0;
+    private boolean isBussesSeparate = false;
     protected final ArrayList<GT_MetaTileEntity_Hatch_Output> mPollutionOutputHatches = new ArrayList<>();
     protected final FluidStack[] pollutionFluidStacks = {Materials.CarbonDioxide.getGas(1000),
             Materials.CarbonMonoxide.getGas(1000), Materials.SulfurDioxide.getGas(1000)};
@@ -142,71 +145,79 @@ public class GT_MetaTileEntity_ElectricBlastFurnace extends GT_MetaTileEntity_Ab
 
     @Override
     public boolean checkRecipe(ItemStack aStack) {
+        if(isBussesSeparate) {
+            FluidStack[] tFluids = getStoredFluids().toArray(new FluidStack[0]);
+            for (GT_MetaTileEntity_Hatch_InputBus tBus : mInputBusses) {
+                ArrayList<ItemStack> tInputs = new ArrayList<>();
+                tBus.mRecipeMap = getRecipeMap();
+
+                if (isValidMetaTileEntity(tBus)) {
+                    for (int i = tBus.getBaseMetaTileEntity().getSizeInventory() - 1; i >= 0; i--) {
+                        if (tBus.getBaseMetaTileEntity().getStackInSlot(i) != null) {
+                            tInputs.add(tBus.getBaseMetaTileEntity().getStackInSlot(i));
+                        }
+                    }
+                }
+                ItemStack[] tItems = tInputs.toArray(new ItemStack[0]);
+                if (processRecipe(tItems, tFluids)) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            return processRecipe(getCompactedInputs(), getCompactedFluids());
+        }
+
+    }
+    protected boolean processRecipe(ItemStack[] tItems, FluidStack[] tFluids) {
+        if (tItems.length <= 0)
+            return false;
+
         long tVoltage = getMaxInputVoltage();
         byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
+
+        GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sBlastRecipes.findRecipe(
+                getBaseMetaTileEntity(),
+                false,
+                V[tTier],
+                tFluids,
+                tItems
+        );
+
+        if (tRecipe == null)
+            return false;
+        if (this.mHeatingCapacity < tRecipe.mSpecialValue)
+            return false;
+        if (!tRecipe.isRecipeInputEqual(true, tFluids, tItems))
+            return false;
+        //In case recipe is too OP for that machine
+        if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+            return false;
+
         this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
 
-        FluidStack[] tFluids = getStoredFluids().toArray(new FluidStack[0]);
-
-        for (GT_MetaTileEntity_Hatch_InputBus tBus : mInputBusses) {
-            ArrayList<ItemStack> tInputs = new ArrayList<>();
-            tBus.mRecipeMap = getRecipeMap();
-
-            if (isValidMetaTileEntity(tBus)) {
-                for (int i = tBus.getBaseMetaTileEntity().getSizeInventory() - 1; i >= 0; i--) {
-                    if (tBus.getBaseMetaTileEntity().getStackInSlot(i) != null) {
-                        tInputs.add(tBus.getBaseMetaTileEntity().getStackInSlot(i));
-                    }
-                }
-            }
-
-            if (tInputs.size() <= 0)
-                continue;
-
-            ItemStack[] tItems = tInputs.toArray(new ItemStack[0]);
-
-            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sBlastRecipes.findRecipe(
-                    getBaseMetaTileEntity(),
-                    false,
-                    V[tTier],
-                    tFluids,
-                    tItems
-            );
-
-            if (tRecipe == null)
-                continue;
-            if (this.mHeatingCapacity < tRecipe.mSpecialValue)
-                continue;
-            if (!tRecipe.isRecipeInputEqual(true, tFluids, tItems))
-                continue;
-            //In case recipe is too OP for that machine
-            if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
-                continue;
-
-            int tHeatCapacityDivTiers = (mHeatingCapacity - tRecipe.mSpecialValue) / 900;
-            byte overclockCount = calculateOverclockednessEBF(tRecipe.mEUt, tRecipe.mDuration, tVoltage);
-            if (this.mEUt > 0) {
-                this.mEUt = (-this.mEUt);
-            }
-            if (tHeatCapacityDivTiers > 0) {
-                this.mEUt = (int) (this.mEUt * (Math.pow(0.95, tHeatCapacityDivTiers)));
-                this.mMaxProgresstime >>= Math.min(tHeatCapacityDivTiers / 2, overclockCount);//extra free overclocking if possible
-                if (this.mMaxProgresstime < 1)
-                    this.mMaxProgresstime = 1;//no eu efficiency correction
-            }
-            this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
-            this.mOutputItems = new ItemStack[]{
-                    tRecipe.getOutput(0),
-                    tRecipe.getOutput(1)
-            };
-            this.mOutputFluids = new FluidStack[]{
-                    tRecipe.getFluidOutput(0)
-            };
-            updateSlots();
-            return true;
+        int tHeatCapacityDivTiers = (mHeatingCapacity - tRecipe.mSpecialValue) / 900;
+        byte overclockCount = calculateOverclockednessEBF(tRecipe.mEUt, tRecipe.mDuration, tVoltage);
+        if (this.mEUt > 0) {
+            this.mEUt = (-this.mEUt);
         }
-        return false;
+        if (tHeatCapacityDivTiers > 0) {
+            this.mEUt = (int) (this.mEUt * (Math.pow(0.95, tHeatCapacityDivTiers)));
+            this.mMaxProgresstime >>= Math.min(tHeatCapacityDivTiers / 2, overclockCount);//extra free overclocking if possible
+            if (this.mMaxProgresstime < 1)
+                this.mMaxProgresstime = 1;//no eu efficiency correction
+        }
+        this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
+        this.mOutputItems = new ItemStack[]{
+                tRecipe.getOutput(0),
+                tRecipe.getOutput(1)
+        };
+        this.mOutputFluids = new FluidStack[]{
+                tRecipe.getFluidOutput(0)
+        };
+        updateSlots();
+        return true;
     }
     /**
      * Calcualtes overclocked ness using long integers
@@ -400,5 +411,23 @@ public class GT_MetaTileEntity_ElectricBlastFurnace extends GT_MetaTileEntity_Ab
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, 1,3,0);
+    }
+
+    @Override
+    public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        isBussesSeparate = !isBussesSeparate;
+        GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("GT5U.machines.separatebus") + " " + isBussesSeparate);
+    }
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setBoolean("isBussesSeparate", isBussesSeparate);
+    }
+
+    @Override
+    public void loadNBTData(final NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        isBussesSeparate = aNBT.getBoolean("isBussesSeparate");
     }
 }
