@@ -468,6 +468,10 @@ public class Textures {
         OVERLAY_PIPE,
         OVERLAY_PIPE_IN,
         OVERLAY_PIPE_OUT,
+        FLUID_OUT_SIGN,
+        FLUID_IN_SIGN,
+        ITEM_IN_SIGN,
+        ITEM_OUT_SIGN,
         OVERLAY_MUFFLER,
 
         OVERLAY_CONTROLLER,
