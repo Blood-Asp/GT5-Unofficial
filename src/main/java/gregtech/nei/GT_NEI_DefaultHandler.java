@@ -32,14 +32,18 @@ import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GT_NEI_DefaultHandler extends RecipeMapHandler {
     public static final int sOffsetX = 5;
     public static final int sOffsetY = 11;
+    private int mCachedRecipesVersion = -1;
+    private SoftReference<List<CachedDefaultRecipe>> mCachedRecipes = null;
 
     static {
         GuiContainerManager.addInputHandler(new GT_RectHandler());
@@ -51,10 +55,25 @@ public class GT_NEI_DefaultHandler extends RecipeMapHandler {
         this.transferRects.add(new TemplateRecipeHandler.RecipeTransferRect(new Rectangle(65, 13, 36, 18), getOverlayIdentifier()));
     }
 
+    @Deprecated
     public List<GT_Recipe> getSortedRecipes() {
         List<GT_Recipe> result = new ArrayList<>(this.mRecipeMap.mRecipeList);
         Collections.sort(result);
         return result;
+    }
+
+    public List<CachedDefaultRecipe> getCache() {
+        List<CachedDefaultRecipe> cache;
+        if (mCachedRecipesVersion == GT_Mod.gregtechproxy.getReloadCount() || mCachedRecipes == null || (cache = mCachedRecipes.get()) == null) {
+            cache = mRecipeMap.mRecipeList.stream()  // do not use parallel stream. This is already parallelized by NEI
+                    .filter(r -> !r.mHidden)
+                    .map(CachedDefaultRecipe::new)
+                    .collect(Collectors.toList());
+            // while the NEI parallelize handlers, for each individual handler it still uses sequential execution model
+            // so we do not need any synchronization here
+            mCachedRecipes = new SoftReference<>(cache);
+        }
+        return cache;
     }
 
     public static void drawText(int aX, int aY, String aString, int aColor) {
@@ -69,11 +88,7 @@ public class GT_NEI_DefaultHandler extends RecipeMapHandler {
     @Override
     public void loadCraftingRecipes(String outputId, Object... results) {
         if (outputId.equals(getOverlayIdentifier())) {
-            for (GT_Recipe tRecipe : getSortedRecipes()) {
-                if (!tRecipe.mHidden) {
-                    this.arecipes.add(new CachedDefaultRecipe(tRecipe));
-                }
-            }
+            arecipes.addAll(getCache());
         } else {
             super.loadCraftingRecipes(outputId, results);
         }
@@ -83,7 +98,7 @@ public class GT_NEI_DefaultHandler extends RecipeMapHandler {
     public void loadCraftingRecipes(ItemStack aResult) {
         ItemData tPrefixMaterial = GT_OreDictUnificator.getAssociation(aResult);
 
-        ArrayList<ItemStack> tResults = new ArrayList();
+        ArrayList<ItemStack> tResults = new ArrayList<>();
         tResults.add(aResult);
         tResults.add(GT_OreDictUnificator.get(true, aResult));
         if ((tPrefixMaterial != null) && (!tPrefixMaterial.mBlackListed) && (!tPrefixMaterial.mPrefix.mFamiliarPrefixes.isEmpty())) {
@@ -101,16 +116,9 @@ public class GT_NEI_DefaultHandler extends RecipeMapHandler {
         if (tFluidStack != null) {
             tResults.addAll(GT_Utility.getContainersFromFluid(tFluidStack));
         }
-        for (GT_Recipe tRecipe : getSortedRecipes()) {
-            if (!tRecipe.mHidden) {
-                CachedDefaultRecipe tNEIRecipe = new CachedDefaultRecipe(tRecipe);
-                for (ItemStack tStack : tResults) {
-                    if (tNEIRecipe.contains(tNEIRecipe.mOutputs, tStack)) {
-                        this.arecipes.add(tNEIRecipe);
-                        break;
-                    }
-                }
-            }
+        for (CachedDefaultRecipe recipe : getCache()) {
+            if (tResults.stream().anyMatch(stack -> recipe.contains(recipe.mOutputs, stack)))
+                arecipes.add(recipe);
         }
     }
 
@@ -118,7 +126,7 @@ public class GT_NEI_DefaultHandler extends RecipeMapHandler {
     public void loadUsageRecipes(ItemStack aInput) {
         ItemData tPrefixMaterial = GT_OreDictUnificator.getAssociation(aInput);
 
-        ArrayList<ItemStack> tInputs = new ArrayList();
+        ArrayList<ItemStack> tInputs = new ArrayList<>();
         tInputs.add(aInput);
         tInputs.add(GT_OreDictUnificator.get(false, aInput));
         if ((tPrefixMaterial != null) && (!tPrefixMaterial.mPrefix.mFamiliarPrefixes.isEmpty())) {
@@ -136,18 +144,10 @@ public class GT_NEI_DefaultHandler extends RecipeMapHandler {
         if (tFluidStack != null) {
             tInputs.addAll(GT_Utility.getContainersFromFluid(tFluidStack));
         }
-        for (GT_Recipe tRecipe : getSortedRecipes()) {
-            if (!tRecipe.mHidden) {
-                CachedDefaultRecipe tNEIRecipe = new CachedDefaultRecipe(tRecipe);
-                for (ItemStack tStack : tInputs) {
-                    if (tNEIRecipe.contains(tNEIRecipe.mInputs, tStack)) {
-                        this.arecipes.add(tNEIRecipe);
-                        break;
-                    }
-                }
-            }
+        for (CachedDefaultRecipe recipe : getCache()) {
+            if (tInputs.stream().anyMatch(stack -> recipe.contains(recipe.mInputs, stack)))
+                arecipes.add(recipe);
         }
-        CachedDefaultRecipe tNEIRecipe;
     }
 
     @Override

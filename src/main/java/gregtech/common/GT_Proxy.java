@@ -776,6 +776,10 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public void onClientConnectedToServerEvent(FMLNetworkEvent.ClientConnectedToServerEvent aEvent) {
     }
 
+    public int getReloadCount() {
+        return 0;
+    }
+
     @SubscribeEvent
     public void onArrowNockEvent(ArrowNockEvent aEvent) {
         if ((!aEvent.isCanceled()) && (GT_Utility.isStackValid(aEvent.result))

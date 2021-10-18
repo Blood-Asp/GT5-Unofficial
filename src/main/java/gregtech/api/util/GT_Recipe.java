@@ -800,7 +800,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
          * @return if this Item is a valid Input for any for the Recipes
          */
         public boolean containsInput(ItemStack aStack) {
-            return aStack != null && (mRecipeItemMap.containsKey(new GT_ItemStack(aStack)) || mRecipeItemMap.containsKey(new GT_ItemStack(GT_Utility.copyMetaData(W, aStack))));
+            return aStack != null && (mRecipeItemMap.containsKey(new GT_ItemStack(aStack)) || mRecipeItemMap.containsKey(new GT_ItemStack(aStack, true)));
         }
 
         /**
@@ -886,7 +886,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                     if (tRecipes != null) for (GT_Recipe tRecipe : tRecipes)
                         if (!tRecipe.mFakeRecipe && tRecipe.isRecipeInputEqual(false, aDontCheckStackSizes, aFluids, aInputs))
                             return tRecipe.mEnabled && aVoltage * mAmperage >= tRecipe.mEUt ? tRecipe : null;
-                    tRecipes = mRecipeItemMap.get(new GT_ItemStack(GT_Utility.copyMetaData(W, tStack)));
+                    tRecipes = mRecipeItemMap.get(new GT_ItemStack(tStack, true));
                     if (tRecipes != null) for (GT_Recipe tRecipe : tRecipes)
                         if (!tRecipe.mFakeRecipe && tRecipe.isRecipeInputEqual(false, aDontCheckStackSizes, aFluids, aInputs))
                             return tRecipe.mEnabled && aVoltage * mAmperage >= tRecipe.mEUt ? tRecipe : null;
