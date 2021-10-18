@@ -85,6 +85,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_MagicHazard.get(1L), bits, new Object[]{" Y ", "BM ", "   ", 'M', ItemList.Casing_SolidSteel, 'Y', Dyes.dyeYellow, 'B', Dyes.dyeBlack});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_FrostHazard.get(1L), bits, new Object[]{"BY ", " M ", "   ", 'M', ItemList.Casing_SolidSteel, 'Y', Dyes.dyeYellow, 'B', Dyes.dyeBlack});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_NoiseHazard.get(1L), bits, new Object[]{"   ", " M ", "BY ", 'M', ItemList.Casing_SolidSteel, 'Y', Dyes.dyeYellow, 'B', Dyes.dyeBlack});
+        GT_ModHandler.addCraftingRecipe(ItemList.Casing_Advanced_Iridium.get(1L), bits, new Object[]{"PhP", "PFP", aTextPlateWrench, 'P', OrePrefixes.plate.get(Materials.Iridium), 'F', OrePrefixes.frameGt.get(Materials.Iridium)});
 
         GT_ModHandler.addShapelessCraftingRecipe(ItemList.Casing_SolidSteel.get(1L), bits, new Object[]{ItemList.Casing_Stripes_A});
         GT_ModHandler.addShapelessCraftingRecipe(ItemList.Casing_SolidSteel.get(1L), bits, new Object[]{ItemList.Casing_Stripes_B});

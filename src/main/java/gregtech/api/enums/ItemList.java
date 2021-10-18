@@ -841,6 +841,8 @@ public enum ItemList implements IItemContainer {
     Casing_Firebox_Titanium,
     Casing_MiningNeutronium,
     Casing_MiningBlackPlutonium,
+    Casing_Advanced_Rhodium_Palladium,
+    Casing_Advanced_Iridium,
 
     Hull_ULV,
     Hull_LV,

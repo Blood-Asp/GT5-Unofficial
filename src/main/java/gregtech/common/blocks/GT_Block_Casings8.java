@@ -23,6 +23,8 @@ public class GT_Block_Casings8 extends GT_Block_Casings_Abstract {
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".3.name", "Mining Black Plutonium Casing");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".4.name", "Extreme Engine Intake Casing");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".5.name", "Europium Reinforced Radiation Proof Machine Casing");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".6.name", "Advanced Rhodium Plated Palladium Machine Casing");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".7.name", "Advanced Iridium Plated Machine Casing");
 
         ItemList.Casing_Chemically_Inert.set(new ItemStack(this, 1, 0));
         ItemList.Casing_Pipe_Polytetrafluoroethylene.set(new ItemStack(this, 1, 1));
@@ -30,6 +32,8 @@ public class GT_Block_Casings8 extends GT_Block_Casings_Abstract {
         ItemList.Casing_MiningBlackPlutonium.set(new ItemStack(this, 1, 3));
         ItemList.Casing_ExtremeEngineIntake.set(new ItemStack(this, 1, 4));
         ItemList.Casing_AdvancedRadiationProof.set(new ItemStack(this, 1, 5));
+        ItemList.Casing_Advanced_Rhodium_Palladium.set(new ItemStack(this, 1, 6));
+        ItemList.Casing_Advanced_Iridium.set(new ItemStack(this, 1, 7));
     }
 
     @Override
@@ -48,6 +52,10 @@ public class GT_Block_Casings8 extends GT_Block_Casings_Abstract {
             return Textures.BlockIcons.MACHINE_CASING_EXTREME_ENGINE_INTAKE.getIcon();//changed color in a terrible way
         case 5:
             return Textures.BlockIcons.MACHINE_CASING_ADVANCEDRADIATIONPROOF.getIcon();
+        case 6:
+            return Textures.BlockIcons.MACHINE_CASING_RHODIUM_PALLADIUM.getIcon();
+        case 7:
+            return Textures.BlockIcons.MACHINE_CASING_IRIDIUM.getIcon();
         }
         return Textures.BlockIcons.MACHINE_CASING_ROBUST_TUNGSTENSTEEL.getIcon();
     }
