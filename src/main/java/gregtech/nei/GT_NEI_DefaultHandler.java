@@ -11,10 +11,8 @@ import codechicken.nei.recipe.GuiUsageRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import gregtech.GT_Mod;
 import gregtech.api.enums.GT_Values;
-import gregtech.api.enums.ItemList;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.gui.GT_GUIContainer_BasicMachine;
-import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Log;
@@ -27,7 +25,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
@@ -367,15 +364,14 @@ public class GT_NEI_DefaultHandler extends RecipeMapHandler {
             if (this.permutated) {
                 return;
             }
-            ArrayList<ItemStack> tDisplayStacks = new ArrayList();
+            ArrayList<ItemStack> tDisplayStacks = new ArrayList<>();
             for (ItemStack tStack : this.items) {
                 if (GT_Utility.isStackValid(tStack)) {
                     if (tStack.getItemDamage() == 32767) {
                         List<ItemStack> permutations = codechicken.nei.ItemList.itemMap.get(tStack.getItem());
                         if (!permutations.isEmpty()) {
-                            ItemStack stack;
-                            for (Iterator i$ = permutations.iterator(); i$.hasNext(); tDisplayStacks.add(GT_Utility.copyAmount(tStack.stackSize, stack))) {
-                                stack = (ItemStack) i$.next();
+                            for (ItemStack permutation : permutations) {
+                                tDisplayStacks.add(GT_Utility.copyAmount(tStack.stackSize, permutation));
                             }
                         } else {
                             ItemStack base = new ItemStack(tStack.getItem(), tStack.stackSize);
@@ -387,7 +383,7 @@ public class GT_NEI_DefaultHandler extends RecipeMapHandler {
                     }
                 }
             }
-            this.items = ((ItemStack[]) tDisplayStacks.toArray(new ItemStack[0]));
+            this.items = tDisplayStacks.toArray(new ItemStack[0]);
             if (this.items.length == 0) {
                 this.items = new ItemStack[]{new ItemStack(Blocks.fire)};
             }
@@ -412,14 +408,14 @@ public class GT_NEI_DefaultHandler extends RecipeMapHandler {
                 maybeIn = aRecipe.getInputPositionedStacks();
             } catch(NullPointerException npe) {
                 maybeIn = null;
-                GT_Log.err.println("CachedDefaultRecipe - Invalid InputPositionedStacks " + aRecipe.toString());
+                GT_Log.err.println("CachedDefaultRecipe - Invalid InputPositionedStacks " + aRecipe);
                 npe.printStackTrace(GT_Log.err);
             }
             try {
                 maybeOut = aRecipe.getOutputPositionedStacks();
             } catch (NullPointerException npe) {
                 maybeOut = null;
-                GT_Log.err.println("CachedDefaultRecipe - Invalid OutputPositionedStacks " + aRecipe.toString());
+                GT_Log.err.println("CachedDefaultRecipe - Invalid OutputPositionedStacks " + aRecipe);
                 npe.printStackTrace(GT_Log.err);
             }
 
