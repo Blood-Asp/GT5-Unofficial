@@ -315,7 +315,7 @@ public class GT_OreDictUnificator {
     public static ItemData getItemData(ItemStack aStack) {
         if (GT_Utility.isStackInvalid(aStack)) return null;
         ItemData rData = sItemStack2DataMap.get(new GT_ItemStack(aStack));
-        if (rData == null) rData = sItemStack2DataMap.get(new GT_ItemStack(GT_Utility.copyMetaData(W, aStack)));
+        if (rData == null) rData = sItemStack2DataMap.get(new GT_ItemStack(aStack, true));
         return rData;
     }
 
