@@ -1549,12 +1549,20 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Wood, 1L), ItemList.IC2_Resin.get(1L), new ItemStack(Blocks.torch, 6), 400, 1);
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Coal, 8L), new ItemStack(Items.flint, 1), ItemList.IC2_Compressed_Coal_Ball.get(1L), 400, 4);
 
-        if(Loader.isModLoaded("IC2NuclearControl")) {
-        	GT_Values.RA.addAssemblerRecipe(ItemList.NC_SensorCard.get(1L), ItemList.Circuit_Integrated.getWithDamage(0L, 1L), GT_ModHandler.getIC2Item("electronicCircuit", 3L), 200, 30);
-            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "ItemMultipleSensorLocationCard", 1L, 0), GT_ModHandler.getModItem("IC2NuclearControl", "ItemMultipleSensorLocationCard", 1L, 0),  GT_ModHandler.getIC2Item("electronicCircuit", 1L), 200, 30);
-            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "ItemMultipleSensorLocationCard", 1L, 1), GT_ModHandler.getModItem("IC2NuclearControl", "ItemMultipleSensorLocationCard", 1L, 1),  GT_ModHandler.getIC2Item("electronicCircuit", 1L), 200, 30);
-            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "ItemMultipleSensorLocationCard", 1L, 2), GT_ModHandler.getModItem("IC2NuclearControl", "ItemMultipleSensorLocationCard", 1L, 2),  GT_ModHandler.getIC2Item("electronicCircuit", 1L), 200, 30);
-            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "RFSensorCard", 1L, 0), GT_ModHandler.getModItem("IC2NuclearControl", "RFSensorCard", 1L, 0),  GT_ModHandler.getIC2Item("electronicCircuit", 1L), 200, 30);
+        if(Loader.isModLoaded("IC2NuclearControl")) {//Card recycling recipes
+            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "ItemVanillaMachineCard", 1L, 0), ItemList.Circuit_Integrated.getWithDamage(0L, 1L),  GT_ModHandler.getIC2Item("electronicCircuit", 2L), 200, 30);
+            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "ItemInventoryScannerCard", 1L, 0), ItemList.Circuit_Integrated.getWithDamage(0L, 1L),  GT_ModHandler.getIC2Item("electronicCircuit", 2L), 200, 30);
+            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "ItemEnergySensorLocationCard", 1L, 0), ItemList.Circuit_Integrated.getWithDamage(0L, 1L),  GT_ModHandler.getIC2Item("electronicCircuit", 2L), 200, 30);
+            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "RFSensorCard", 1L, 0), ItemList.Circuit_Integrated.getWithDamage(0L, 1L),  GT_ModHandler.getIC2Item("electronicCircuit", 2L), 200, 30);
+            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "ItemMultipleSensorLocationCard", 1L, 0), ItemList.Circuit_Integrated.getWithDamage(0L, 1L),  GT_ModHandler.getIC2Item("electronicCircuit", 1L), 200, 30);//counter
+            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "ItemMultipleSensorLocationCard", 1L, 1), ItemList.Circuit_Integrated.getWithDamage(0L, 1L),  GT_ModHandler.getIC2Item("electronicCircuit", 1L), 200, 30);//liquid
+            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "ItemMultipleSensorLocationCard", 1L, 2), ItemList.Circuit_Integrated.getWithDamage(0L, 1L),  GT_ModHandler.getIC2Item("electronicCircuit", 2L), 200, 30);//generator
+            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "ItemLiquidArrayLocationCard", 1L, 0), ItemList.Circuit_Integrated.getWithDamage(0L, 1L),  GT_ModHandler.getIC2Item("electronicCircuit", 2L), 200, 30);//2-6 liquid
+            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "ItemEnergyArrayLocationCard", 1L, 0), ItemList.Circuit_Integrated.getWithDamage(0L, 1L),  GT_ModHandler.getIC2Item("electronicCircuit", 2L), 200, 30);//2-6 energy
+            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "ItemSensorLocationCard", 1L, 0), ItemList.Circuit_Integrated.getWithDamage(0L, 1L),  GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Good), 2L), 200, 30);//non-fluid nuke
+            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "Item55ReactorCard", 1L, 0), ItemList.Circuit_Integrated.getWithDamage(0L, 1L),  GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Good), 2L), 200, 30);
+            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "CardAppeng", 1L, 0), ItemList.Circuit_Integrated.getWithDamage(0L, 1L),  GT_ModHandler.getIC2Item("electronicCircuit", 2L), 200, 30);
+            GT_Values.RA.addAssemblerRecipe(ItemList.NC_SensorCard.get(1L), ItemList.Circuit_Integrated.getWithDamage(0L, 1L), GT_ModHandler.getIC2Item("electronicCircuit", 3L), 200, 30);
         }
 
         if (!GT_Mod.gregtechproxy.mDisableIC2Cables) {
