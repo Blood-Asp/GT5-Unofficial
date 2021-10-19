@@ -265,7 +265,7 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
                 mOutputItems[0] = drops.get(0);
             if (drops.size() > 1)
                 mOutputItems[1] = drops.get(1);
-            aBaseMetaTileEntity.getWorld().setBlockToAir(x, y, z);
+            aBaseMetaTileEntity.getWorld().setBlock(x, y, z, Blocks.cobblestone);
             if (debugBlockMiner)
                 GT_Log.out.println("MINER: Mining GT ore block at " + x + " " + y + " " + z);
         }
