@@ -2780,7 +2780,7 @@ public class GT_Utility {
      * We return {@code ItemStack} instead of {@code Block} so that we can include metadata.
      */
     public static ItemStack getCobbleForOre(Block ore, short metaData) {
-        // We need to convert to small ores to regular ores because small ores don't have associated ItemData.
+        // We need to convert small ores to regular ores because small ores don't have associated ItemData.
         // We take the modulus of the metadata by 16000 because that is the magic number to convert small ores to regular ores.
         // See: GT_TileEntity_Ores.java
         ItemData association = GT_OreDictUnificator.getAssociation(new ItemStack(Item.getItemFromBlock(ore), 1, metaData % 16000));
