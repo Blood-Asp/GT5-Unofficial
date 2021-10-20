@@ -572,6 +572,10 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
          * Contains all Recipe Maps
          */
         public static final Collection<GT_Recipe_Map> sMappings = new ArrayList<>();
+        /**
+         * All recipe maps indexed by their {@link #mUniqueIdentifier}.
+         */
+        public static final Map<String, GT_Recipe_Map> sIndexedMappings = new HashMap<>();
 
         public static final GT_Recipe_Map sOreWasherRecipes = new GT_Recipe_Map(new HashSet<>(500), "gt.recipe.orewasher", "Ore Washing Plant", null, RES_PATH_GUI + "basicmachines/OreWasher", 1, 3, 1, 1, 1, E, 1, E, true, true);
         public static final GT_Recipe_Map sThermalCentrifugeRecipes = new GT_Recipe_Map(new HashSet<>(1000), "gt.recipe.thermalcentrifuge", "Thermal Centrifuge", null, RES_PATH_GUI + "basicmachines/ThermalCentrifuge", 1, 3, 1, 0, 2, E, 1, E, true, true);
@@ -686,6 +690,12 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         public final boolean mNEIAllowed, mShowVoltageAmperageInNEI;
 
         /**
+         * Unique identifier for this recipe map. Generated from aUnlocalizedName and a few other parameters.
+         * See constructor for details.
+         */
+        public final String mUniqueIdentifier;
+
+        /**
          * Initialises a new type of Recipe Handler.
          *
          * @param aRecipeList                a List you specify as Recipe List. Usually just an ArrayList with a pre-initialised Size.
@@ -717,6 +727,9 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
             GregTech_API.sFluidMappings.add(mRecipeFluidMap);
             GregTech_API.sItemStackMappings.add(mRecipeItemMap);
             GT_LanguageManager.addStringLocalization(mUnlocalizedName = aUnlocalizedName, aLocalName);
+            mUniqueIdentifier = String.format("%s_%d_%d_%d_%d_%d", aUnlocalizedName, aAmperage, aUsualInputCount, aUsualOutputCount, aMinimalInputFluids, aMinimalInputItems);
+            if (sIndexedMappings.put(mUniqueIdentifier, this) != null)
+                throw new IllegalArgumentException("Duplicate recipe map registered: " + mUniqueIdentifier);
         }
 
         public GT_Recipe addRecipe(boolean aOptimize, ItemStack[] aInputs, ItemStack[] aOutputs, Object aSpecial, int[] aOutputChances, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue) {
