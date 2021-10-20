@@ -1,6 +1,7 @@
 package gregtech.api.util;
 
 import cofh.api.transport.IItemDuct;
+import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.gtnewhorizon.structurelib.alignment.IAlignment;
@@ -28,6 +29,7 @@ import gregtech.api.objects.ItemData;
 import gregtech.api.threads.GT_Runnable_Sound;
 import gregtech.api.util.extensions.ArrayExt;
 import gregtech.common.GT_Proxy;
+import gregtech.common.blocks.GT_Block_Ores_Abstract;
 import ic2.api.recipe.IRecipeInput;
 import ic2.api.recipe.RecipeInputItemStack;
 import ic2.api.recipe.RecipeInputOreDict;
@@ -80,7 +82,9 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.function.Function;
 import java.util.function.IntFunction;
+import java.util.function.Supplier;
 
 import static gregtech.GT_Mod.GT_FML_LOGGER;
 import static gregtech.api.enums.GT_Values.*;
@@ -103,6 +107,8 @@ public class GT_Utility {
     private static final Map<GT_ItemStack, FluidContainerData> sFilledContainerToData = new /*Concurrent*/HashMap<>();
     private static final Map<GT_ItemStack, Map<Fluid, FluidContainerData>> sEmptyContainerToFluidToData = new /*Concurrent*/HashMap<>();
     private static final Map<Fluid, List<ItemStack>> sFluidToContainers = new HashMap<>();
+    /** Must use {@code Supplier} here because the ore prefixes have not yet been registered at class load time. */
+    private static final Map<OrePrefixes, Supplier<ItemStack>> sOreToCobble = new HashMap<>();
     public static volatile int VERSION = 509;
     public static boolean TE_CHECK = false, BC_CHECK = false, CHECK_ALL = true, RF_CHECK = false;
     public static Map<GT_PlayedSound, Integer> sPlayedSoundMap = new /*Concurrent*/HashMap<>();
@@ -117,6 +123,29 @@ public class GT_Utility {
 
         GregTech_API.sItemStackMappings.add(sFilledContainerToData);
         GregTech_API.sItemStackMappings.add(sEmptyContainerToFluidToData);
+
+        // 1 is the magic index to get the cobblestone block.
+        // See: GT_Block_Stones.java, GT_Block_Granites.java
+        Function<Materials, Supplier<ItemStack>> materialToCobble =
+                m -> Suppliers.memoize(() -> GT_OreDictUnificator.getOres(OrePrefixes.stone, m).get(1))::get;
+        sOreToCobble.put(
+                OrePrefixes.oreBlackgranite,
+                materialToCobble.apply(Materials.GraniteBlack));
+        sOreToCobble.put(
+                OrePrefixes.oreRedgranite,
+                materialToCobble.apply(Materials.GraniteRed));
+        sOreToCobble.put(
+                OrePrefixes.oreMarble,
+                materialToCobble.apply(Materials.Marble));
+        sOreToCobble.put(
+                OrePrefixes.oreBasalt,
+                materialToCobble.apply(Materials.Basalt));
+        sOreToCobble.put(
+                OrePrefixes.oreNetherrack,
+                () -> new ItemStack(Blocks.netherrack));
+        sOreToCobble.put(
+                OrePrefixes.oreEndstone,
+                () -> new ItemStack(Blocks.end_stone));
     }
 
     public static int safeInt(long number, int margin){
@@ -2733,7 +2762,9 @@ public class GT_Utility {
     );
 
     public static boolean isOre(Block aBlock, int aMeta) {
-        return isOre(new ItemStack(aBlock, 1, aMeta)) || ORE_BLOCK_CLASSES.contains(aBlock.getClass().getName());
+        return (aBlock instanceof GT_Block_Ores_Abstract)
+                || isOre(new ItemStack(aBlock, 1, aMeta))
+                || ORE_BLOCK_CLASSES.contains(aBlock.getClass().getName());
     }
 
     public static boolean isOre(ItemStack aStack) {
@@ -2742,6 +2773,24 @@ public class GT_Utility {
                 return true;
         }
         return false;
+    }
+
+    /**
+     * Do <b>NOT</b> mutate the returned {@code ItemStack}!
+     * We return {@code ItemStack} instead of {@code Block} so that we can include metadata.
+     */
+    public static ItemStack getCobbleForOre(Block ore, short metaData) {
+        // We need to convert small ores to regular ores because small ores don't have associated ItemData.
+        // We take the modulus of the metadata by 16000 because that is the magic number to convert small ores to regular ores.
+        // See: GT_TileEntity_Ores.java
+        ItemData association = GT_OreDictUnificator.getAssociation(new ItemStack(Item.getItemFromBlock(ore), 1, metaData % 16000));
+        if (association != null) {
+            Supplier<ItemStack> supplier = sOreToCobble.get(association.mPrefix);
+            if (supplier != null) {
+                return supplier.get();
+            }
+        }
+        return new ItemStack(Blocks.cobblestone);
     }
 
     public static Optional<GT_Recipe> reverseShapelessRecipe(ItemStack output, Object... aRecipe) {

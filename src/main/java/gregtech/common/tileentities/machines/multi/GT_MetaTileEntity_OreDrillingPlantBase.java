@@ -17,7 +17,6 @@ import gregtech.common.blocks.GT_TileEntity_Ores;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -31,8 +30,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-
-import org.lwjgl.input.Keyboard;
 
 import static gregtech.api.enums.GT_Values.VN;
 
@@ -109,21 +106,34 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
     }
     private boolean processOreList(){
         ChunkPosition oreBlockPos = null;
+        int x = 0, y = 0, z = 0;
         Block oreBlock = null;
+        int oreBlockMetadata = 0;
 
-        while ((oreBlock == null || oreBlock == Blocks.air) && !oreBlockPositions.isEmpty()) {
+        while ((oreBlock == null || !GT_Utility.isOre(oreBlock, oreBlockMetadata)) && !oreBlockPositions.isEmpty()) {
             oreBlockPos = oreBlockPositions.remove(0);
-            if (GT_Utility.eraseBlockByFakePlayer(getFakePlayer(getBaseMetaTileEntity()), oreBlockPos.chunkPosX, oreBlockPos.chunkPosY, oreBlockPos.chunkPosZ, true))
-                oreBlock = getBaseMetaTileEntity().getBlock(oreBlockPos.chunkPosX, oreBlockPos.chunkPosY, oreBlockPos.chunkPosZ);
+            x = oreBlockPos.chunkPosX;
+            y = oreBlockPos.chunkPosY;
+            z = oreBlockPos.chunkPosZ;
+            if (GT_Utility.eraseBlockByFakePlayer(getFakePlayer(getBaseMetaTileEntity()), x, y, z, true))
+                oreBlock = getBaseMetaTileEntity().getBlock(x, y, z);
+            oreBlockMetadata = getBaseMetaTileEntity().getWorld().getBlockMetadata(x, y, z);
         }
 
         if (!tryConsumeDrillingFluid()) {
             oreBlockPositions.add(0, oreBlockPos);
             return false;
         }
-        if (oreBlock != null && oreBlock != Blocks.air) {
-            Collection<ItemStack> oreBlockDrops = getBlockDrops(oreBlock, oreBlockPos.chunkPosX, oreBlockPos.chunkPosY, oreBlockPos.chunkPosZ);
-            getBaseMetaTileEntity().getWorld().setBlock(oreBlockPos.chunkPosX, oreBlockPos.chunkPosY, oreBlockPos.chunkPosZ, Blocks.cobblestone);
+        if (oreBlock != null && GT_Utility.isOre(oreBlock, oreBlockMetadata)) {
+            short metaData = 0;
+            TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntity(x, y, z);
+            if (tTileEntity instanceof GT_TileEntity_Ores) {
+                metaData = ((GT_TileEntity_Ores) tTileEntity).mMetaData;
+            }
+
+            Collection<ItemStack> oreBlockDrops = getBlockDrops(oreBlock, x, y, z);
+            ItemStack cobble = GT_Utility.getCobbleForOre(oreBlock, metaData);
+            getBaseMetaTileEntity().getWorld().setBlock(x, y, z, Block.getBlockFromItem(cobble.getItem()), cobble.getItemDamage(), 3);
             mOutputItems = getOutputByDrops(oreBlockDrops);
         }
         return true;
