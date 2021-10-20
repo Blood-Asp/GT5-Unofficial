@@ -176,18 +176,21 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
                     moveOneDown(aBaseMetaTileEntity);
                 } else {
                     ChunkPosition oreBlockPos;
-                    Block block;
+                    int x = 0, y = 0, z = 0;
+                    Block oreBlock;
+                    int oreBlockMetadata = 0;
                     do {
                         oreBlockPos = oreBlockPositions.remove(0);
-                        block = aBaseMetaTileEntity.getBlockOffset(oreBlockPos.chunkPosX, oreBlockPos.chunkPosY, oreBlockPos.chunkPosZ);
+                        oreBlock = aBaseMetaTileEntity.getBlockOffset(oreBlockPos.chunkPosX, oreBlockPos.chunkPosY, oreBlockPos.chunkPosZ);
+                        x = aBaseMetaTileEntity.getXCoord() + oreBlockPos.chunkPosX;
+                        y = aBaseMetaTileEntity.getYCoord() + oreBlockPos.chunkPosY;
+                        z = aBaseMetaTileEntity.getZCoord() + oreBlockPos.chunkPosZ;
+                        oreBlockMetadata = getBaseMetaTileEntity().getWorld().getBlockMetadata(x, y, z);
                     } // someone else might have removed the block
-                    while (block == Blocks.air && !oreBlockPositions.isEmpty());
+                    while (!GT_Utility.isOre(oreBlock, oreBlockMetadata) && !oreBlockPositions.isEmpty());
 
-                    if (block != Blocks.air) {
-                        mineBlock(aBaseMetaTileEntity, block,
-                            aBaseMetaTileEntity.getXCoord() + oreBlockPos.chunkPosX,
-                            aBaseMetaTileEntity.getYCoord() + oreBlockPos.chunkPosY,
-                            aBaseMetaTileEntity.getZCoord() + oreBlockPos.chunkPosZ);
+                    if (GT_Utility.isOre(oreBlock, oreBlockMetadata)) {
+                        mineBlock(aBaseMetaTileEntity, oreBlock, x, y, z);
                     }
                 }
             }
@@ -265,7 +268,15 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
                 mOutputItems[0] = drops.get(0);
             if (drops.size() > 1)
                 mOutputItems[1] = drops.get(1);
-            aBaseMetaTileEntity.getWorld().setBlock(x, y, z, Blocks.cobblestone);
+
+            short metaData = 0;
+            TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntity(x, y, z);
+            if (tTileEntity instanceof GT_TileEntity_Ores) {
+                metaData = ((GT_TileEntity_Ores) tTileEntity).mMetaData;
+            }
+
+            ItemStack cobble = GT_Utility.getCobbleForOre(block, metaData);
+            aBaseMetaTileEntity.getWorld().setBlock(x, y, z, Block.getBlockFromItem(cobble.getItem()), cobble.getItemDamage(), 3);
             if (debugBlockMiner)
                 GT_Log.out.println("MINER: Mining GT ore block at " + x + " " + y + " " + z);
         }
