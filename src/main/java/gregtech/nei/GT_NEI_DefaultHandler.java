@@ -64,6 +64,7 @@ public class GT_NEI_DefaultHandler extends RecipeMapHandler {
         if (mCachedRecipesVersion == GT_Mod.gregtechproxy.getReloadCount() || mCachedRecipes == null || (cache = mCachedRecipes.get()) == null) {
             cache = mRecipeMap.mRecipeList.stream()  // do not use parallel stream. This is already parallelized by NEI
                     .filter(r -> !r.mHidden)
+                    .sorted()
                     .map(CachedDefaultRecipe::new)
                     .collect(Collectors.toList());
             // while the NEI parallelize handlers, for each individual handler it still uses sequential execution model
