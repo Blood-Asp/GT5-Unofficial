@@ -81,6 +81,7 @@ import static gregtech.api.enums.GT_Values.MOD_ID_FR;
                 " required-after:" + StructureLib.MOD_ID + ";" +
                 " after:dreamcraft;" +
                 " after:Forestry;" +
+                " after:gendustry;" +
                 " after:PFAAGeologica;" +
                 " after:Thaumcraft;" +
                 " after:Railcraft;" +
