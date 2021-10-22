@@ -14,7 +14,7 @@ public class GT_Block_Casings8 extends GT_Block_Casings_Abstract {
     //WATCH OUT FOR TEXTURE ID's
     public GT_Block_Casings8() {
         super(GT_Item_Casings8.class, "gt.blockcasings8", GT_Material_Casings.INSTANCE);
-        for (int i = 0; i < 8; i = (i + 1)) {
+        for (int i = 0; i < 9; i = (i + 1)) {
             Textures.BlockIcons.casingTexturePages[1][i+48] = TextureFactory.of(this, i);
         }
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".0.name", "Chemically Inert Machine Casing");
@@ -25,6 +25,7 @@ public class GT_Block_Casings8 extends GT_Block_Casings_Abstract {
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".5.name", "Europium Reinforced Radiation Proof Machine Casing");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".6.name", "Advanced Rhodium Plated Palladium Machine Casing");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".7.name", "Advanced Iridium Plated Machine Casing");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".8.name", "Magical Machine Casing");
 
         ItemList.Casing_Chemically_Inert.set(new ItemStack(this, 1, 0));
         ItemList.Casing_Pipe_Polytetrafluoroethylene.set(new ItemStack(this, 1, 1));
@@ -34,6 +35,7 @@ public class GT_Block_Casings8 extends GT_Block_Casings_Abstract {
         ItemList.Casing_AdvancedRadiationProof.set(new ItemStack(this, 1, 5));
         ItemList.Casing_Advanced_Rhodium_Palladium.set(new ItemStack(this, 1, 6));
         ItemList.Casing_Advanced_Iridium.set(new ItemStack(this, 1, 7));
+        ItemList.Casing_Magical.set(new ItemStack(this, 1, 8));
     }
 
     @Override
@@ -56,6 +58,8 @@ public class GT_Block_Casings8 extends GT_Block_Casings_Abstract {
             return Textures.BlockIcons.MACHINE_CASING_RHODIUM_PALLADIUM.getIcon();
         case 7:
             return Textures.BlockIcons.MACHINE_CASING_IRIDIUM.getIcon();
+            case 8:
+                return Textures.BlockIcons.MACHINE_CASING_MAGICAL.getIcon();
         }
         return Textures.BlockIcons.MACHINE_CASING_ROBUST_TUNGSTENSTEEL.getIcon();
     }
