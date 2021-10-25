@@ -36,8 +36,8 @@ public class GT_ContainerMetaTile_Machine extends GT_Container {
             oOutput = 0,
             oInput = 0,
             oID = 0,
-            oDisplayErrorCode = 0,
-            mTimer = 0;
+            oDisplayErrorCode = 0;
+    protected int mTimer = 0;
 
 
     public GT_ContainerMetaTile_Machine(InventoryPlayer aInventoryPlayer, IGregTechTileEntity aTileEntity) {
