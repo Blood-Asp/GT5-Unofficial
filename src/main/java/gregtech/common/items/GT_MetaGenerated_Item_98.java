@@ -1,6 +1,5 @@
 package gregtech.common.items;
 
-import com.google.common.collect.ImmutableMap;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.ItemList;
@@ -9,6 +8,7 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.items.GT_MetaGenerated_Item;
 import gregtech.api.util.GT_LanguageManager;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -38,14 +38,62 @@ public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
      * re-ordered or removed! The only safe modification that can be made to this list is adding new
      * entries to the end. To remove an entry, pass {@code null} in for the fluid name.
      */
-    private static final ImmutableMap<String, CellType> FLUIDS =
-            ImmutableMap.<String, CellType>builder()
-                    .put("steam", CellType.REGULAR)
-                    .put("bacterialsludge", CellType.REGULAR)
-                    .put("mutagen", CellType.REGULAR)
-                    .put("ender", CellType.REGULAR)
-                    .put("endergoo", CellType.REGULAR)
-                    .build();
+    public enum FluidCell {
+        steam(CellType.REGULAR),
+        bacterialsludge(CellType.REGULAR),
+        mutagen(CellType.REGULAR),
+        ender(CellType.REGULAR),
+        endergoo(CellType.REGULAR),
+        ;
+
+        private final CellType mType;
+        private ItemStack mStack;
+
+        FluidCell(CellType aType) {
+            this.mType = aType;
+        }
+
+        public CellType getDisplayType() {
+            return mType;
+        }
+
+        /**
+         * Get a copy of this stack with stack size 1.
+         *
+         * Might return null if not yet initialized, or the fluid referenced does not exist.
+         */
+        public ItemStack get() {
+            return GT_Utility.copy(mStack);
+        }
+
+        /**
+         * Get a copy of this cell WITHOUT copy.
+         *
+         * Might return null if not yet initialized, or the fluid referenced does not exist.
+         *
+         * Use with caution.
+         */
+        public ItemStack getNoCopy() {
+            return mStack;
+        }
+
+        /**
+         * Get a copy of this cell with specified stack size.
+         *
+         * Might return null if not yet initialized, or the fluid referenced does not exist.
+         */
+        public ItemStack get(int aStackSize) {
+            return GT_Utility.copyAmount(aStackSize, mStack);
+        }
+
+        void setStack(ItemStack mStack) {
+            this.mStack = mStack;
+        }
+
+        public int getId() {
+            return ordinal();
+        }
+    }
 
     /**
      * We support adding two different types of cells.
@@ -88,23 +136,23 @@ public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
      */
     private final Map<Integer, RegisteredFluidData> registeredFluidDataMap;
 
-    public GT_MetaGenerated_Item_98() {
+    public static synchronized void init() {
+        if (INSTANCE == null)
+            INSTANCE = new GT_MetaGenerated_Item_98();
+    }
+
+    private GT_MetaGenerated_Item_98() {
         // For some reason, fluid cells will be rendered only if the metadata ID is less than the
         // offset. So we will specify maximum offset here.
         // See: GT_MetaGenerated_Item_Renderer.java
-        super("metaitem.98", (short) 32766, (short) FLUIDS.size());
+        super("metaitem.98", (short) 32766, (short) FluidCell.values().length);
 
-        INSTANCE = this;
         registeredFluidDataMap = new HashMap<>();
 
-        int i = -1;
-        for (Map.Entry<String, CellType> entry : FLUIDS.entrySet()) {
-            i++;  // Increment first so that we don't accidentally skip doing so with continue
-            String fluidName = entry.getKey();
-            CellType cellType = entry.getValue();
-            if (fluidName == null) {
-                continue;
-            }
+        for (FluidCell tCell : FluidCell.values()) {
+            int i = tCell.getId();  // Increment first so that we don't accidentally skip doing so with continue
+            String fluidName = tCell.name();
+            CellType cellType = tCell.getDisplayType();
 
             Fluid fluid = FluidRegistry.getFluid(fluidName);
             if (fluid == null) {
@@ -119,6 +167,8 @@ public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
             FluidContainerRegistry.registerFluidContainer(
                     new FluidContainerRegistry.FluidContainerData(
                             fluidStack, itemStack, ItemList.Cell_Empty.get(1L)));
+
+            tCell.setStack(itemStack);
 
             GT_LanguageManager.addStringLocalization(
                     getUnlocalizedName(itemStack) + ".name",

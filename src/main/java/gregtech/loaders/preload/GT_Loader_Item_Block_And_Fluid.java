@@ -71,7 +71,7 @@ public class GT_Loader_Item_Block_And_Fluid implements Runnable {
         new GT_MetaGenerated_Item_01();
         new GT_MetaGenerated_Item_02();
         new GT_MetaGenerated_Item_03();
-        new GT_MetaGenerated_Item_98();
+        GT_MetaGenerated_Item_98.init();
         new GT_MetaGenerated_Item_99();
         new GT_MetaGenerated_Tool_01();
         new GT_FluidDisplayItem();
