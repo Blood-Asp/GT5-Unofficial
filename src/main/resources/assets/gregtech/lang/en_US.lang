@@ -1112,21 +1112,23 @@ fluid.Ammonium Dinitramide=Ammonium Dinitramide
 fluid.LMP-103S=LMP-103S
 fluid.Nitromethane=Nitromethane
 fluid.O-Xylene=O-Xylene
+//GT_MetaGenerated_Item_98 cells
+fluid.UnknownNutrientAgar=Unknown Nutrient Agar
+fluid.SeaweedBroth=Seaweed Broth
+fluid.EnzymesSollution=Enzyme Solution
+fluid.escherichiakolifluid=eColi Bacteria Fluid
+fluid.Penicillin=Penicillin
+fluid.FluorecentdDNA=Fluorescent DNA
+fluid.Polymerase=Polymerase
 //No cell, most from bart bio
 fluid.Monomethylhydrazine=Monomethylhydrazine
 fluid.binnibacteriafluid=binnibacteriafluid
-fluid.SeaweedBroth=SeaweedBroth
 fluid.barnadafisarboriatorisfluid=barnadafisarboriatorisfluid
-fluid.Polymerase=Polymerase
 fluid.GelatinMixture=GelatinMixture
-fluid.FluorecentdDNA=FluorecentdDNA
-fluid.Penicillin=Penicillin
 fluid.sludge=sludge
-fluid.EnzymesSollution=EnzymesSollution
 fluid.Formaldehyde=Formaldehyde
 fluid.tcetieisfucusserratusfluid=tcetieisfucusserratusfluid
 fluid.MeatExtract=MeatExtract
-fluid.UnknownNutrientAgar=UnknownNutrientAgar
 //No recipe
 fluid.CompressedOxygen=CompressedOxygen
 fluid.CompressedNitrogen=CompressedNitrogen
