@@ -78,7 +78,7 @@ import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.Map.Entry;
@@ -98,7 +98,7 @@ import static gregtech.common.GT_UndergroundOil.undergroundOilReadInformation;
  */
 public class GT_Utility {
     /** Formats a number with group separator and at most 2 fraction digits. */
-    private static final DecimalFormat decimalFormat = new DecimalFormat();
+    private static final NumberFormat numberFormat = NumberFormat.getInstance();
 
     /**
      * Forge screwed the Fluid Registry up again, so I make my own, which is also much more efficient than the stupid Stuff over there.
@@ -116,10 +116,7 @@ public class GT_Utility {
     public static UUID defaultUuid = null; // maybe default non-null? UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     static {
-        DecimalFormatSymbols symbols = decimalFormat.getDecimalFormatSymbols();
-        symbols.setGroupingSeparator(' ');
-        decimalFormat.setDecimalFormatSymbols(symbols);
-        decimalFormat.setMaximumFractionDigits(2);
+        numberFormat.setMaximumFractionDigits(2);
 
         GregTech_API.sItemStackMappings.add(sFilledContainerToData);
         GregTech_API.sItemStackMappings.add(sEmptyContainerToFluidToData);
@@ -2308,11 +2305,11 @@ public class GT_Utility {
     }
 
     public static String formatNumbers(long aNumber) {
-        return decimalFormat.format(aNumber);
+        return numberFormat.format(aNumber);
     }
 
     public static String formatNumbers(double aNumber) {
-        return decimalFormat.format(aNumber);
+        return numberFormat.format(aNumber);
     }
 
     /*
