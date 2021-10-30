@@ -8,6 +8,8 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.items.GT_MetaGenerated_Item;
 import gregtech.api.util.GT_LanguageManager;
+import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -18,39 +20,67 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /** This class holds cells for non-GT fluids. */
 public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
     public static GT_MetaGenerated_Item_98 INSTANCE;
 
     /**
-     * Map of internal fluid name to cell type to register for that fluid.
-     *
-     * <p>The fluid at index {@code i} (in entry set iteration order) will be assigned ID {@code i}.
+     * Registered fluids.
      *
      * <p>When adding a fluid, don't forget to make sure that GregTech loads after the mod that adds
      * that fluid!
      *
-     * <p>In order to avoid breaking existing worlds, the entries in this list must not be
-     * re-ordered or removed! The only safe modification that can be made to this list is adding new
-     * entries to the end. To remove an entry, pass {@code null} in for the fluid name.
+     * <p>In order to avoid breaking existing worlds, fluids must not have their IDs changed! The
+     * only safe modification that can be made to this list is adding new fluids, or removing
+     * existing fluids. When removing fluids, maybe leave a comment mentioning the old ID, so that
+     * we don't re-use it for a new fluid.
      */
     public enum FluidCell {
-        steam(CellType.REGULAR),
-        bacterialsludge(CellType.REGULAR),
-        mutagen(CellType.REGULAR),
-        ender(CellType.REGULAR),
-        endergoo(CellType.REGULAR),
+        // Next unused ID: 5
+
+        // Railcraft
+        STEAM(0, "steam", CellType.REGULAR),
+
+        // Galacticraft
+        BACTERIAL_SLUDGE(1, "bacterialsludge", CellType.REGULAR),
+
+        // Gendustry
+        MUTAGEN(2, "mutagen", CellType.REGULAR),
+
+        // Tinker's Construct
+        LIQUID_ENDER(3, "ender", CellType.REGULAR),
+
+        // Hardcore Ender Expansion
+        ENDER_GOO(4, "endergoo", CellType.REGULAR),
         ;
 
+        private final int mId;
+        /** This is the Forge internal fluid name. */
+        private final String mfluidName;
         private final CellType mType;
+
+        @Nullable
         private ItemStack mStack;
 
-        FluidCell(CellType aType) {
-            this.mType = aType;
+        FluidCell(int aId, String aFluidName, CellType aType) {
+            mId = aId;
+            mfluidName = aFluidName;
+            mType = aType;
+        }
+
+        public int getId() {
+            return mId;
+        }
+
+        public String getFluidName() {
+            return mfluidName;
         }
 
         public CellType getDisplayType() {
@@ -62,6 +92,7 @@ public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
          *
          * Might return null if not yet initialized, or the fluid referenced does not exist.
          */
+        @Nullable
         public ItemStack get() {
             return GT_Utility.copy(mStack);
         }
@@ -73,6 +104,7 @@ public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
          *
          * Use with caution.
          */
+        @Nullable
         public ItemStack getNoCopy() {
             return mStack;
         }
@@ -82,16 +114,13 @@ public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
          *
          * Might return null if not yet initialized, or the fluid referenced does not exist.
          */
+        @Nullable
         public ItemStack get(int aStackSize) {
             return GT_Utility.copyAmount(aStackSize, mStack);
         }
 
-        void setStack(ItemStack mStack) {
+        private void setStack(ItemStack mStack) {
             this.mStack = mStack;
-        }
-
-        public int getId() {
-            return ordinal();
         }
     }
 
@@ -139,6 +168,9 @@ public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
     public static synchronized void init() {
         if (INSTANCE == null)
             INSTANCE = new GT_MetaGenerated_Item_98();
+
+        INSTANCE.createItems();
+        INSTANCE.registerOreDict();
     }
 
     private GT_MetaGenerated_Item_98() {
@@ -148,10 +180,14 @@ public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
         super("metaitem.98", (short) 32766, (short) FluidCell.values().length);
 
         registeredFluidDataMap = new HashMap<>();
+    }
+
+    private void createItems() {
+        ItemStack emptyCell = ItemList.Cell_Empty.get(1L);
 
         for (FluidCell tCell : FluidCell.values()) {
-            int i = tCell.getId();  // Increment first so that we don't accidentally skip doing so with continue
-            String fluidName = tCell.name();
+            int id = tCell.getId();
+            String fluidName = tCell.getFluidName();
             CellType cellType = tCell.getDisplayType();
 
             Fluid fluid = FluidRegistry.getFluid(fluidName);
@@ -161,12 +197,12 @@ public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
                 continue;
             }
 
-            ItemStack itemStack = new ItemStack(this, 1, i);
+            ItemStack itemStack = new ItemStack(this, 1, id);
             FluidStack fluidStack = new FluidStack(fluid, cellType.capacity);
 
             FluidContainerRegistry.registerFluidContainer(
                     new FluidContainerRegistry.FluidContainerData(
-                            fluidStack, itemStack, ItemList.Cell_Empty.get(1L)));
+                            fluidStack, itemStack, emptyCell));
 
             tCell.setStack(itemStack);
 
@@ -183,12 +219,24 @@ public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
 
             // We'll just steal the icons from Water. They are all the same anyway (except _NULL is broken for cells).
             IIconContainer iconContainer = Materials.Water.mIconSet.mTextures[cellType.prefix.mTextureIndex];
-            registeredFluidDataMap.put(i, new RegisteredFluidData(fluid, rgba, iconContainer));
+            registeredFluidDataMap.put(id, new RegisteredFluidData(fluid, rgba, iconContainer));
         }
 
         // We're not going to use these BitSets, so clear them to save memory.
         mEnabledItems.clear();
         mVisibleItems.clear();
+    }
+
+    private void registerOreDict() {
+        // The GregTech ore dictionary requires an entry in the Materials enum, and since the whole
+        // point of this class is to add cell items for non-GregTech fluids, the vast majority of
+        // cell items won't have an associated material. So only a rare few cell items will need to
+        // be registered.
+
+        // Register IC2 steam cell and Railcraft steam cell as synonyms.
+        // There is no steam material, so we'll use Water.cellMolten instead.
+        GT_OreDictUnificator.add(OrePrefixes.cellMolten, Materials.Water, GT_ModHandler.getIC2Item("steamCell", 1L));
+        GT_OreDictUnificator.add(OrePrefixes.cellMolten, Materials.Water, FluidCell.STEAM.getNoCopy());
     }
 
     @Override
@@ -209,8 +257,9 @@ public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item var1, CreativeTabs aCreativeTab, List aList) {
-        registeredFluidDataMap.keySet().stream()
-                .map(i -> new ItemStack(this, 1, i))
+        Arrays.stream(FluidCell.values())
+                .map(FluidCell::get)
+                .filter(Objects::nonNull)
                 .forEach(aList::add);
     }
 

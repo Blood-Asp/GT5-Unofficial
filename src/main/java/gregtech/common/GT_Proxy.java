@@ -26,7 +26,6 @@ import gregtech.api.util.*;
 import gregtech.common.entities.GT_Entity_Arrow;
 import gregtech.common.gui.GT_ContainerVolumetricFlask;
 import gregtech.common.gui.GT_GUIContainerVolumetricFlask;
-import gregtech.common.items.GT_MetaGenerated_Item_98;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
@@ -1812,8 +1811,6 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
             GT_Values.RA.addCrackingRecipe(i + 1, new FluidStack(uncrackedFluid, 1000), GT_ModHandler.getSteam(1000),
                     new FluidStack(crackedFluids[i], 1000), 40 + 20 * i, 240 + 120 * i);
             GT_Values.RA.addChemicalRecipe(GT_ModHandler.getIC2Item("steamCell", 1L), GT_Utility.getIntegratedCircuit(i + 1), new FluidStack(uncrackedFluid, 1000),
-                    new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), 160 + 80 * i, 30);
-            GT_Values.RA.addChemicalRecipe(GT_MetaGenerated_Item_98.FluidCell.steam.get(), GT_Utility.getIntegratedCircuit(i + 1), new FluidStack(uncrackedFluid, 1000),
                     new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), 160 + 80 * i, 30);
             GT_Values.RA.addChemicalRecipe(aMaterial.getCells(1), GT_Utility.getIntegratedCircuit(i + 1), GT_ModHandler.getSteam(1000),
                     new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), 160 + 80 * i, 30);
