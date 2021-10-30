@@ -41,9 +41,15 @@ public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
      * that fluid!
      *
      * <p>In order to avoid breaking existing worlds, fluids must not have their IDs changed! The
-     * only safe modification that can be made to this list is adding new fluids, or removing
+     * only safe modification that can be made to this enum is adding new fluids, or removing
      * existing fluids. When removing fluids, maybe leave a comment mentioning the old ID, so that
      * we don't re-use it for a new fluid.
+     *
+     * <p>If, in the future, we need to get item stacks before {@link #init()} has been called (such
+     * as for creating recipes), we can probably just modify the {@code FluidCell} methods below to
+     * eagerly construct the item stack ahead of time and memoize it or something. Really, the only
+     * thing that we need before we can construct item stacks is for {@link #INSTANCE} to be
+     * initialized.
      */
     public enum FluidCell {
         // Next unused ID: 18
@@ -235,7 +241,7 @@ public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
 
             Fluid fluid = FluidRegistry.getFluid(fluidName);
             if (fluid == null) {
-                // Fluid is not guaranteed to exist.
+                // The fluid is not guaranteed to exist.
                 // These fluids are non-GT fluids, so the mod may not be present.
                 continue;
             }
@@ -244,8 +250,7 @@ public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
             FluidStack fluidStack = new FluidStack(fluid, cellType.capacity);
 
             FluidContainerRegistry.registerFluidContainer(
-                    new FluidContainerRegistry.FluidContainerData(
-                            fluidStack, itemStack, emptyCell));
+                    new FluidContainerRegistry.FluidContainerData(fluidStack, itemStack, emptyCell));
 
             tCell.setStack(itemStack);
 
@@ -261,11 +266,6 @@ public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
             rgba[3] = (short) ((color & 0xFF000000) >> 24);
 
             registeredFluidDataMap.put(id, new RegisteredFluidData(fluid, rgba, iconContainerMap.get(cellType)));
-            /*
-            // We'll just steal the icons from Water. They are all the same anyway (except _NULL is broken for cells).
-            IIconContainer iconContainer = Materials.Water.mIconSet.mTextures[cellType.prefix.mTextureIndex];
-            registeredFluidDataMap.put(id, new RegisteredFluidData(fluid, rgba, iconContainer));
-             */
         }
 
         // We're not going to use these BitSets, so clear them to save memory.
