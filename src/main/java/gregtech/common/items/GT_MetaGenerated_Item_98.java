@@ -68,6 +68,7 @@ public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
         ESCHERICHIA_COLI_FLUID(11, "escherichiakolifluid", CellType.REGULAR),
         PENICILLIN(12, "penicillin", CellType.REGULAR),
         FLUORESCENT_DNA(13, "fluorecentddna", CellType.REGULAR),
+        POLYMERASE(17, "polymerase", CellType.REGULAR),
 
         // Good Generator
         COMBUSTION_PROMOTER(14, "combustionpromotor", CellType.REGULAR),
@@ -82,9 +83,6 @@ public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
         BACTERIA(15, "binnie.bacteria", CellType.REGULAR),
         MUTAGEN(2, "mutagen", CellType.REGULAR),
         LIQUID_DNA(16, "liquiddna", CellType.REGULAR),
-
-        // Genetics
-        POLYMERASE(17, "polymerase", CellType.REGULAR),
 
         // Tinker's Construct
         LIQUID_ENDER(3, "ender", CellType.REGULAR),
