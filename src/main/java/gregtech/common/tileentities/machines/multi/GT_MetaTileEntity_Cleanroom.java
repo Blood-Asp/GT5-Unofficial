@@ -61,8 +61,9 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
                 .addController("Top center")
                 .addCasingInfo("Plascrete", 20)
                 .addStructureInfo(GT_Values.cleanroomGlass + "% of the Plascrete can be replaced with Reinforced Glass")//check
+                .addStructureInfo("Other material can be used in place of Plascrete. See config for detail")//check
                 .addOtherStructurePart("Filter Machine Casing", "Top besides controller and edges")
-                .addEnergyHatch("LV or MV, any casing")//check
+                .addEnergyHatch("Any casing. Exactly one.")//check
                 .addMaintenanceHatch("Any casing")
                 .addStructureInfo("1x Reinforced Door (keep closed or efficiency will reduce)")
                 .addStructureInfo("Up to 10 Machine Hulls for Item & Energy transfer through walls")

@@ -9,7 +9,6 @@ import codechicken.nei.recipe.GuiCraftingRecipe;
 import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.GuiUsageRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;
-import cpw.mods.fml.common.event.FMLInterModComms;
 import gregtech.GT_Mod;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.OrePrefixes;
@@ -36,7 +35,7 @@ import java.util.List;
 
 import static gregtech.api.util.GT_Utility.trans;
 
-public class GT_NEI_AssLineHandler extends TemplateRecipeHandler {
+public class GT_NEI_AssLineHandler extends RecipeMapHandler {
     public static final int sOffsetX = 5;
     public static final int sOffsetY = 11;
 
@@ -45,16 +44,9 @@ public class GT_NEI_AssLineHandler extends TemplateRecipeHandler {
         GuiContainerManager.addTooltipHandler(new GT_RectHandler());
     }
 
-    protected final GT_Recipe.GT_Recipe_Map mRecipeMap;
-
     public GT_NEI_AssLineHandler(GT_Recipe.GT_Recipe_Map aRecipeMap) {//this is called when recipes should be shown
-        this.mRecipeMap = aRecipeMap;
+        super(aRecipeMap);
         this.transferRects.add(new RecipeTransferRect(new Rectangle(138, 18, 18, 18), getOverlayIdentifier()));
-        if (!NEI_GT_Config.sIsAdded) {
-            FMLInterModComms.sendRuntimeMessage(GT_Values.GT, "NEIPlugins", "register-crafting-handler", "gregtech@" + getRecipeName() + "@" + getOverlayIdentifier());
-            GuiCraftingRecipe.craftinghandlers.add(this);
-            GuiUsageRecipe.usagehandlers.add(this);
-        }
     }
 
     public List<GT_Recipe> getSortedRecipes() {

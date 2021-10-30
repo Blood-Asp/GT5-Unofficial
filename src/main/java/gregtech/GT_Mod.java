@@ -81,6 +81,7 @@ import static gregtech.api.enums.GT_Values.MOD_ID_FR;
                 " required-after:" + StructureLib.MOD_ID + ";" +
                 " after:dreamcraft;" +
                 " after:Forestry;" +
+                " after:gendustry;" +
                 " after:PFAAGeologica;" +
                 " after:Thaumcraft;" +
                 " after:Railcraft;" +
@@ -337,6 +338,7 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mRenderTileAmbientOcclusion = GregTech_API.sClientDataFile.get("render", "TileAmbientOcclusion", true);
         gregtechproxy.mRenderGlowTextures = GregTech_API.sClientDataFile.get("render", "GlowTextures", true);
         gregtechproxy.mRenderFlippedMachinesFlipped = GregTech_API.sClientDataFile.get("render", "RenderFlippedMachinesFlipped", true);
+        gregtechproxy.mRenderIndicatorsOnHatch = GregTech_API.sClientDataFile.get("render", "RenderIndicatorsOnHatch", true);
 
         gregtechproxy.mMaxEqualEntitiesAtOneSpot = tMainConfig.get(aTextGeneral, "MaxEqualEntitiesAtOneSpot", 3).getInt(3);
         gregtechproxy.mSkeletonsShootGTArrows = tMainConfig.get(aTextGeneral, "SkeletonsShootGTArrows", 16).getInt(16);

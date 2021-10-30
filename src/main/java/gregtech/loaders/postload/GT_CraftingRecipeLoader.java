@@ -31,7 +31,8 @@ public class GT_CraftingRecipeLoader implements Runnable {
     private static final String aTextIron2 = "XXX";
     private static final long bits_no_remove_buffered = GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.BUFFERED;
     private static final long bits = GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED;
-    private static final long bitsd = GT_ModHandler.RecipeBits.DISMANTLEABLE | bits;
+    private static final String aTextPlateWrench = "PwP";
+
 
     @Override
     public void run() {
@@ -700,5 +701,8 @@ public class GT_CraftingRecipeLoader implements Runnable {
 
         GT_ModHandler.addShapelessCraftingRecipe(Materials.Fireclay.getDust(2), new Object[]{Materials.Brick.getDust(1), Materials.Clay.getDust(1)});
         GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Ball.get(0), new FluidStack(FluidRegistry.getFluid("molten.borosilicateglass"), 144), ItemList.VOLUMETRIC_FLASK.get(1), 44, 24);
-       }
+        if (Loader.isModLoaded("bartworks")) {
+            GT_ModHandler.addCraftingRecipe(ItemList.Casing_Advanced_Rhodium_Palladium.get(1L), bits, new Object[]{"PhP", "PFP", aTextPlateWrench, 'P', GT_ModHandler.getModItem("bartworks", "gt.bwMetaGeneratedplate", 1L, 88), 'F', OrePrefixes.frameGt.get(Materials.Chrome)});
+        }
+    }
 }

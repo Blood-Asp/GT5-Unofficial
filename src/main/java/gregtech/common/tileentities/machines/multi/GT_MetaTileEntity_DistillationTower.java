@@ -225,6 +225,7 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Enhan
         mOutputHatchesByLayer.forEach(List::clear);
         mHeight = 1;
         mTopLayerFound = false;
+        mCasing = 0;
 
         // check base
         if (!checkPiece(STRUCTURE_PIECE_BASE, 1, 0, 0))
@@ -275,7 +276,7 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Enhan
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         buildPiece(STRUCTURE_PIECE_BASE, stackSize, hintsOnly, 1, 0, 0);
-        int tTotalHeight = Math.max(12, stackSize.stackSize + 2); // min 2 output layer, so at least 1 + 2 height
+        int tTotalHeight = Math.min(12, stackSize.stackSize + 2); // min 2 output layer, so at least 1 + 2 height
         for (int i = 1; i < tTotalHeight - 1; i++) {
             buildPiece(STRUCTURE_PIECE_LAYER_HINT, stackSize, hintsOnly, 1, i, 0);
         }

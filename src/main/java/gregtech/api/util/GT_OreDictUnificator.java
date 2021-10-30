@@ -223,26 +223,30 @@ public class GT_OreDictUnificator {
         rStack = tPrefixMaterial.mUnificationTarget;
         if (GT_Utility.isStackInvalid(rStack))
             return !alreadyCompared && GT_Utility.areStacksEqual(aStack, unified_tStack, true);
-        assert rStack != null;
         rStack.setTagCompound(aStack.getTagCompound());
         return GT_Utility.areStacksEqual(rStack, unified_tStack, true);
     }
 
     public static List<ItemStack> getNonUnifiedStacks(Object obj) {
-    	synchronized (sUnificationTable) {
-    		if (sUnificationTable.isEmpty() && !sItemStack2DataMap.isEmpty()) {
-            	for (GT_ItemStack tGTStack0 : sItemStack2DataMap.keySet()) {
-            		ItemStack tStack0 = tGTStack0.toStack();
-            		ItemStack tStack1 = get(false, tStack0);
-            		if (!GT_Utility.areStacksEqual(tStack0, tStack1)) {
-            			GT_ItemStack tGTStack1 = new GT_ItemStack(tStack1);
-                        List<ItemStack> list = sUnificationTable.computeIfAbsent(tGTStack1, k -> new ArrayList<>());
-                        if (!list.contains(tStack0))
-            			    list.add(tStack0);
-            		}
-            	}
-        	}
-    	}
+        if (sUnificationTable.isEmpty() && !sItemStack2DataMap.isEmpty()) {
+            // use something akin to double check lock. this synchronization overhead is causing lag whenever my
+            // 5900x tries to do NEI lookup
+            synchronized (sUnificationTable) {
+                if (sUnificationTable.isEmpty() && !sItemStack2DataMap.isEmpty()) {
+                    for (GT_ItemStack tGTStack0 : sItemStack2DataMap.keySet()) {
+                        ItemStack tStack0 = tGTStack0.toStack();
+                        ItemStack tStack1 = get_nocopy(false, tStack0);
+                        if (!GT_Utility.areStacksEqual(tStack0, tStack1)) {
+                            GT_ItemStack tGTStack1 = new GT_ItemStack(tStack1);
+                            List<ItemStack> list = sUnificationTable.computeIfAbsent(tGTStack1, k -> new ArrayList<>());
+                            // greg's original code tries to dedupe the list using List#contains, which won't work
+                            // on vanilla ItemStack. I removed it since it never worked and can be slow.
+                            list.add(tStack0);
+                        }
+                    }
+                }
+            }
+        }
     	ItemStack[] aStacks = {};
     	if (obj instanceof ItemStack)
     	    aStacks = new ItemStack[]{(ItemStack) obj};
@@ -257,7 +261,6 @@ public class GT_OreDictUnificator {
     		if (tList != null) {
     			for (ItemStack tStack : tList) {
             		ItemStack tStack1 = GT_Utility.copyAmount(aStack.stackSize, tStack);
-            		tStack1.setTagCompound(aStack.getTagCompound());
             		rList.add(tStack1);
             	}
     		}
@@ -315,7 +318,7 @@ public class GT_OreDictUnificator {
     public static ItemData getItemData(ItemStack aStack) {
         if (GT_Utility.isStackInvalid(aStack)) return null;
         ItemData rData = sItemStack2DataMap.get(new GT_ItemStack(aStack));
-        if (rData == null) rData = sItemStack2DataMap.get(new GT_ItemStack(GT_Utility.copyMetaData(W, aStack)));
+        if (rData == null) rData = sItemStack2DataMap.get(new GT_ItemStack(aStack, true));
         return rData;
     }
 

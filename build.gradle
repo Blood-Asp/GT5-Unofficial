@@ -59,7 +59,7 @@ repositories {
     }
     maven {
         name = "ic2, forestry"
-        url = "http://maven.ic2.player.to/"
+        url = "http://downloads.gtnewhorizons.com/Mods_for_Jenkins/"
     }
     maven { // EnderIO & EnderCore
         name = 'tterrag Repo'
