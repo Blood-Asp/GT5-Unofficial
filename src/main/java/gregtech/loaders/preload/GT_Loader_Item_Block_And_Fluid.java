@@ -71,7 +71,9 @@ public class GT_Loader_Item_Block_And_Fluid implements Runnable {
         new GT_MetaGenerated_Item_01();
         new GT_MetaGenerated_Item_02();
         new GT_MetaGenerated_Item_03();
-        GT_MetaGenerated_Item_98.init();
+        // GT_MetaGenerated_Item_98 is initialized in GT_Proxy.onPostLoad() because we need to wait for fluids to be registered.
+        // Pre-initialization needs to happen before then, though, because the cell icons get deleted at some point between load and post-load.
+        GT_MetaGenerated_Item_98.preInit();
         new GT_MetaGenerated_Item_99();
         new GT_MetaGenerated_Tool_01();
         new GT_FluidDisplayItem();
@@ -569,213 +571,213 @@ public class GT_Loader_Item_Block_And_Fluid implements Runnable {
             }
         }
 
-            GT_Mod.gregtechproxy.addFluid("potion.awkward", "Awkward Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.thick", "Thick Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 32), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.mundane", "Mundane Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 64), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.damage", "Harming Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8204), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.damage.strong", "Strong Harming Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8236), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.damage.splash", "Splash Harming Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16396), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.damage.strong.splash", "Strong Splash Harming Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16428), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.health", "Healing Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8197), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.health.strong", "Strong Healing Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8229), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.health.splash", "Splash Healing Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16389), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.health.strong.splash", "Strong Splash Healing Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16421), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.speed", "Swiftness Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8194), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.speed.strong", "Strong Swiftness Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8226), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.speed.long", "Stretched Swiftness Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8258), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.speed.splash", "Splash Swiftness Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16386), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.speed.strong.splash", "Strong Splash Swiftness Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16418), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.speed.long.splash", "Stretched Splash Swiftness Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16450), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.strength", "Strength Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8201), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.strength.strong", "Strong Strength Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8233), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.strength.long", "Stretched Strength Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8265), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.strength.splash", "Splash Strength Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16393), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.strength.strong.splash", "Strong Splash Strength Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16425), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.strength.long.splash", "Stretched Splash Strength Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16457), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.regen", "Regenerating Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8193), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.regen.strong", "Strong Regenerating Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8225), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.regen.long", "Stretched Regenerating Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8257), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.regen.splash", "Splash Regenerating Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16385), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.regen.strong.splash", "Strong Splash Regenerating Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16417), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.regen.long.splash", "Stretched Splash Regenerating Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16449), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.poison", "Poisonous Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8196), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.poison.strong", "Strong Poisonous Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8228), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.poison.long", "Stretched Poisonous Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8260), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.poison.splash", "Splash Poisonous Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16388), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.poison.strong.splash", "Strong Splash Poisonous Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16420), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.poison.long.splash", "Stretched Splash Poisonous Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16452), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.fireresistance", "Fire Resistant Brew", null, 1, 375, new ItemStack(Items.potionitem, 1, 8195), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.fireresistance.long", "Stretched Fire Resistant Brew", null, 1, 375, new ItemStack(Items.potionitem, 1, 8259), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.fireresistance.splash", "Splash Fire Resistant Brew", null, 1, 375, new ItemStack(Items.potionitem, 1, 16387), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.fireresistance.long.splash", "Stretched Splash Fire Resistant Brew", null, 1, 375, new ItemStack(Items.potionitem, 1, 16451), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.nightvision", "Night Vision Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8198), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.nightvision.long", "Stretched Night Vision Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8262), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.nightvision.splash", "Splash Night Vision Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16390), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.nightvision.long.splash", "Stretched Splash Night Vision Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16454), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.weakness", "Weakening Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8200), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.weakness.long", "Stretched Weakening Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8264), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.weakness.splash", "Splash Weakening Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16392), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.weakness.long.splash", "Stretched Splash Weakening Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16456), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.slowness", "Lame Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8202), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.slowness.long", "Stretched Lame Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8266), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.slowness.splash", "Splash Lame Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16394), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.slowness.long.splash", "Stretched Splash Lame Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16458), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.waterbreathing", "Fishy Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8205), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.waterbreathing.long", "Stretched Fishy Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8269), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.waterbreathing.splash", "Splash Fishy Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16397), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.waterbreathing.long.splash", "Stretched Splash Fishy Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16461), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.invisibility", "Invisible Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8206), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.invisibility.long", "Stretched Invisible Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8270), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.invisibility.splash", "Splash Invisible Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16398), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.invisibility.long.splash", "Stretched Splash Invisible Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16462), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.awkward", "Awkward Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.thick", "Thick Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 32), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.mundane", "Mundane Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 64), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.damage", "Harming Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8204), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.damage.strong", "Strong Harming Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8236), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.damage.splash", "Splash Harming Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16396), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.damage.strong.splash", "Strong Splash Harming Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16428), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.health", "Healing Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8197), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.health.strong", "Strong Healing Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8229), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.health.splash", "Splash Healing Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16389), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.health.strong.splash", "Strong Splash Healing Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16421), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.speed", "Swiftness Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8194), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.speed.strong", "Strong Swiftness Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8226), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.speed.long", "Stretched Swiftness Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8258), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.speed.splash", "Splash Swiftness Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16386), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.speed.strong.splash", "Strong Splash Swiftness Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16418), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.speed.long.splash", "Stretched Splash Swiftness Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16450), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.strength", "Strength Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8201), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.strength.strong", "Strong Strength Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8233), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.strength.long", "Stretched Strength Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8265), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.strength.splash", "Splash Strength Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16393), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.strength.strong.splash", "Strong Splash Strength Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16425), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.strength.long.splash", "Stretched Splash Strength Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16457), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.regen", "Regenerating Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8193), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.regen.strong", "Strong Regenerating Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8225), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.regen.long", "Stretched Regenerating Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8257), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.regen.splash", "Splash Regenerating Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16385), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.regen.strong.splash", "Strong Splash Regenerating Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16417), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.regen.long.splash", "Stretched Splash Regenerating Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16449), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.poison", "Poisonous Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8196), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.poison.strong", "Strong Poisonous Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8228), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.poison.long", "Stretched Poisonous Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8260), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.poison.splash", "Splash Poisonous Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16388), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.poison.strong.splash", "Strong Splash Poisonous Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16420), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.poison.long.splash", "Stretched Splash Poisonous Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16452), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.fireresistance", "Fire Resistant Brew", null, 1, 375, new ItemStack(Items.potionitem, 1, 8195), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.fireresistance.long", "Stretched Fire Resistant Brew", null, 1, 375, new ItemStack(Items.potionitem, 1, 8259), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.fireresistance.splash", "Splash Fire Resistant Brew", null, 1, 375, new ItemStack(Items.potionitem, 1, 16387), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.fireresistance.long.splash", "Stretched Splash Fire Resistant Brew", null, 1, 375, new ItemStack(Items.potionitem, 1, 16451), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.nightvision", "Night Vision Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8198), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.nightvision.long", "Stretched Night Vision Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8262), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.nightvision.splash", "Splash Night Vision Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16390), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.nightvision.long.splash", "Stretched Splash Night Vision Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16454), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.weakness", "Weakening Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8200), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.weakness.long", "Stretched Weakening Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8264), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.weakness.splash", "Splash Weakening Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16392), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.weakness.long.splash", "Stretched Splash Weakening Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16456), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.slowness", "Lame Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8202), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.slowness.long", "Stretched Lame Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8266), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.slowness.splash", "Splash Lame Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16394), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.slowness.long.splash", "Stretched Splash Lame Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16458), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.waterbreathing", "Fishy Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8205), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.waterbreathing.long", "Stretched Fishy Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8269), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.waterbreathing.splash", "Splash Fishy Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16397), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.waterbreathing.long.splash", "Stretched Splash Fishy Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16461), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.invisibility", "Invisible Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8206), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.invisibility.long", "Stretched Invisible Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 8270), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.invisibility.splash", "Splash Invisible Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16398), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.invisibility.long.splash", "Stretched Splash Invisible Brew", null, 1, 295, new ItemStack(Items.potionitem, 1, 16462), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
 
-            GT_Mod.gregtechproxy.addFluid("potion.purpledrink", "Purple Drink", null, 1, 275, ItemList.Bottle_Purple_Drink.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.grapejuice", "Grape Juice", null, 1, 295, ItemList.Bottle_Grape_Juice.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.wine", "Wine", null, 1, 295, ItemList.Bottle_Wine.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.vinegar", "Vinegar", Materials.Vinegar, 1, 295, ItemList.Bottle_Vinegar.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.potatojuice", "Potato Juice", null, 1, 295, ItemList.Bottle_Potato_Juice.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.vodka", "Vodka", null, 1, 275, ItemList.Bottle_Vodka.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.leninade", "Leninade", null, 1, 275, ItemList.Bottle_Leninade.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.mineralwater", "Mineral Water", null, 1, 275, ItemList.Bottle_Mineral_Water.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.saltywater", "Salty Water", null, 1, 275, ItemList.Bottle_Salty_Water.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.reedwater", "Reed Water", null, 1, 295, ItemList.Bottle_Reed_Water.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.rum", "Rum", null, 1, 295, ItemList.Bottle_Rum.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.piratebrew", "Pirate Brew", null, 1, 295, ItemList.Bottle_Pirate_Brew.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.hopsjuice", "Hops Juice", null, 1, 295, ItemList.Bottle_Hops_Juice.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.darkbeer", "Dark Beer", null, 1, 275, ItemList.Bottle_Dark_Beer.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.dragonblood", "Dragon Blood", null, 1, 375, ItemList.Bottle_Dragon_Blood.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.wheatyjuice", "Wheaty Juice", null, 1, 295, ItemList.Bottle_Wheaty_Juice.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.scotch", "Scotch", null, 1, 275, ItemList.Bottle_Scotch.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.glenmckenner", "Glen McKenner", null, 1, 275, ItemList.Bottle_Glen_McKenner.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.wheatyhopsjuice", "Wheaty Hops Juice", null, 1, 295, ItemList.Bottle_Wheaty_Hops_Juice.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.beer", "Beer", null, 1, 275, ItemList.Bottle_Beer.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.chillysauce", "Chilly Sauce", null, 1, 375, ItemList.Bottle_Chilly_Sauce.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.hotsauce", "Hot Sauce", null, 1, 380, ItemList.Bottle_Hot_Sauce.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.diabolosauce", "Diabolo Sauce", null, 1, 385, ItemList.Bottle_Diabolo_Sauce.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.diablosauce", "Diablo Sauce", null, 1, 390, ItemList.Bottle_Diablo_Sauce.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.diablosauce.strong", "Old Man Snitches glitched Diablo Sauce", null, 1, 999, ItemList.Bottle_Snitches_Glitch_Sauce.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.applejuice", "Apple Juice", null, 1, 295, ItemList.Bottle_Apple_Juice.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.cider", "Cider", null, 1, 295, ItemList.Bottle_Cider.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.goldenapplejuice", "Golden Apple Juice", null, 1, 295, ItemList.Bottle_Golden_Apple_Juice.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.goldencider", "Golden Cider", null, 1, 295, ItemList.Bottle_Golden_Cider.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.idunsapplejuice", "Idun's Apple Juice", null, 1, 295, ItemList.Bottle_Iduns_Apple_Juice.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.notchesbrew", "Notches Brew", null, 1, 295, ItemList.Bottle_Notches_Brew.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.lemonjuice", "Lemon Juice", null, 1, 295, ItemList.Bottle_Lemon_Juice.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.limoncello", "Limoncello", null, 1, 295, ItemList.Bottle_Limoncello.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.lemonade", "Lemonade", null, 1, 275, ItemList.Bottle_Lemonade.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.alcopops", "Alcopops", null, 1, 275, ItemList.Bottle_Alcopops.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.cavejohnsonsgrenadejuice", "Cave Johnsons Grenade Juice", null, 1, 295, ItemList.Bottle_Cave_Johnsons_Grenade_Juice.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.purpledrink", "Purple Drink", null, 1, 275, ItemList.Bottle_Purple_Drink.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.grapejuice", "Grape Juice", null, 1, 295, ItemList.Bottle_Grape_Juice.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.wine", "Wine", null, 1, 295, ItemList.Bottle_Wine.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.vinegar", "Vinegar", Materials.Vinegar, 1, 295, ItemList.Bottle_Vinegar.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.potatojuice", "Potato Juice", null, 1, 295, ItemList.Bottle_Potato_Juice.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.vodka", "Vodka", null, 1, 275, ItemList.Bottle_Vodka.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.leninade", "Leninade", null, 1, 275, ItemList.Bottle_Leninade.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.mineralwater", "Mineral Water", null, 1, 275, ItemList.Bottle_Mineral_Water.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.saltywater", "Salty Water", null, 1, 275, ItemList.Bottle_Salty_Water.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.reedwater", "Reed Water", null, 1, 295, ItemList.Bottle_Reed_Water.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.rum", "Rum", null, 1, 295, ItemList.Bottle_Rum.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.piratebrew", "Pirate Brew", null, 1, 295, ItemList.Bottle_Pirate_Brew.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.hopsjuice", "Hops Juice", null, 1, 295, ItemList.Bottle_Hops_Juice.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.darkbeer", "Dark Beer", null, 1, 275, ItemList.Bottle_Dark_Beer.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.dragonblood", "Dragon Blood", null, 1, 375, ItemList.Bottle_Dragon_Blood.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.wheatyjuice", "Wheaty Juice", null, 1, 295, ItemList.Bottle_Wheaty_Juice.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.scotch", "Scotch", null, 1, 275, ItemList.Bottle_Scotch.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.glenmckenner", "Glen McKenner", null, 1, 275, ItemList.Bottle_Glen_McKenner.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.wheatyhopsjuice", "Wheaty Hops Juice", null, 1, 295, ItemList.Bottle_Wheaty_Hops_Juice.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.beer", "Beer", null, 1, 275, ItemList.Bottle_Beer.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.chillysauce", "Chilly Sauce", null, 1, 375, ItemList.Bottle_Chilly_Sauce.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.hotsauce", "Hot Sauce", null, 1, 380, ItemList.Bottle_Hot_Sauce.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.diabolosauce", "Diabolo Sauce", null, 1, 385, ItemList.Bottle_Diabolo_Sauce.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.diablosauce", "Diablo Sauce", null, 1, 390, ItemList.Bottle_Diablo_Sauce.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.diablosauce.strong", "Old Man Snitches glitched Diablo Sauce", null, 1, 999, ItemList.Bottle_Snitches_Glitch_Sauce.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.applejuice", "Apple Juice", null, 1, 295, ItemList.Bottle_Apple_Juice.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.cider", "Cider", null, 1, 295, ItemList.Bottle_Cider.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.goldenapplejuice", "Golden Apple Juice", null, 1, 295, ItemList.Bottle_Golden_Apple_Juice.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.goldencider", "Golden Cider", null, 1, 295, ItemList.Bottle_Golden_Cider.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.idunsapplejuice", "Idun's Apple Juice", null, 1, 295, ItemList.Bottle_Iduns_Apple_Juice.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.notchesbrew", "Notches Brew", null, 1, 295, ItemList.Bottle_Notches_Brew.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.lemonjuice", "Lemon Juice", null, 1, 295, ItemList.Bottle_Lemon_Juice.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.limoncello", "Limoncello", null, 1, 295, ItemList.Bottle_Limoncello.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.lemonade", "Lemonade", null, 1, 275, ItemList.Bottle_Lemonade.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.alcopops", "Alcopops", null, 1, 275, ItemList.Bottle_Alcopops.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.cavejohnsonsgrenadejuice", "Cave Johnsons Grenade Juice", null, 1, 295, ItemList.Bottle_Cave_Johnsons_Grenade_Juice.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), 250);
 
-            GT_Mod.gregtechproxy.addFluid("potion.darkcoffee", "Dark Coffee", null, 1, 295, ItemList.ThermosCan_Dark_Coffee.get(1L, new Object[0]), ItemList.ThermosCan_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.darkcafeaulait", "Dark Cafe au lait", null, 1, 295, ItemList.ThermosCan_Dark_Cafe_au_lait.get(1L, new Object[0]), ItemList.ThermosCan_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.coffee", "Coffee", null, 1, 295, ItemList.ThermosCan_Coffee.get(1L, new Object[0]), ItemList.ThermosCan_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.cafeaulait", "Cafe au lait", null, 1, 295, ItemList.ThermosCan_Cafe_au_lait.get(1L, new Object[0]), ItemList.ThermosCan_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.laitaucafe", "Lait au cafe", null, 1, 295, ItemList.ThermosCan_Lait_au_cafe.get(1L, new Object[0]), ItemList.ThermosCan_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.darkchocolatemilk", "Bitter Chocolate Milk", null, 1, 295, ItemList.ThermosCan_Dark_Chocolate_Milk.get(1L, new Object[0]), ItemList.ThermosCan_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.chocolatemilk", "Chocolate Milk", null, 1, 295, ItemList.ThermosCan_Chocolate_Milk.get(1L, new Object[0]), ItemList.ThermosCan_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.tea", "Tea", null, 1, 295, ItemList.ThermosCan_Tea.get(1L, new Object[0]), ItemList.ThermosCan_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.sweettea", "Sweet Tea", null, 1, 295, ItemList.ThermosCan_Sweet_Tea.get(1L, new Object[0]), ItemList.ThermosCan_Empty.get(1L, new Object[0]), 250);
-            GT_Mod.gregtechproxy.addFluid("potion.icetea", "Ice Tea", null, 1, 255, ItemList.ThermosCan_Ice_Tea.get(1L, new Object[0]), ItemList.ThermosCan_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.darkcoffee", "Dark Coffee", null, 1, 295, ItemList.ThermosCan_Dark_Coffee.get(1L, new Object[0]), ItemList.ThermosCan_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.darkcafeaulait", "Dark Cafe au lait", null, 1, 295, ItemList.ThermosCan_Dark_Cafe_au_lait.get(1L, new Object[0]), ItemList.ThermosCan_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.coffee", "Coffee", null, 1, 295, ItemList.ThermosCan_Coffee.get(1L, new Object[0]), ItemList.ThermosCan_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.cafeaulait", "Cafe au lait", null, 1, 295, ItemList.ThermosCan_Cafe_au_lait.get(1L, new Object[0]), ItemList.ThermosCan_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.laitaucafe", "Lait au cafe", null, 1, 295, ItemList.ThermosCan_Lait_au_cafe.get(1L, new Object[0]), ItemList.ThermosCan_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.darkchocolatemilk", "Bitter Chocolate Milk", null, 1, 295, ItemList.ThermosCan_Dark_Chocolate_Milk.get(1L, new Object[0]), ItemList.ThermosCan_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.chocolatemilk", "Chocolate Milk", null, 1, 295, ItemList.ThermosCan_Chocolate_Milk.get(1L, new Object[0]), ItemList.ThermosCan_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.tea", "Tea", null, 1, 295, ItemList.ThermosCan_Tea.get(1L, new Object[0]), ItemList.ThermosCan_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.sweettea", "Sweet Tea", null, 1, 295, ItemList.ThermosCan_Sweet_Tea.get(1L, new Object[0]), ItemList.ThermosCan_Empty.get(1L, new Object[0]), 250);
+        GT_Mod.gregtechproxy.addFluid("potion.icetea", "Ice Tea", null, 1, 255, ItemList.ThermosCan_Ice_Tea.get(1L, new Object[0]), ItemList.ThermosCan_Empty.get(1L, new Object[0]), 250);
 
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.poison.strong", 750), ItemList.IC2_Spray_WeedEx.get(1L, new Object[0]), ItemList.Spray_Empty.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.poison.strong", 750), ItemList.IC2_Spray_WeedEx.get(1L, new Object[0]), ItemList.Spray_Empty.get(1L, new Object[0])));
 
 
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.poison", 125), ItemList.Arrow_Head_Glass_Poison.get(1L, new Object[0]), ItemList.Arrow_Head_Glass_Emtpy.get(1L, new Object[0])));
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.poison.long", 125), ItemList.Arrow_Head_Glass_Poison_Long.get(1L, new Object[0]), ItemList.Arrow_Head_Glass_Emtpy.get(1L, new Object[0])));
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.poison.strong", 125), ItemList.Arrow_Head_Glass_Poison_Strong.get(1L, new Object[0]), ItemList.Arrow_Head_Glass_Emtpy.get(1L, new Object[0])));
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.slowness", 125), ItemList.Arrow_Head_Glass_Slowness.get(1L, new Object[0]), ItemList.Arrow_Head_Glass_Emtpy.get(1L, new Object[0])));
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.slowness.long", 125), ItemList.Arrow_Head_Glass_Slowness_Long.get(1L, new Object[0]), ItemList.Arrow_Head_Glass_Emtpy.get(1L, new Object[0])));
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.weakness", 125), ItemList.Arrow_Head_Glass_Weakness.get(1L, new Object[0]), ItemList.Arrow_Head_Glass_Emtpy.get(1L, new Object[0])));
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.weakness.long", 125), ItemList.Arrow_Head_Glass_Weakness_Long.get(1L, new Object[0]), ItemList.Arrow_Head_Glass_Emtpy.get(1L, new Object[0])));
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("holywater", 125), ItemList.Arrow_Head_Glass_Holy_Water.get(1L, new Object[0]), ItemList.Arrow_Head_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.poison", 125), ItemList.Arrow_Head_Glass_Poison.get(1L, new Object[0]), ItemList.Arrow_Head_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.poison.long", 125), ItemList.Arrow_Head_Glass_Poison_Long.get(1L, new Object[0]), ItemList.Arrow_Head_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.poison.strong", 125), ItemList.Arrow_Head_Glass_Poison_Strong.get(1L, new Object[0]), ItemList.Arrow_Head_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.slowness", 125), ItemList.Arrow_Head_Glass_Slowness.get(1L, new Object[0]), ItemList.Arrow_Head_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.slowness.long", 125), ItemList.Arrow_Head_Glass_Slowness_Long.get(1L, new Object[0]), ItemList.Arrow_Head_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.weakness", 125), ItemList.Arrow_Head_Glass_Weakness.get(1L, new Object[0]), ItemList.Arrow_Head_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.weakness.long", 125), ItemList.Arrow_Head_Glass_Weakness_Long.get(1L, new Object[0]), ItemList.Arrow_Head_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("holywater", 125), ItemList.Arrow_Head_Glass_Holy_Water.get(1L, new Object[0]), ItemList.Arrow_Head_Glass_Emtpy.get(1L, new Object[0])));
 
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.poison", 125), ItemList.Arrow_Wooden_Glass_Poison.get(1L, new Object[0]), ItemList.Arrow_Wooden_Glass_Emtpy.get(1L, new Object[0])));
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.poison.long", 125), ItemList.Arrow_Wooden_Glass_Poison_Long.get(1L, new Object[0]), ItemList.Arrow_Wooden_Glass_Emtpy.get(1L, new Object[0])));
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.poison.strong", 125), ItemList.Arrow_Wooden_Glass_Poison_Strong.get(1L, new Object[0]), ItemList.Arrow_Wooden_Glass_Emtpy.get(1L, new Object[0])));
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.slowness", 125), ItemList.Arrow_Wooden_Glass_Slowness.get(1L, new Object[0]), ItemList.Arrow_Wooden_Glass_Emtpy.get(1L, new Object[0])));
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.slowness.long", 125), ItemList.Arrow_Wooden_Glass_Slowness_Long.get(1L, new Object[0]), ItemList.Arrow_Wooden_Glass_Emtpy.get(1L, new Object[0])));
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.weakness", 125), ItemList.Arrow_Wooden_Glass_Weakness.get(1L, new Object[0]), ItemList.Arrow_Wooden_Glass_Emtpy.get(1L, new Object[0])));
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.weakness.long", 125), ItemList.Arrow_Wooden_Glass_Weakness_Long.get(1L, new Object[0]), ItemList.Arrow_Wooden_Glass_Emtpy.get(1L, new Object[0])));
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("holywater", 125), ItemList.Arrow_Wooden_Glass_Holy_Water.get(1L, new Object[0]), ItemList.Arrow_Wooden_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.poison", 125), ItemList.Arrow_Wooden_Glass_Poison.get(1L, new Object[0]), ItemList.Arrow_Wooden_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.poison.long", 125), ItemList.Arrow_Wooden_Glass_Poison_Long.get(1L, new Object[0]), ItemList.Arrow_Wooden_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.poison.strong", 125), ItemList.Arrow_Wooden_Glass_Poison_Strong.get(1L, new Object[0]), ItemList.Arrow_Wooden_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.slowness", 125), ItemList.Arrow_Wooden_Glass_Slowness.get(1L, new Object[0]), ItemList.Arrow_Wooden_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.slowness.long", 125), ItemList.Arrow_Wooden_Glass_Slowness_Long.get(1L, new Object[0]), ItemList.Arrow_Wooden_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.weakness", 125), ItemList.Arrow_Wooden_Glass_Weakness.get(1L, new Object[0]), ItemList.Arrow_Wooden_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.weakness.long", 125), ItemList.Arrow_Wooden_Glass_Weakness_Long.get(1L, new Object[0]), ItemList.Arrow_Wooden_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("holywater", 125), ItemList.Arrow_Wooden_Glass_Holy_Water.get(1L, new Object[0]), ItemList.Arrow_Wooden_Glass_Emtpy.get(1L, new Object[0])));
 
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.poison", 125), ItemList.Arrow_Plastic_Glass_Poison.get(1L, new Object[0]), ItemList.Arrow_Plastic_Glass_Emtpy.get(1L, new Object[0])));
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.poison.long", 125), ItemList.Arrow_Plastic_Glass_Poison_Long.get(1L, new Object[0]), ItemList.Arrow_Plastic_Glass_Emtpy.get(1L, new Object[0])));
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.poison.strong", 125), ItemList.Arrow_Plastic_Glass_Poison_Strong.get(1L, new Object[0]), ItemList.Arrow_Plastic_Glass_Emtpy.get(1L, new Object[0])));
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.slowness", 125), ItemList.Arrow_Plastic_Glass_Slowness.get(1L, new Object[0]), ItemList.Arrow_Plastic_Glass_Emtpy.get(1L, new Object[0])));
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.slowness.long", 125), ItemList.Arrow_Plastic_Glass_Slowness_Long.get(1L, new Object[0]), ItemList.Arrow_Plastic_Glass_Emtpy.get(1L, new Object[0])));
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.weakness", 125), ItemList.Arrow_Plastic_Glass_Weakness.get(1L, new Object[0]), ItemList.Arrow_Plastic_Glass_Emtpy.get(1L, new Object[0])));
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.weakness.long", 125), ItemList.Arrow_Plastic_Glass_Weakness_Long.get(1L, new Object[0]), ItemList.Arrow_Plastic_Glass_Emtpy.get(1L, new Object[0])));
-            FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("holywater", 125), ItemList.Arrow_Plastic_Glass_Holy_Water.get(1L, new Object[0]), ItemList.Arrow_Plastic_Glass_Emtpy.get(1L, new Object[0])));
-            if (!GT_Values.D1) {
-                try {
-                    Class.forName("codechicken.nei.api.API");
-                    GT_Log.out.println("GT_Mod: Hiding certain Items from NEI.");
-                    API.hideItem(ItemList.Display_Fluid.getWildcard(1L, new Object[0]));
-                } catch (Throwable e) {
-                    if (GT_Values.D1) {
-                        e.printStackTrace(GT_Log.err);
-                    }
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.poison", 125), ItemList.Arrow_Plastic_Glass_Poison.get(1L, new Object[0]), ItemList.Arrow_Plastic_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.poison.long", 125), ItemList.Arrow_Plastic_Glass_Poison_Long.get(1L, new Object[0]), ItemList.Arrow_Plastic_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.poison.strong", 125), ItemList.Arrow_Plastic_Glass_Poison_Strong.get(1L, new Object[0]), ItemList.Arrow_Plastic_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.slowness", 125), ItemList.Arrow_Plastic_Glass_Slowness.get(1L, new Object[0]), ItemList.Arrow_Plastic_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.slowness.long", 125), ItemList.Arrow_Plastic_Glass_Slowness_Long.get(1L, new Object[0]), ItemList.Arrow_Plastic_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.weakness", 125), ItemList.Arrow_Plastic_Glass_Weakness.get(1L, new Object[0]), ItemList.Arrow_Plastic_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("potion.weakness.long", 125), ItemList.Arrow_Plastic_Glass_Weakness_Long.get(1L, new Object[0]), ItemList.Arrow_Plastic_Glass_Emtpy.get(1L, new Object[0])));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(FluidRegistry.getFluidStack("holywater", 125), ItemList.Arrow_Plastic_Glass_Holy_Water.get(1L, new Object[0]), ItemList.Arrow_Plastic_Glass_Emtpy.get(1L, new Object[0])));
+        if (!GT_Values.D1) {
+            try {
+                Class.forName("codechicken.nei.api.API");
+                GT_Log.out.println("GT_Mod: Hiding certain Items from NEI.");
+                API.hideItem(ItemList.Display_Fluid.getWildcard(1L, new Object[0]));
+            } catch (Throwable e) {
+                if (GT_Values.D1) {
+                    e.printStackTrace(GT_Log.err);
                 }
             }
-            GT_ModHandler.addPulverisationRecipe(new ItemStack(Blocks.cobblestone, 1, 32767), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Stone, 1L), null, 0, false);
-            GT_ModHandler.addPulverisationRecipe(new ItemStack(Blocks.gravel, 1, 32767), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Stone, 1L), new ItemStack(Items.flint, 1), 10, false);
-            GT_ModHandler.addPulverisationRecipe(new ItemStack(Blocks.furnace, 1, 32767), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Stone, 8L), null, 0, false);
-            GT_ModHandler.addPulverisationRecipe(new ItemStack(Blocks.lit_furnace, 1, 32767), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Stone, 8L), null, 0, false);
-
-            GT_OreDictUnificator.set(OrePrefixes.ingot, Materials.FierySteel, GT_ModHandler.getModItem("TwilightForest", "item.fieryIngot", 1L, 0));
-            GT_OreDictUnificator.set(OrePrefixes.ingot, Materials.Knightmetal, GT_ModHandler.getModItem("TwilightForest", "item.knightMetal", 1L, 0));
-            GT_OreDictUnificator.set(OrePrefixes.ingot, Materials.Steeleaf, GT_ModHandler.getModItem("TwilightForest", "item.steeleafIngot", 1L, 0));
-            GT_OreDictUnificator.set(OrePrefixes.ingot, Materials.IronWood, GT_ModHandler.getModItem("TwilightForest", "item.ironwoodIngot", 1L, 0));
-            GT_OreDictUnificator.set(OrePrefixes.gem, Materials.InfusedAir, GT_ModHandler.getModItem("Thaumcraft", "ItemShard", 1L, 0));
-            GT_OreDictUnificator.set(OrePrefixes.gem, Materials.InfusedFire, GT_ModHandler.getModItem("Thaumcraft", "ItemShard", 1L, 1));
-            GT_OreDictUnificator.set(OrePrefixes.gem, Materials.InfusedWater, GT_ModHandler.getModItem("Thaumcraft", "ItemShard", 1L, 2));
-            GT_OreDictUnificator.set(OrePrefixes.gem, Materials.InfusedEarth, GT_ModHandler.getModItem("Thaumcraft", "ItemShard", 1L, 3));
-            GT_OreDictUnificator.set(OrePrefixes.gem, Materials.InfusedOrder, GT_ModHandler.getModItem("Thaumcraft", "ItemShard", 1L, 4));
-            GT_OreDictUnificator.set(OrePrefixes.gem, Materials.InfusedEntropy, GT_ModHandler.getModItem("Thaumcraft", "ItemShard", 1L, 5));
-            GT_OreDictUnificator.set(OrePrefixes.nugget, Materials.Mercury, GT_ModHandler.getModItem("Thaumcraft", "ItemNugget", 1L, 5));
-            GT_OreDictUnificator.set(OrePrefixes.nugget, Materials.Thaumium, GT_ModHandler.getModItem("Thaumcraft", "ItemNugget", 1L, 6));
-            GT_OreDictUnificator.set(OrePrefixes.ingot, Materials.Thaumium, GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1L, 2));
-            GT_OreDictUnificator.set(OrePrefixes.gem, Materials.Mercury, GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1L, 3));
-            GT_OreDictUnificator.set(OrePrefixes.gem, Materials.Amber, GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1L, 6));
-            GT_OreDictUnificator.set(OrePrefixes.gem, Materials.Firestone, GT_ModHandler.getModItem("Railcraft", "firestone.raw", 1L));
-
-            GT_OreDictUnificator.set(OrePrefixes.nugget, Materials.Void, GT_ModHandler.getModItem("Thaumcraft", "ItemNugget", 1L, 7));
-            GT_OreDictUnificator.set(OrePrefixes.ingot, Materials.Void, GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1L, 16));
-            GT_OreDictUnificator.set(OrePrefixes.ingot, Materials.BloodInfusedIron, GT_ModHandler.getModItem("BloodArsenal", "blood_infused_iron", 1L, 0));
-
-            if (GregTech_API.sUnification.get(ConfigCategories.specialunificationtargets + "." + "railcraft", "plateIron", true)) {
-                GT_OreDictUnificator.set(OrePrefixes.plate, Materials.Iron, GT_ModHandler.getModItem("Railcraft", "part.plate", 1L, 0));
-            } else {
-                GT_OreDictUnificator.set(OrePrefixes.plate, Materials.Iron, GT_ModHandler.getModItem("Railcraft", "part.plate", 1L, 0), false, false);
-            }
-
-            if (GregTech_API.sUnification.get(ConfigCategories.specialunificationtargets + "." + "railcraft", "plateSteel", true)) {
-                GT_OreDictUnificator.set(OrePrefixes.plate, Materials.Steel, GT_ModHandler.getModItem("Railcraft", "part.plate", 1L, 1));
-            } else {
-                GT_OreDictUnificator.set(OrePrefixes.plate, Materials.Steel, GT_ModHandler.getModItem("Railcraft", "part.plate", 1L, 1), false, false);
-            }
-
-            if (GregTech_API.sUnification.get(ConfigCategories.specialunificationtargets + "." + "railcraft", "plateTinAlloy", true)) {
-                GT_OreDictUnificator.set(OrePrefixes.plate, Materials.TinAlloy, GT_ModHandler.getModItem("Railcraft", "part.plate", 1L, 2));
-            } else {
-                GT_OreDictUnificator.set(OrePrefixes.plate, Materials.TinAlloy, GT_ModHandler.getModItem("Railcraft", "part.plate", 1L, 2), false, false);
-            }
-
-
-            if (GregTech_API.sUnification.get(ConfigCategories.specialunificationtargets + "." + "railcraft", "plateCopper", true)) {
-                GT_OreDictUnificator.set(OrePrefixes.plate, Materials.Copper, GT_ModHandler.getModItem("Railcraft", "part.plate", 1L, 3));
-            } else {
-                GT_OreDictUnificator.set(OrePrefixes.plate, Materials.Copper, GT_ModHandler.getModItem("Railcraft", "part.plate", 1L, 3), false, false);
-            }
-
-
-            GT_OreDictUnificator.set(OrePrefixes.dust, Materials.Cocoa, GT_ModHandler.getModItem("harvestcraft", "cocoapowderItem", 1L, 0));
-            GT_OreDictUnificator.set(OrePrefixes.dust, Materials.Coffee, ItemList.IC2_CoffeePowder.get(1L, new Object[0]));
-            //TODO ADD LATER @Technus why it crash if enable?
-            //FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(Materials.Naquadah.getMolten(1000L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Naquadah, 1L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Empty, 1L)));
-            //FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(Materials.NaquadahEnriched.getMolten(1000L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.NaquadahEnriched, 1L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Empty, 1L)));
-            //FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(Materials.Naquadria.getMolten(1000L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Naquadria, 1L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Empty, 1L)));
-
-            GregTech_API.registerMachineBlock(GT_Utility.getBlockFromStack(GT_ModHandler.getIC2Item("reinforcedGlass", 0)), 0);
         }
+        GT_ModHandler.addPulverisationRecipe(new ItemStack(Blocks.cobblestone, 1, 32767), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Stone, 1L), null, 0, false);
+        GT_ModHandler.addPulverisationRecipe(new ItemStack(Blocks.gravel, 1, 32767), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Stone, 1L), new ItemStack(Items.flint, 1), 10, false);
+        GT_ModHandler.addPulverisationRecipe(new ItemStack(Blocks.furnace, 1, 32767), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Stone, 8L), null, 0, false);
+        GT_ModHandler.addPulverisationRecipe(new ItemStack(Blocks.lit_furnace, 1, 32767), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Stone, 8L), null, 0, false);
+
+        GT_OreDictUnificator.set(OrePrefixes.ingot, Materials.FierySteel, GT_ModHandler.getModItem("TwilightForest", "item.fieryIngot", 1L, 0));
+        GT_OreDictUnificator.set(OrePrefixes.ingot, Materials.Knightmetal, GT_ModHandler.getModItem("TwilightForest", "item.knightMetal", 1L, 0));
+        GT_OreDictUnificator.set(OrePrefixes.ingot, Materials.Steeleaf, GT_ModHandler.getModItem("TwilightForest", "item.steeleafIngot", 1L, 0));
+        GT_OreDictUnificator.set(OrePrefixes.ingot, Materials.IronWood, GT_ModHandler.getModItem("TwilightForest", "item.ironwoodIngot", 1L, 0));
+        GT_OreDictUnificator.set(OrePrefixes.gem, Materials.InfusedAir, GT_ModHandler.getModItem("Thaumcraft", "ItemShard", 1L, 0));
+        GT_OreDictUnificator.set(OrePrefixes.gem, Materials.InfusedFire, GT_ModHandler.getModItem("Thaumcraft", "ItemShard", 1L, 1));
+        GT_OreDictUnificator.set(OrePrefixes.gem, Materials.InfusedWater, GT_ModHandler.getModItem("Thaumcraft", "ItemShard", 1L, 2));
+        GT_OreDictUnificator.set(OrePrefixes.gem, Materials.InfusedEarth, GT_ModHandler.getModItem("Thaumcraft", "ItemShard", 1L, 3));
+        GT_OreDictUnificator.set(OrePrefixes.gem, Materials.InfusedOrder, GT_ModHandler.getModItem("Thaumcraft", "ItemShard", 1L, 4));
+        GT_OreDictUnificator.set(OrePrefixes.gem, Materials.InfusedEntropy, GT_ModHandler.getModItem("Thaumcraft", "ItemShard", 1L, 5));
+        GT_OreDictUnificator.set(OrePrefixes.nugget, Materials.Mercury, GT_ModHandler.getModItem("Thaumcraft", "ItemNugget", 1L, 5));
+        GT_OreDictUnificator.set(OrePrefixes.nugget, Materials.Thaumium, GT_ModHandler.getModItem("Thaumcraft", "ItemNugget", 1L, 6));
+        GT_OreDictUnificator.set(OrePrefixes.ingot, Materials.Thaumium, GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1L, 2));
+        GT_OreDictUnificator.set(OrePrefixes.gem, Materials.Mercury, GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1L, 3));
+        GT_OreDictUnificator.set(OrePrefixes.gem, Materials.Amber, GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1L, 6));
+        GT_OreDictUnificator.set(OrePrefixes.gem, Materials.Firestone, GT_ModHandler.getModItem("Railcraft", "firestone.raw", 1L));
+
+        GT_OreDictUnificator.set(OrePrefixes.nugget, Materials.Void, GT_ModHandler.getModItem("Thaumcraft", "ItemNugget", 1L, 7));
+        GT_OreDictUnificator.set(OrePrefixes.ingot, Materials.Void, GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1L, 16));
+        GT_OreDictUnificator.set(OrePrefixes.ingot, Materials.BloodInfusedIron, GT_ModHandler.getModItem("BloodArsenal", "blood_infused_iron", 1L, 0));
+
+        if (GregTech_API.sUnification.get(ConfigCategories.specialunificationtargets + "." + "railcraft", "plateIron", true)) {
+            GT_OreDictUnificator.set(OrePrefixes.plate, Materials.Iron, GT_ModHandler.getModItem("Railcraft", "part.plate", 1L, 0));
+        } else {
+            GT_OreDictUnificator.set(OrePrefixes.plate, Materials.Iron, GT_ModHandler.getModItem("Railcraft", "part.plate", 1L, 0), false, false);
+        }
+
+        if (GregTech_API.sUnification.get(ConfigCategories.specialunificationtargets + "." + "railcraft", "plateSteel", true)) {
+            GT_OreDictUnificator.set(OrePrefixes.plate, Materials.Steel, GT_ModHandler.getModItem("Railcraft", "part.plate", 1L, 1));
+        } else {
+            GT_OreDictUnificator.set(OrePrefixes.plate, Materials.Steel, GT_ModHandler.getModItem("Railcraft", "part.plate", 1L, 1), false, false);
+        }
+
+        if (GregTech_API.sUnification.get(ConfigCategories.specialunificationtargets + "." + "railcraft", "plateTinAlloy", true)) {
+            GT_OreDictUnificator.set(OrePrefixes.plate, Materials.TinAlloy, GT_ModHandler.getModItem("Railcraft", "part.plate", 1L, 2));
+        } else {
+            GT_OreDictUnificator.set(OrePrefixes.plate, Materials.TinAlloy, GT_ModHandler.getModItem("Railcraft", "part.plate", 1L, 2), false, false);
+        }
+
+
+        if (GregTech_API.sUnification.get(ConfigCategories.specialunificationtargets + "." + "railcraft", "plateCopper", true)) {
+            GT_OreDictUnificator.set(OrePrefixes.plate, Materials.Copper, GT_ModHandler.getModItem("Railcraft", "part.plate", 1L, 3));
+        } else {
+            GT_OreDictUnificator.set(OrePrefixes.plate, Materials.Copper, GT_ModHandler.getModItem("Railcraft", "part.plate", 1L, 3), false, false);
+        }
+
+
+        GT_OreDictUnificator.set(OrePrefixes.dust, Materials.Cocoa, GT_ModHandler.getModItem("harvestcraft", "cocoapowderItem", 1L, 0));
+        GT_OreDictUnificator.set(OrePrefixes.dust, Materials.Coffee, ItemList.IC2_CoffeePowder.get(1L, new Object[0]));
+        //TODO ADD LATER @Technus why it crash if enable?
+        //FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(Materials.Naquadah.getMolten(1000L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Naquadah, 1L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Empty, 1L)));
+        //FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(Materials.NaquadahEnriched.getMolten(1000L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.NaquadahEnriched, 1L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Empty, 1L)));
+        //FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(Materials.Naquadria.getMolten(1000L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Naquadria, 1L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Empty, 1L)));
+
+        GregTech_API.registerMachineBlock(GT_Utility.getBlockFromStack(GT_ModHandler.getIC2Item("reinforcedGlass", 0)), 0);
+    }
 }

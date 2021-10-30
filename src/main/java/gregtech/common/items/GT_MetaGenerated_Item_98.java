@@ -22,10 +22,13 @@ import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /** This class holds cells for non-GT fluids. */
 public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
@@ -43,16 +46,39 @@ public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
      * we don't re-use it for a new fluid.
      */
     public enum FluidCell {
-        // Next unused ID: 5
+        // Next unused ID: 18
 
-        // Railcraft
-        STEAM(0, "steam", CellType.REGULAR),
+        // GregTech
+        DRILLING_FLUID(5, "liquid_drillingfluid", CellType.REGULAR),
+        SQUID_INK(6, "squidink", CellType.SMALL),
+
+        // New Horizons Core Mod
+        UNKNOWN_NUTRIENT_AGAR(7, "unknownnutrientagar", CellType.REGULAR),
+        SEAWEED_BROTH(8, "seaweedbroth", CellType.REGULAR),
+        SUPER_LIGHT_RADOX(9, "superlightradox", CellType.REGULAR),
+
+        // BartWorks
+        ENZYME_SOLUTION(10, "enzymessollution", CellType.REGULAR),
+        ESCHERICHIA_COLI_FLUID(11, "escherichiakolifluid", CellType.REGULAR),
+        PENICILLIN(12, "penicillin", CellType.REGULAR),
+        FLUORESCENT_DNA(13, "fluorecentddna", CellType.REGULAR),
+
+        // Good Generator
+        COMBUSTION_PROMOTER(14, "combustionpromotor", CellType.REGULAR),
 
         // Galacticraft
         BACTERIAL_SLUDGE(1, "bacterialsludge", CellType.REGULAR),
 
+        // Railcraft
+        STEAM(0, "steam", CellType.REGULAR),
+
         // Gendustry
+        BACTERIA(15, "binnie.bacteria", CellType.REGULAR),
         MUTAGEN(2, "mutagen", CellType.REGULAR),
+        LIQUID_DNA(16, "liquiddna", CellType.REGULAR),
+
+        // Genetics
+        POLYMERASE(17, "polymerase", CellType.REGULAR),
 
         // Tinker's Construct
         LIQUID_ENDER(3, "ender", CellType.REGULAR),
@@ -124,17 +150,12 @@ public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
         }
     }
 
-    /**
-     * We support adding two different types of cells.
-     *
-     * <p>Regular cells have capacity 1000 and use the regular cell icon. Molten cells have capacity
-     * 144 and use the molten cell icon.
-     */
+    /** Cell type specifies the cell capacity, appearance, and item name format. */
     private enum CellType {
         REGULAR(1_000, OrePrefixes.cell),
-        MOLTEN(144, OrePrefixes.cellMolten);
-        // We could also add plasma cells (cellPlasma) here if we need to.
-        // Plasma cells look like molten cells, but have 1000 capacity.
+        SMALL(144, OrePrefixes.cell),
+        MOLTEN(144, OrePrefixes.cellMolten),
+        PLASMA(1_000, OrePrefixes.cellPlasma);
 
         private final int capacity;
         private final OrePrefixes prefix;
@@ -164,31 +185,53 @@ public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
      * <p>Only contains IDs that were successfully registered.
      */
     private final Map<Integer, RegisteredFluidData> registeredFluidDataMap;
-
-    public static synchronized void init() {
-        if (INSTANCE == null)
-            INSTANCE = new GT_MetaGenerated_Item_98();
-
-        INSTANCE.createItems();
-        INSTANCE.registerOreDict();
-    }
+    private final EnumMap<CellType, IIconContainer> iconContainerMap;
 
     private GT_MetaGenerated_Item_98() {
         // For some reason, fluid cells will be rendered only if the metadata ID is less than the
         // offset. So we will specify maximum offset here.
         // See: GT_MetaGenerated_Item_Renderer.java
-        super("metaitem.98", (short) 32766, (short) FluidCell.values().length);
+        super("metaitem.98", (short) 32766, (short) 0);
 
         registeredFluidDataMap = new HashMap<>();
+        iconContainerMap = new EnumMap<>(CellType.class);
+    }
+
+    /**
+     * Loading needs to happen after the fluids we need have been registered, which means during post-load.
+     * However, cell icons seem to be deleted some time between load and post-load, so we must pre-cache them.
+     */
+    public static synchronized void preInit() {
+        if (INSTANCE == null)
+            INSTANCE = new GT_MetaGenerated_Item_98();
+
+        // We'll just steal the icons from Water. They are all the same anyway (except _NULL is broken for cells).
+        for (CellType cellType : CellType.values()) {
+            IIconContainer iconContainer = Materials.Water.mIconSet.mTextures[cellType.prefix.mTextureIndex];
+            INSTANCE.iconContainerMap.put(cellType, iconContainer);
+        }
+    }
+
+    public static synchronized void init() {
+        INSTANCE.createItems();
+        INSTANCE.registerOreDict();
     }
 
     private void createItems() {
         ItemStack emptyCell = ItemList.Cell_Empty.get(1L);
 
+        // We'll check for ID uniqueness. Better to throw an exception than silently overwrite some
+        // fluid cells with other fluids due to ID collision.
+        Set<Integer> idSet = new HashSet<>();
         for (FluidCell tCell : FluidCell.values()) {
             int id = tCell.getId();
             String fluidName = tCell.getFluidName();
             CellType cellType = tCell.getDisplayType();
+
+            if (idSet.contains(id)) {
+                throw new IllegalStateException("Got ID collision for ID: " + id);
+            }
+            idSet.add(id);
 
             Fluid fluid = FluidRegistry.getFluid(fluidName);
             if (fluid == null) {
@@ -217,9 +260,12 @@ public class GT_MetaGenerated_Item_98 extends GT_MetaGenerated_Item {
             rgba[2] = (short) (color & 0x000000FF);
             rgba[3] = (short) ((color & 0xFF000000) >> 24);
 
+            registeredFluidDataMap.put(id, new RegisteredFluidData(fluid, rgba, iconContainerMap.get(cellType)));
+            /*
             // We'll just steal the icons from Water. They are all the same anyway (except _NULL is broken for cells).
             IIconContainer iconContainer = Materials.Water.mIconSet.mTextures[cellType.prefix.mTextureIndex];
             registeredFluidDataMap.put(id, new RegisteredFluidData(fluid, rgba, iconContainer));
+             */
         }
 
         // We're not going to use these BitSets, so clear them to save memory.
