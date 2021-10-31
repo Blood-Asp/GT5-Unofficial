@@ -18,7 +18,11 @@ GT5U.MBTT.Causes=产生
 GT5U.MBTT.PPS=点/秒污染
 GT5U.MBTT.Hold=按住
 GT5U.MBTT.Display=以显示结构指导
+GT5U.MBTT.StructureHint=多种可选方块或任意等级方块
 GT5U.MBTT.Mod=添加模组：
+GT5U.MBTT.Air=必须留空
+
+GT5U.cracker.io_side=输入/输出仓必须处在对侧！
 
 GT5U.turbine.running.true=涡轮运行
 GT5U.turbine.running.false=涡轮停止
@@ -68,6 +72,10 @@ GT5U.machines.voidoveflow.disabled=禁用溢出销毁
 
 GT5U.hatch.disableFilter.true=关闭输入过滤
 GT5U.hatch.disableFilter.false=开启输入过滤
+GT5U.hatch.disableSort.true=关闭整理模式
+GT5U.hatch.disableSort.false=开启整理模式
+GT5U.hatch.disableLimited.true=关闭限制模式
+GT5U.hatch.disableLimited.false=开启限制模式
 
 GT5U.multiblock.pollution=污染减少到
 GT5U.multiblock.energy=存储能量
@@ -421,7 +429,7 @@ achievement.Chrome=找到铬矿石
 achievement.Chrome.desc=高度：5-50，几率：60，谷神星/木卫三/木卫一/木卫四/水星/天卫四/土卫二/海卫八/冥王星/柯伊伯带/鸟神星/织女一B/巴德纳F/鲸鱼座T星//
 achievement.Neutronium=找到中子锭矿石
 achievement.Neutronium.desc=高度：5-30，几率：10，/木卫一/金星/水星/土卫二/土卫六/天卫五/海卫一/柯伊伯带/鲸鱼座T星//
-achievement.Adamantium=找到精金合金矿石
+achievement.Adamantium=找到精金矿石
 achievement.Adamantium.desc=高度：5-30，几率：10，海卫八/海卫一/冥王星/柯伊伯带/鸟神星/妊神星/织女一B/巴德纳E/巴德纳F/鲸鱼座T星//
 achievement.MeteoricIron=找到陨铁矿石
 achievement.MeteoricIron.desc=高度：220-230，几率：100，漆黑维度/
@@ -1054,7 +1062,7 @@ fluid.NitricAcid=硝酸
 fluid.EnrichedBacterialSludge=放射性细菌污泥
 fluid.Ammonia=氨气
 fluid.Neon=氖气
-fluid.Oganesson=<气奥>
+fluid.Oganesson=鿫
 fluid.Aqua Regia=王水
 fluid.Ammonium Chloride=氯化铵
 fluid.Platinum Concentrate=浓缩铂
@@ -1104,29 +1112,27 @@ fluid.Ammonium Dinitramide=二硝酰胺铵
 fluid.LMP-103S=LMP-103S
 fluid.Nitromethane=硝基甲烷
 fluid.O-Xylene=邻二甲苯
-//GT_MetaGenerated_Item_98 cells
-fluid.UnknownNutrientAgar=未知营养琼脂
-fluid.SeaweedBroth=海藻基质
-fluid.EnzymesSollution=酶溶液
-fluid.escherichiakolifluid=eColi Bacteria Fluid
-fluid.Penicillin=青霉素
-fluid.FluorecentdDNA=荧光DNA
-fluid.Polymerase=聚合酶
-//以下流体没有单元形式，大部分是bart的生物科技
+#以下流体没有单元形式，大部分是bart的生物科技
 fluid.Monomethylhydrazine=一甲基肼
 fluid.binnibacteriafluid=双杆菌液体
+fluid.SeaweedBroth=海藻基质
 fluid.barnadafisarboriatorisfluid=巴纳德乔木培养液
+fluid.Polymerase=聚合酶
 fluid.GelatinMixture=明胶混合物
+fluid.FluorecentdDNA=荧光DNA
+fluid.Penicillin=青霉素
 fluid.sludge=菌泥
+fluid.EnzymesSollution=酶溶液
 fluid.Formaldehyde=甲醛
 fluid.tcetieisfucusserratusfluid=鲸鱼座T星藻类培养液
 fluid.MeatExtract=肉汁
-//以下流体有贴图没有配方
+fluid.UnknownNutrientAgar=未知营养琼脂
+#以下流体有贴图没有配方
 fluid.CompressedOxygen=压缩氧气
 fluid.CompressedNitrogen=压缩氮气
 fluid.redplasma=红等离子体
 fluid.tile.fluidBlockSludge=污泥
-//以下流体没有贴图
+#以下流体没有贴图
 fluid.guano=鸟粪
 fluid.poo=便便
 fluid.sewerage=下水
