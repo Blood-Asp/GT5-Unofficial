@@ -722,6 +722,11 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
     }
 
     @Override
+    public boolean addChemicalBathRecipe(ItemStack aInput, FluidStack aBathingFluid, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, FluidStack aFluidOutput, int[] aChances, int aDuration, int aEUt) {
+        return false;
+    }
+
+    @Override
     public boolean addForgeHammerRecipe(ItemStack aInput1, ItemStack aOutput1, int aDuration, int aEUt) {
         if ((aInput1 == null) || (aOutput1 == null)) {
             return false;
@@ -990,7 +995,6 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         GT_Recipe.GT_Recipe_Map.sFluidCannerRecipes.addRecipe(true, new ItemStack[]{aInput}, new ItemStack[]{aOutput}, null, new FluidStack[]{aFluidInput == null ? null : aFluidInput}, new FluidStack[]{aFluidOutput == null ? null : aFluidOutput}, aDuration, aEUt, 0);
         return true;
     }
-
     @Override
     public boolean addChemicalBathRecipe(ItemStack aInput, FluidStack aBathingFluid, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, int[] aChances, int aDuration, int aEUt) {
         if ((aInput == null) || (aBathingFluid == null) || (aOutput1 == null)) {
@@ -1000,6 +1004,18 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
             return false;
         }
         GT_Recipe.GT_Recipe_Map.sChemicalBathRecipes.addRecipe(true, new ItemStack[]{aInput}, new ItemStack[]{aOutput1, aOutput2, aOutput3}, null, aChances, new FluidStack[]{aBathingFluid}, null, aDuration, aEUt, 0);
+        return true;
+    }
+
+    @Override
+    public boolean addChemicalBathRecipe(ItemStack aInput, FluidStack aBathingFluid, FluidStack aFluidOutput, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, int[] aChances, int aDuration, int aEUt) {
+        if ((aInput == null) || (aBathingFluid == null) || (aOutput1 == null)) {
+            return false;
+        }
+        if ((aDuration = GregTech_API.sRecipeFile.get("chemicalbath", aInput, aDuration)) <= 0) {
+            return false;
+        }
+        GT_Recipe.GT_Recipe_Map.sChemicalBathRecipes.addRecipe(true, new ItemStack[]{aInput}, new ItemStack[]{aOutput1, aOutput2, aOutput3}, null, aChances, new FluidStack[]{aBathingFluid}, new FluidStack[]{aFluidOutput}, aDuration, aEUt, 0);
         return true;
     }
 
@@ -1090,6 +1106,20 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
             aCleanroom = false;
         }
         GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes.addRecipe(true, new ItemStack[]{aInput, aCircuit}, new ItemStack[]{aOutput}, null, new int[]{aChance}, new FluidStack[]{aFluid}, null, aDuration, aEUt, aCleanroom ? -100 : 0);
+        return true;
+    }
+    @Override
+    public boolean addAutoclave4Recipe(ItemStack aInput, ItemStack aCircuit, FluidStack aFluidIn, FluidStack aFluidOut, ItemStack[] aOutputs, int[] aChances, int aDuration, int aEUt, boolean aCleanroom) {
+        if ((aInput == null) || (aFluidIn == null) || (aOutputs == null)) {
+            return false;
+        }
+        if ((aDuration = GregTech_API.sRecipeFile.get("autoclave", aInput, aDuration)) <= 0) {
+            return false;
+        }
+        if (!GT_Mod.gregtechproxy.mEnableCleanroom){
+            aCleanroom = false;
+        }
+        GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes.addRecipe(true, new ItemStack[] {aInput, aCircuit} , aOutputs, null, aChances, new FluidStack[]{aFluidIn}, new FluidStack[]{aFluidOut}, aDuration, aEUt, aCleanroom ? -200 : 0);
         return true;
     }
 

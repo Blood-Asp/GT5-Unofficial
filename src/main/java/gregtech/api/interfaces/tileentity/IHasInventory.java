@@ -5,6 +5,8 @@ import net.minecraft.item.ItemStack;
 
 public interface IHasInventory extends ISidedInventory, IHasWorldObjectAndCoords {
 
+    default void markInventoryBeenModified() {}
+
     /**
      * if the Inventory of this TileEntity got modified this tick
      */
