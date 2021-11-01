@@ -35,6 +35,8 @@ GT5U.turbine.dmg=Turbine Damage
 GT5U.turbine.loose=Loose
 GT5U.turbine.tight=Tight
 
+GT5U.tool.drill.area=Drill Area Set To
+
 GT5U.engine.output=Current Output
 GT5U.engine.consumption=Fuel Consumption
 GT5U.engine.value=Fuel Value

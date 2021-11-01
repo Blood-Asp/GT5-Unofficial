@@ -48,6 +48,11 @@ public class GT_Tool_Drill_HV extends GT_Tool_Drill_LV {
     }
 
     @Override
+    public int getMaxAOESize() {
+        return 3;
+    }
+
+    @Override
     public void onToolCrafted(ItemStack aStack, EntityPlayer aPlayer) {
         super.onToolCrafted(aStack, aPlayer);
         try {

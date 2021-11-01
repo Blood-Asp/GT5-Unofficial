@@ -3,20 +3,24 @@ package gregtech.common.tools;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.IAOETool;
 import gregtech.api.interfaces.IIconContainer;
+import gregtech.api.interfaces.IToolStats;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.util.GT_ToolHarvestHelper;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.AchievementList;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.*;
+import net.minecraft.world.World;
 
-public class GT_Tool_Drill_LV extends GT_Tool {
+public class GT_Tool_Drill_LV extends GT_Tool implements IAOETool {
     @Override
     public int getToolDamagePerBlockBreak() {
         return GT_Mod.gregtechproxy.mHardRock ? 25 : 50;
@@ -78,6 +82,11 @@ public class GT_Tool_Drill_LV extends GT_Tool {
     }
 
     @Override
+    public int getMaxAOESize() {
+        return 1;
+    }
+
+    @Override
     public boolean canBlock() {
         return false;
     }
@@ -133,6 +142,50 @@ public class GT_Tool_Drill_LV extends GT_Tool {
             GT_Mod.instance.achievements.issueAchievement(aPlayer, "buildDrill");
         } catch (Exception ignored) {
         }
+    }
+
+    @Override
+    public void onRightClick(ItemStack stack, EntityPlayer player) {
+        if (player.isSneaking()) {
+            NBTTagCompound stats = GT_MetaGenerated_Tool.getStatNbt(stack);
+            int size = getAOE(stats) + 1;
+            if (size > getMaxAOESize()) size = 0;
+            int chatSize = 1 + size * 2;
+            GT_Utility.sendChatToPlayer(player, StatCollector.translateToLocal("GT5U.tool.drill.area") + " " + chatSize + "x" + chatSize);
+            setAOE(stats, size);
+        }
+    }
+
+    @Override
+    public float getDigSpeed(float digSpeed, IToolStats stats, ItemStack stack) {
+        NBTTagCompound nbtStats = GT_MetaGenerated_Tool.getStatNbt(stack);
+        int aoe = getAOE(nbtStats);
+        if (aoe > 0) return digSpeed / getSpeedReduction();
+        return digSpeed;
+    }
+
+    @Override
+    public int getDamageMultiplyer() {
+        return 2;
+    }
+
+    @Override
+    public float getSpeedReduction() {
+        return 6;
+    }
+
+    @Override
+    public int onBlockDestroyed(ItemStack stack, IToolStats stats, World world, Block block, int x, int y, int z, EntityLivingBase player) {
+        if (!(player instanceof EntityPlayerMP))
+            return 0;
+        MovingObjectPosition mop = GT_Utility.raytraceFromEntity(player.worldObj, player, false, 5);
+        if (mop == null) return 0;
+        int side = mop.sideHit;
+        EntityPlayerMP playerMP = (EntityPlayerMP) player;
+        NBTTagCompound nbt = GT_MetaGenerated_Tool.getStatNbt(stack);
+        int radius = getAOE(nbt);
+        int broken = breakBlockAround(side, radius, radius, stats, stack, world, x, y, z, playerMP) * getDamageMultiplyer();
+        return broken;
     }
 
     @Override
