@@ -665,8 +665,7 @@ public abstract class GT_MetaGenerated_Tool extends GT_MetaBase_Item implements 
             if (aNBT != null) aNBT.removeTag("ench");
             return false;
         }
-        //TODO THIS SHOULD NOT BE FUCKING CALLED HERE
-        //WTF WAS GER THINKING WHEN WRITING THIS GARBAGE
+        //TODO THIS SHOULD NOT BE CALLED HERE
         addEnchantmentsFromMaterialAndToolStats(aStack, tStats);
         return true;
     }
