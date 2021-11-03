@@ -3108,8 +3108,8 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addChemicalRecipeForBasicMachineOnly(Materials.HydrochloricAcid.getCells(1), 	Materials.Oxygen.getCells(1), 			Materials.Ethylene.getGas(1000), 			Materials.VinylChloride.getGas(1000), Materials.Water.getCells(1), Materials.Empty.getCells(1), 160, 30);
         GT_Values.RA.addChemicalRecipeForBasicMachineOnly(Materials.Oxygen.getCells(1), 			Materials.Ethylene.getCells(1), 		Materials.HydrochloricAcid.getFluid(1000),  Materials.VinylChloride.getGas(1000), Materials.Water.getCells(1), Materials.Empty.getCells(1), 160, 30);
 
-        GT_Values.RA.addMultiblockChemicalRecipe(new ItemStack[]{GT_Utility.getIntegratedCircuit(2)}, new FluidStack[]{Materials.HydrochloricAcid.getFluid(1000), Materials.Ethylene.getFluid(1000), Materials.Oxygen.getFluid(1000)}, new FluidStack[]{Materials.VinylChloride.getFluid(1000), Materials.Water.getFluid(1000)}, null, 160, 30);
-        GT_Values.RA.addMultiblockChemicalRecipe(new ItemStack[]{GT_Utility.getIntegratedCircuit(24)}, new FluidStack[]{Materials.Chlorine.getFluid(2000), Materials.Ethylene.getFluid(2000), Materials.Oxygen.getFluid(1000)}, new FluidStack[]{Materials.VinylChloride.getFluid(2000), Materials.Water.getFluid(1000)}, null, 240, 30);
+        GT_Values.RA.addMultiblockChemicalRecipe(new ItemStack[]{GT_Utility.getIntegratedCircuit(2)}, new FluidStack[]{Materials.HydrochloricAcid.getFluid(1000), Materials.Ethylene.getGas(1000), Materials.Oxygen.getGas(1000)}, new FluidStack[]{Materials.VinylChloride.getGas(1000), Materials.Water.getFluid(1000)}, null, 160, 30);
+        GT_Values.RA.addMultiblockChemicalRecipe(new ItemStack[]{GT_Utility.getIntegratedCircuit(24)}, new FluidStack[]{Materials.Chlorine.getGas(2000), Materials.Ethylene.getGas(2000), Materials.Oxygen.getGas(1000)}, new FluidStack[]{Materials.VinylChloride.getGas(2000), Materials.Water.getFluid(1000)}, null, 240, 30);
 
         GT_Values.RA.addDefaultPolymerizationRecipes(Materials.VinylChloride.mGas, Materials.VinylChloride.getCells(1), Materials.PolyvinylChloride.mStandardMoltenFluid);
 
