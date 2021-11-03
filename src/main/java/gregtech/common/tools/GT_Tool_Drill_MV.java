@@ -49,7 +49,7 @@ public class GT_Tool_Drill_MV
 
     @Override
     public int getMaxAOESize() {
-        return 2;
+        return 4;
     }
 
     @Override

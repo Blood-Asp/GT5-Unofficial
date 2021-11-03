@@ -12,13 +12,17 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.world.BlockEvent;
 
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 public interface IAOETool {
 
     int getMaxAOESize();
 
     void onRightClick(ItemStack stack, EntityPlayer player);
 
-    int getDamageMultiplyer();
+    float getDamageMultiplyer();
 
     float getSpeedReduction();
 
@@ -34,40 +38,130 @@ public interface IAOETool {
         return statNbt.getInteger("AOE");
     }
 
-    default int breakBlockAround(int side, int xRadius, int yRadius, IToolStats stats, ItemStack stack, World world, int x, int y, int z,
+    default int breakBlockAround(int side,int xStartPos ,int yStartPos,int xLength, int yLenghth, IToolStats stats, ItemStack stack, World world, int x, int y, int z,
                                        EntityPlayerMP player) {
         int harvsestleve = stack.getItem().getHarvestLevel(stack,"");
-
-        float rotation = player.rotationYawHead < 0 ? 360f + player.rotationYawHead : player.rotationYawHead;
 
         int DX;
         int DY;
         int DZ;
         boolean downUp = side < 2;
         boolean northSouth = side < 4;
+        float rotation = player.rotationYawHead < 0 ? 360f + player.rotationYawHead : player.rotationYawHead;
 
-        if (downUp && !(rotation < 45 || rotation > 315 || (rotation > 135 && rotation < 225 ))) {
-            int yt = yRadius;
-            yRadius = xRadius;
-            xRadius = yt;
+        BiFunction<Integer,Integer,Boolean> xCheck = (value,len) -> value<len;
+        BiFunction<Integer,Integer,Boolean> yCheck = (value,len) -> value>len;
+
+        int xIterate = 1;
+        int yIterate = -1;
+
+        if (downUp ) {
+            boolean north = rotation > 135 && rotation < 225;// 180
+            //boolean east = rotation >= 225 && rotation <= 315;//270
+            boolean west = rotation >= 45 && rotation <= 135;// 90
+            boolean south = rotation < 45 || rotation > 315;//0
+
+            //x = easth-west
+            //y = north-south
+
+            if (south) {
+                yLenghth *= -1;
+                yLenghth -= yStartPos;
+                yStartPos *= -1;
+                if (side == 0) {
+                    xLength += xStartPos;
+                } else {
+                    xCheck = (value,len) -> value>len;
+                    xLength *= -1;
+                    xLength -= xStartPos;
+                    xIterate = -1;
+                    xStartPos *=-1;
+                }
+            } else if (west) {
+                xCheck = (value,len) -> value>len;
+                xLength *= -1;
+                xLength -= xStartPos;
+                xIterate = -1;
+                xStartPos *=-1;
+
+                if (side == 0) {
+                    yLenghth *= -1;
+                    yLenghth -= yStartPos;
+                    yStartPos *= -1;
+                } else {
+                    yCheck = (value,len) -> value<len;
+                    yIterate = 1;
+                    yLenghth += yStartPos;
+                }
+            } else if (north) {
+                yCheck = (value,len) -> value<len;
+                yIterate = 1;
+                yLenghth += yStartPos;
+
+                if (side == 0) {
+                    xCheck = (value,len) -> value>len;
+                    xLength *= -1;
+                    xLength -= xStartPos;
+                    xIterate = -1;
+                    xStartPos *=-1;
+                } else {
+                    xLength += xStartPos;
+                }
+            } else {
+                xLength += xStartPos;
+
+                if (side == 0) {
+                    yCheck = (value,len) -> value<len;
+                    yIterate = 1;
+                    yLenghth += yStartPos;
+                } else {
+                    yLenghth *= -1;
+                    yLenghth -= yStartPos;
+                    yStartPos *= -1;
+                }
+            }
+        } else {
+            yLenghth *= -1;
+            yLenghth -= yStartPos;
+            yStartPos *= -1;
+            if (northSouth) {
+                if (side ==2) {
+                    xLength *= -1;
+                    xLength -= xStartPos;
+                    xIterate = -1;
+                    xStartPos *=-1;
+                    xCheck = (value,len) -> value>len;
+                } else {
+                    xLength += xStartPos;
+                }
+            } else {
+                if (side == 5) {
+                    xLength *= -1;
+                    xLength -= xStartPos;
+                    xIterate = -1;
+                    xStartPos *=-1;
+                    xCheck = (value,len) -> value>len;
+                } else {
+                    xLength += xStartPos;
+                }
+            }
         }
-
         int broken = 0;
-        for (int i = -1*yRadius; i <= yRadius; i++) {
-            for (int j = -1*xRadius; j <= xRadius; j++) {
-                if (i != 0 || j != 0) {
+        for (int Y = yStartPos; yCheck.apply(Y,yLenghth); Y+=yIterate) {
+            for (int X = xStartPos;xCheck.apply(X,xLength); X+=xIterate) {
+                if (Y != 0 || X != 0) {
                     if (downUp) {
-                        DX = x + i;
+                        DX = x + Y;
                         DY = y;
-                        DZ = z + j;
+                        DZ = z + X;
                     } else if (northSouth) {
-                        DX = x + i;
-                        DY = y + j;
+                        DX = x + X;
+                        DY = y + Y;
                         DZ = z;
                     } else {
                         DX = x;
-                        DY = y + j;
-                        DZ = z + i;
+                        DY = y + Y;
+                        DZ = z + X;
                     }
                     if (breakBlock(stack, stats, harvsestleve, world, DX, DY, DZ, player))
                         broken++;
@@ -104,7 +198,7 @@ public interface IAOETool {
     //and block stats dont matter for the get digSpeed mult or even matter for this function
     static boolean canHarvest(int toolHarvestLevel, Block block, int meta, IToolStats stats) {
         int blockHarvestLevel = block.getHarvestLevel(meta);
-        if (toolHarvestLevel < blockHarvestLevel) return false;
+        if (toolHarvestLevel < blockHarvestLevel || blockHarvestLevel < 0) return false;
         boolean isMineble = stats.isMinableBlock(block, (byte) meta);
         if (!isMineble && blockHarvestLevel != 0) {
             return false;
