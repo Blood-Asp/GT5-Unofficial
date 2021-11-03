@@ -61,13 +61,15 @@ public interface IAOETool {
             boolean west = rotation >= 45 && rotation <= 135;// 90
             boolean south = rotation < 45 || rotation > 315;//0
 
-            //x = easth-west
-            //y = north-south
+            //x = north-south
+            //y = east-west
 
             if (south) {
+                //invert Y direction
                 yLenghth *= -1;
                 yLenghth -= yStartPos;
                 yStartPos *= -1;
+                //invert X direction when looking down
                 if (side == 0) {
                     xLength += xStartPos;
                 } else {
@@ -78,12 +80,13 @@ public interface IAOETool {
                     xStartPos *=-1;
                 }
             } else if (west) {
+                //invert X direction
                 xCheck = (value,len) -> value>len;
                 xLength *= -1;
                 xLength -= xStartPos;
                 xIterate = -1;
                 xStartPos *=-1;
-
+                //invert Y direction when looking up
                 if (side == 0) {
                     yLenghth *= -1;
                     yLenghth -= yStartPos;
@@ -94,10 +97,12 @@ public interface IAOETool {
                     yLenghth += yStartPos;
                 }
             } else if (north) {
+                //dont invert Y direction
                 yCheck = (value,len) -> value<len;
                 yIterate = 1;
                 yLenghth += yStartPos;
 
+                //invert X direction when looking UP
                 if (side == 0) {
                     xCheck = (value,len) -> value>len;
                     xLength *= -1;
@@ -108,8 +113,10 @@ public interface IAOETool {
                     xLength += xStartPos;
                 }
             } else {
+                //dont invert X direction
                 xLength += xStartPos;
 
+                //invert Y direction when looking DOWN
                 if (side == 0) {
                     yCheck = (value,len) -> value<len;
                     yIterate = 1;
@@ -151,6 +158,7 @@ public interface IAOETool {
             for (int X = xStartPos;xCheck.apply(X,xLength); X+=xIterate) {
                 if (Y != 0 || X != 0) {
                     if (downUp) {
+                        //im to lazy to fix this
                         DX = x + Y;
                         DY = y;
                         DZ = z + X;
@@ -200,9 +208,6 @@ public interface IAOETool {
         int blockHarvestLevel = block.getHarvestLevel(meta);
         if (toolHarvestLevel < blockHarvestLevel || blockHarvestLevel < 0) return false;
         boolean isMineble = stats.isMinableBlock(block, (byte) meta);
-        if (!isMineble && blockHarvestLevel != 0) {
-            return false;
-        }
-        return true;
+        return isMineble || blockHarvestLevel == 0;
     }
 }
