@@ -1,3 +1,14 @@
+# Creative ItemGroup Tab
+itemGroup.GregTech.GTPP_BLOCKS=GT++方块
+itemGroup.GregTech.GTPP_MACHINES=GT++机器
+itemGroup.GregTech.GTPP_MISC=GT++杂项
+itemGroup.GregTech.GTPP_OTHER=GT++其他
+itemGroup.GregTech.GTPP_OTHER_2=GT++其他II
+itemGroup.GregTech.GTPP_TOOLS=GT++工具
+itemGroup.GregTech.Main=主体
+itemGroup.GregTech.Materials=材料
+itemGroup.GregTech.Ores=矿石
+
 # Multiblock Tooltip Builder Keywords
 # Context can be found in the class gregtech.api.util.GT_Multiblock_Tooltip_Builder
 GT5U.MBTT.MachineType=机器类型
