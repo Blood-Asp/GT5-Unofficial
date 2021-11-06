@@ -83,6 +83,13 @@ public class GT_MachineRecipeLoader implements Runnable {
             e.printStackTrace(GT_Log.err);
         }
 
+        {
+            ItemStack ironRod = GT_ModHandler.getModItem("IC2","itemRecipePart",1,11);
+            GT_Values.RA.addExtruderRecipe(Materials.Iron.getBlocks(1),ItemList.Shape_Extruder_Shaft.get(0),ironRod,640,120);
+            GT_Values.RA.addExtruderRecipe(Materials.Iron.getIngots(9),ItemList.Shape_Extruder_Shaft.get(0),ironRod,640,120);
+            ItemStack steelRod = GT_ModHandler.getModItem("IC2","itemRecipePart",1,12);
+            GT_Values.RA.addExtruderRecipe(Materials.Steel.getBlocks(1),ItemList.Shape_Extruder_Shaft.get(0),steelRod,1280,120);
+        }
         GT_Values.RA.addArcFurnaceRecipe(ItemList.Block_TungstenSteelReinforced.get(1), new ItemStack[]{ GT_OreDictUnificator.get(OrePrefixes.ingot,Materials.TungstenSteel,2), GT_OreDictUnificator.get(OrePrefixes.dust,Materials.Concrete,1)}, null, 160, 96);
 
         GT_Values.RA.addPrinterRecipe(GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.Paper, 1L), FluidRegistry.getFluidStack("squidink", 36), GT_Values.NI, ItemList.Paper_Punch_Card_Empty.get(1L), 100, 2);
