@@ -16,6 +16,7 @@ import static gregtech.api.enums.GT_Values.E;
 public class GT_LanguageManager {
     public static final HashMap<String, String> TEMPMAP = new HashMap<String, String>(), BUFFERMAP = new HashMap<String, String>(), LANGMAP = new HashMap<String, String>();
     public static Configuration sEnglishFile;
+	public static String sLanguage = "en_US";
     public static boolean sUseEnglishFile = false;
     public static boolean i18nPlaceholder = true;
 
@@ -31,7 +32,7 @@ public class GT_LanguageManager {
         	}
         }
         TEMPMAP.put(aKey.trim(), aEnglish);
-        LanguageRegistry.instance().injectLanguage("en_US", TEMPMAP);
+        LanguageRegistry.instance().injectLanguage(sLanguage, TEMPMAP);
         TEMPMAP.clear();
         if(sUseEnglishFile && !aWriteIntoLangFile){
             if (!LANGMAP.containsKey(aKey)) {
