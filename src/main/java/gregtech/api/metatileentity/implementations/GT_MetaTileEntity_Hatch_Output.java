@@ -201,7 +201,7 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
 
     @Override
     public int getCapacity() {
-        return 8000+8000*(mTier*(mTier+1)>>1);
+        return 16000*(mTier*(mTier+1)>>1);
     }
 
     @Override
