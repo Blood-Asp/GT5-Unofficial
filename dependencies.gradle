@@ -1,0 +1,29 @@
+// Add your dependencies here
+
+dependencies {
+    compile("net.industrial-craft:industrialcraft-2:2.2.790-experimental:dev")
+    compile("com.github.GTNewHorizons:StructureLib:master-SNAPSHOT:deobf")
+    compile("codechicken:CodeChickenLib:1.7.10-1.1.3.140:dev")
+    compile("codechicken:CodeChickenCore:1.7.10-1.0.7.47:dev")
+    compile("codechicken:NotEnoughItems:1.7.10-1.0.5.111:dev")
+
+    compileOnly("appeng:appliedenergistics2:rv3-beta-22:dev")
+    compileOnly("applecore:AppleCore:1.7.10-1.2.1+107.59407:api")
+    compileOnly("com.enderio.core:EnderCore:1.7.10-0.1.0.25_beta:dev")
+    compileOnly("com.enderio:EnderIO:1.7.10-2.3.0.417_beta:dev") {
+        transitive = false
+    }
+    compileOnly("commons-io:commons-io:2.4")
+    compileOnly("eu.usrv:YAMCore:1.7.10-0.5.78:deobf")
+    compileOnly("tconstruct:TConstruct:1.7.10-1.8.4.build951:deobf")
+    compileOnly("codechicken:Translocator:1.7.10-1.1.2.16:dev")
+    compileOnly("net.sengir.forestry:forestry_1.7.10:4.4.0.0:dev")
+    compileOnly("micdoodle8.mods:MicdoodleCore:1.7-3.0.12.504:Dev")
+    compileOnly("mods.railcraft:Railcraft_1.7.10:9.12.2.0:dev")
+    compileOnly("cofh:CoFHLib:[1.7.10]1.0.3-175-dev:dev")
+
+    // Ivy dependencies
+    compileOnly name: "Galacticraft-API", version: "1.7-3.0.12.504", ext: 'jar'
+    compileOnly name: "GalacticraftCore-Dev", version: "1.7-3.0.12.504", ext: 'jar'
+    compileOnly name: 'IC2NuclearControl', version: "2.3.4a", ext: 'jar'
+}
