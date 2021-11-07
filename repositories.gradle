@@ -1,4 +1,4 @@
-// Add any additional repositiroes for your dependencies here
+// Add any additional repositories for your dependencies here
 
 repositories {
     maven {
@@ -15,14 +15,14 @@ repositories {
     }
     maven { // EnderIO & EnderCore
         name = 'tterrag Repo'
-        url = "http://maven.tterrag.com"
+        url = "https://maven.tterrag.com"
     }
     maven { // TConstruct
         name = 'DVS1 Maven FS'
-        url = 'http://dvs1.progwml6.com/files/maven'
+        url = 'https://dvs1.progwml6.com/files/maven'
     }
     maven { // AppleCore
-        url = "http://www.ryanliptak.com/maven/"
+        url = "https://www.ryanliptak.com/maven/"
     }
     maven { // GalacticGreg, YAMCore,..
         name = 'UsrvDE'
