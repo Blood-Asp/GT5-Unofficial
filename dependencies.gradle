@@ -14,7 +14,7 @@ dependencies {
         transitive = false
     }
     compileOnly("commons-io:commons-io:2.4")
-    compileOnly("eu.usrv:YAMCore:1.7.10-0.5.78:deobf")
+    compileOnly("eu.usrv:YAMCore:1.7.10-0.5.80:deobf")
     compileOnly("tconstruct:TConstruct:1.7.10-1.8.4.build951:deobf")
     compileOnly("codechicken:Translocator:1.7.10-1.1.2.16:dev")
     compileOnly("net.sengir.forestry:forestry_1.7.10:4.4.0.0:dev")
