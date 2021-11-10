@@ -162,7 +162,7 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
         if (lockedFluidName == null || mMode < 8) mInventory[3] = null;
         else {
             FluidStack tLockedFluid = FluidRegistry.getFluidStack(lockedFluidName.replace("fluid.", "")
-                    .replace(".name", "").replace("ic2.fluid", "ic2").toLowerCase(), 1);
+                .replace("tile.", "").replace(".name", "").replace("ic2.fluid", "ic2").toLowerCase(), 1);
             // Because getStackDisplaySlot() only allow return one int, this place I only can manually set.
             if (tLockedFluid != null) {
                 mInventory[3] = GT_Utility.getFluidDisplayStack(tLockedFluid, false, true);
@@ -329,7 +329,7 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
         return mMode % 4 < 2 && mMode != 9;
     }
 
-    public boolean isFluidLocked(){
+    public boolean isFluidLocked() {
         return mMode == 8 || mMode == 9;
     }
 
@@ -367,7 +367,7 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
                 EnumChatFormatting.GOLD + (mFluid == null ? "No Fluid" : mFluid.getLocalizedName()) + EnumChatFormatting.RESET,
                 EnumChatFormatting.GREEN + GT_Utility.formatNumbers(mFluid == null ? 0 : mFluid.amount) + " L" + EnumChatFormatting.RESET + " " +
                         EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(getCapacity()) + " L"+ EnumChatFormatting.RESET,
-                lockedFluidName == null ? "Not Locked" : ("Locked to " + StatCollector.translateToLocal(getLockedFluidName()))
+            (!isFluidLocked() || lockedFluidName == null) ? "Not Locked" : ("Locked to " + StatCollector.translateToLocal(getLockedFluidName()))
         };
     }
 }
