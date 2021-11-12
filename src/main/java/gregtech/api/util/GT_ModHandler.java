@@ -91,7 +91,7 @@ public class GT_ModHandler {
     public static volatile int VERSION = 509;
     public static Collection<String> sNativeRecipeClasses = new HashSet<>(), sSpecialRecipeClasses = new HashSet<>();
     public static GT_HashSet<GT_ItemStack> sNonReplaceableItems = new GT_HashSet<>();
-    public static Object sBoxableWrapper = GT_Utility.callConstructor("gregtechmod.api.util.GT_IBoxableWrapper", 0, null, false);
+    public static Object sBoxableWrapper = new GT_IBoxableWrapper();
     private static final Map<IRecipeInput, RecipeOutput> sExtractorRecipes = new HashMap<>();
     private static final Map<IRecipeInput, RecipeOutput> sMaceratorRecipes = new HashMap<>();
     private static final Map<IRecipeInput, RecipeOutput> sCompressorRecipes = new HashMap<>();
