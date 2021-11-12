@@ -211,17 +211,17 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
         	}
         }
         
-        if (GT_Utility.isStackInList(aStack, GregTech_API.sWrenchList) && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer))
+        if (GT_Utility.isStackInList(aStack, GregTech_API.sWrenchList) && !mWrench && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer))
             mWrench = true;
-        if (GT_Utility.isStackInList(aStack, GregTech_API.sScrewdriverList) && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer))
+        if (GT_Utility.isStackInList(aStack, GregTech_API.sScrewdriverList) && !mScrewdriver && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer))
             mScrewdriver = true;
-        if (GT_Utility.isStackInList(aStack, GregTech_API.sSoftHammerList) && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer))
+        if (GT_Utility.isStackInList(aStack, GregTech_API.sSoftHammerList) && !mSoftHammer && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer))
             mSoftHammer = true;
-        if (GT_Utility.isStackInList(aStack, GregTech_API.sHardHammerList) && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer))
+        if (GT_Utility.isStackInList(aStack, GregTech_API.sHardHammerList) && !mHardHammer && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer))
             mHardHammer = true;
-        if (GT_Utility.isStackInList(aStack, GregTech_API.sCrowbarList) && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer))
+        if (GT_Utility.isStackInList(aStack, GregTech_API.sCrowbarList) && !mCrowbar && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer))
             mCrowbar = true;
-        if (GT_ModHandler.useSolderingIron(aStack, aPlayer)) mSolderingTool = true;
+        if (!mSolderingTool && GT_ModHandler.useSolderingIron(aStack, aPlayer)) mSolderingTool = true;
         if (GT_OreDictUnificator.isItemStackInstanceOf(aStack, "craftingDuctTape")) {
             mWrench = mScrewdriver = mSoftHammer = mHardHammer = mCrowbar = mSolderingTool = true;
             getBaseMetaTileEntity().setActive(false);
