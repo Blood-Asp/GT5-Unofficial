@@ -46,6 +46,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public abstract class GT_MetaTileEntity_LongDistancePipelineBase extends GT_MetaTileEntity_BasicHull_NonElectric {
+    public static int minimalDistancePoints = 64;
     protected GT_MetaTileEntity_LongDistancePipelineBase mTarget = null, mSender = null;
     protected ChunkCoordinates mTargetPos = null;
     
@@ -77,6 +78,8 @@ public abstract class GT_MetaTileEntity_LongDistancePipelineBase extends GT_Meta
                 aNBT.getInteger("target.y"),
                 aNBT.getInteger("target.z")
             );
+            if (getDistanceToSelf(mTargetPos) < minimalDistancePoints)
+                mTargetPos = null;
         }
     }
 
@@ -210,9 +213,13 @@ public abstract class GT_MetaTileEntity_LongDistancePipelineBase extends GT_Meta
                             tGtTile.getFacingOffset((BaseMetaTileEntity)tTileEntity, ((BaseMetaTileEntity) tTileEntity).getFrontFacing())    
                         )) {
                             // If it's the same class, and we've scanned a wire in front of it (the input side), we've found our target
-                            mTarget = tGtTile;
-                            mTargetPos = tGtTile.getCoords();
-                            return;
+                            // still need to check if it's distant enough
+                            int distance = getDistanceToSelf(aCoords);
+                            if (distance > minimalDistancePoints) {
+                                mTarget = tGtTile;
+                                mTargetPos = tGtTile.getCoords();
+                                return;
+                            }
                         }
                         
                         // Remove this block from the visited because we might end up back here from another wire that IS connected to the
@@ -224,7 +231,13 @@ public abstract class GT_MetaTileEntity_LongDistancePipelineBase extends GT_Meta
         }
         
     }
-    
+
+    protected int getDistanceToSelf(ChunkCoordinates aCoords) {
+        return Math.abs(getBaseMetaTileEntity().getXCoord() - aCoords.posX) +
+                Math.abs(getBaseMetaTileEntity().getYCoord() - aCoords.posY) /  2 +
+                Math.abs(getBaseMetaTileEntity().getZCoord() - aCoords.posZ);
+    }
+
     public ChunkCoordinates getFacingOffset(IGregTechTileEntity gt_tile, byte aSide) {
         return new ChunkCoordinates(
             gt_tile.getOffsetX(aSide, 1), gt_tile.getOffsetY(aSide, 1), gt_tile.getOffsetZ(aSide, 1)
