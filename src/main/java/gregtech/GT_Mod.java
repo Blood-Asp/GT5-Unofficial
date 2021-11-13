@@ -28,6 +28,7 @@ import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import gregtech.common.items.behaviors.Behaviour_DataOrb;
 import gregtech.common.misc.GT_Command;
 import gregtech.common.tileentities.machines.basic.GT_MetaTileEntity_Massfabricator;
+import gregtech.common.tileentities.machines.long_distance.GT_MetaTileEntity_LongDistancePipelineBase;
 import gregtech.common.tileentities.machines.multi.GT_MetaTileEntity_Cleanroom;
 import gregtech.common.tileentities.storage.GT_MetaTileEntity_DigitalChestBase;
 import gregtech.loaders.ExtraIcons;
@@ -409,6 +410,7 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.ic2EnergySourceCompat = tMainConfig.get("general", "Ic2EnergySourceCompat", true).getBoolean(true);
         gregtechproxy.costlyCableConnection = tMainConfig.get("general", "CableConnectionRequiresSolderingMaterial", false).getBoolean(false);
         GT_LanguageManager.i18nPlaceholder = tMainConfig.get("general", "EnablePlaceholderForMaterialNamesInLangFile", true).getBoolean(true);
+        GT_MetaTileEntity_LongDistancePipelineBase.minimalDistancePoints = tMainConfig.get("general", "LongDistancePipelineMinimalDistancePoints", 64).getInt(64);
 
         GregTech_API.mUseOnlyGoodSolderingMaterials = GregTech_API.sRecipeFile.get(ConfigCategories.Recipes.harderrecipes, "useonlygoodsolderingmaterials", GregTech_API.mUseOnlyGoodSolderingMaterials);
         gregtechproxy.mChangeHarvestLevels = GregTech_API.sMaterialProperties.get("havestLevel", "activateHarvestLevelChange", false);//TODO CHECK
