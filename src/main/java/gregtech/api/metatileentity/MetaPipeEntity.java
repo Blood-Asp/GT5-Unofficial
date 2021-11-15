@@ -178,7 +178,10 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
         if (difference > 1.05 && difference < 1.4) {
             aSide = 5;
         }
-        boolean tCovered = aSide < 6 && mBaseMetaTileEntity.getCoverIDAtSide(aSide) > 0;
+        boolean tCovered = false;
+        if (aSide < 6 && mBaseMetaTileEntity.getCoverIDAtSide(aSide) > 0) {
+            tCovered = true;
+        }
         if(isConnectedAtSide(aSide)){
         	tCovered = true;
         }
@@ -518,9 +521,9 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
     public int[] getAccessibleSlotsFromSide(int aSide) {
         ArrayList<Integer> tList = new ArrayList<Integer>();
         IGregTechTileEntity tTileEntity = getBaseMetaTileEntity();
-        boolean tSkip = tTileEntity.getCoverBehaviorAtSide((byte) aSide).letsItemsIn((byte) aSide, tTileEntity.getCoverIDAtSide((byte) aSide), tTileEntity.getCoverDataAtSide((byte) aSide), -2, tTileEntity) || tTileEntity.getCoverBehaviorAtSide((byte) aSide).letsItemsOut((byte) aSide, tTileEntity.getCoverIDAtSide((byte) aSide), tTileEntity.getCoverDataAtSide((byte) aSide), -2, tTileEntity);
+        boolean tSkip = tTileEntity.getCoverBehaviorAtSideNew((byte) aSide).letsItemsIn((byte) aSide, tTileEntity.getCoverIDAtSide((byte) aSide), tTileEntity.getCoverDataAtSideNew((byte) aSide), -2, tTileEntity) || tTileEntity.getCoverBehaviorAtSideNew((byte) aSide).letsItemsOut((byte) aSide, tTileEntity.getCoverIDAtSide((byte) aSide), tTileEntity.getCoverDataAtSideNew((byte) aSide), -2, tTileEntity);
         for (int i = 0; i < getSizeInventory(); i++)
-            if (isValidSlot(i) && (tSkip || tTileEntity.getCoverBehaviorAtSide((byte) aSide).letsItemsOut((byte) aSide, tTileEntity.getCoverIDAtSide((byte) aSide), tTileEntity.getCoverDataAtSide((byte) aSide), i, tTileEntity) || tTileEntity.getCoverBehaviorAtSide((byte) aSide).letsItemsIn((byte) aSide, tTileEntity.getCoverIDAtSide((byte) aSide), tTileEntity.getCoverDataAtSide((byte) aSide), i, tTileEntity)))
+            if (isValidSlot(i) && (tSkip || tTileEntity.getCoverBehaviorAtSideNew((byte) aSide).letsItemsOut((byte) aSide, tTileEntity.getCoverIDAtSide((byte) aSide), tTileEntity.getCoverDataAtSideNew((byte) aSide), i, tTileEntity) || tTileEntity.getCoverBehaviorAtSideNew((byte) aSide).letsItemsIn((byte) aSide, tTileEntity.getCoverIDAtSide((byte) aSide), tTileEntity.getCoverDataAtSideNew((byte) aSide), i, tTileEntity)))
                 tList.add(i);
         int[] rArray = new int[tList.size()];
         for (int i = 0; i < rArray.length; i++) rArray[i] = tList.get(i);
@@ -766,7 +769,7 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
         if (tTileEntity instanceof IColoredTileEntity) {
             if (getBaseMetaTileEntity().getColorization() >= 0) {
                 byte tColor = ((IColoredTileEntity) tTileEntity).getColorization();
-                return tColor < 0 || tColor == getBaseMetaTileEntity().getColorization();
+                if (tColor >= 0 && tColor != getBaseMetaTileEntity().getColorization()) return false;
             }
         }
 
@@ -781,9 +784,9 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 		final IGregTechTileEntity baseMetaTile = getBaseMetaTileEntity();
 		if (baseMetaTile == null || !baseMetaTile.isServerSide()) return 0;
 
-        final GT_CoverBehavior coverBehavior = baseMetaTile.getCoverBehaviorAtSide(aSide);
-        final int coverId = baseMetaTile.getCoverIDAtSide(aSide),
-                  coverData = baseMetaTile.getCoverDataAtSide(aSide);
+        final GT_CoverBehavior_New<?> coverBehavior = baseMetaTile.getCoverBehaviorAtSideNew(aSide);
+        final int coverId = baseMetaTile.getCoverIDAtSide(aSide);
+        ISerializableObject coverData = baseMetaTile.getCoverDataAtSideNew(aSide);
 
         boolean alwaysLookConnected = coverBehavior.alwaysLookConnected(aSide, coverId, coverData, baseMetaTile);
         boolean letsIn = letsIn(coverBehavior, aSide, coverId, coverData, baseMetaTile);
@@ -852,6 +855,9 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 
 	public boolean letsIn(GT_CoverBehavior coverBehavior, byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) { return false; }
     public boolean letsOut(GT_CoverBehavior coverBehavior, byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) { return false; }
+
+    public boolean letsIn(GT_CoverBehavior_New<?> coverBehavior, byte aSide, int aCoverID, ISerializableObject aCoverVariable, ICoverable aTileEntity) { return false; }
+    public boolean letsOut(GT_CoverBehavior_New<?> coverBehavior, byte aSide, int aCoverID, ISerializableObject aCoverVariable, ICoverable aTileEntity) { return false; }
 
 	public boolean canConnect(byte aSide, TileEntity tTileEntity) { return false; }
 	public boolean getGT6StyleConnection() { return false; }

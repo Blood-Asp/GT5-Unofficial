@@ -9,6 +9,7 @@ import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.net.GT_Packet_TileEntityCover;
 import gregtech.api.util.GT_CoverBehavior;
 import gregtech.api.util.GT_Utility;
+import gregtech.api.util.ISerializableObject;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -18,7 +19,9 @@ import net.minecraftforge.fluids.Fluid;
 import java.util.Collections;
 import java.util.List;
 
-import static gregtech.api.util.GT_Utility.*;
+import static gregtech.api.util.GT_Utility.intToStack;
+import static gregtech.api.util.GT_Utility.moveMultipleItemStacks;
+import static gregtech.api.util.GT_Utility.stackToInt;
 
 public class GT_Cover_ItemFilter extends GT_CoverBehavior {
 
@@ -52,6 +55,22 @@ public class GT_Cover_ItemFilter extends GT_CoverBehavior {
     }
 
     @Override
+    protected boolean onCoverRightClickImpl(byte aSide, int aCoverID, ISerializableObject.LegacyCoverData aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        ItemStack tStack = aPlayer.inventory.getCurrentItem();
+        int tCoverVariable = aCoverVariable.get() & 1;
+        if (tStack != null) {
+            tCoverVariable = (stackToInt(tStack) << 1) + tCoverVariable;
+            aCoverVariable.set(tCoverVariable);
+            GT_Utility.sendChatToPlayer(aPlayer, trans("301", "Item Filter: ") + tStack.getDisplayName());
+        } else {
+            aCoverVariable.set(tCoverVariable);
+            GT_Utility.sendChatToPlayer(aPlayer, trans("300", "Filter Cleared!"));
+        }
+        return true;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
     public boolean onCoverRightclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ){
             ItemStack tStack = aPlayer.inventory.getCurrentItem();
             if (tStack != null){

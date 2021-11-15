@@ -1,30 +1,39 @@
 package gregtech.api.net;
 
 import com.google.common.io.ByteArrayDataInput;
+import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.util.ISerializableObject;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.INetHandler;
+import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
 /**
- * Client -> Server: Update cover data. use this only if you are using the legacy data storage
+ * Client -> Server: Update cover data
  */
-public class GT_Packet_TileEntityCover extends GT_Packet_New {
+
+public class GT_Packet_TileEntityCoverNew extends GT_Packet_New {
     protected int mX;
     protected short mY;
     protected int mZ;
 
     protected byte side;
-    protected int coverID, coverData, dimID;
+    protected int coverID, dimID;
+    protected ISerializableObject coverData;
 
-    public GT_Packet_TileEntityCover() {
+    protected EntityPlayerMP mPlayer;
+
+    public GT_Packet_TileEntityCoverNew() {
         super(true);
     }
 
-    public GT_Packet_TileEntityCover(int mX, short mY, int mZ, byte coverSide, int coverID, int coverData, int dimID) {
+    public GT_Packet_TileEntityCoverNew(int mX, short mY, int mZ, byte coverSide, int coverID, ISerializableObject coverData, int dimID) {
         super(false);
         this.mX = mX;
         this.mY = mY;
@@ -36,7 +45,7 @@ public class GT_Packet_TileEntityCover extends GT_Packet_New {
 
         this.dimID = dimID;
     }
-    public GT_Packet_TileEntityCover(byte coverSide, int coverID, int coverData, ICoverable tile) {
+    public GT_Packet_TileEntityCoverNew(byte coverSide, int coverID, ISerializableObject coverData, ICoverable tile) {
         super(false);
         this.mX = tile.getXCoord();
         this.mY = tile.getYCoord();
@@ -51,7 +60,14 @@ public class GT_Packet_TileEntityCover extends GT_Packet_New {
 
     @Override
     public byte getPacketID() {
-        return 6;
+        return 11;
+    }
+
+    @Override
+    public void setINetHandler(INetHandler aHandler) {
+        if (aHandler instanceof NetHandlerPlayServer) {
+            mPlayer = ((NetHandlerPlayServer) aHandler).playerEntity;
+        }
     }
 
     @Override
@@ -62,32 +78,35 @@ public class GT_Packet_TileEntityCover extends GT_Packet_New {
 
         aOut.writeByte(side);
         aOut.writeInt(coverID);
-        aOut.writeInt(coverData);
+        coverData.writeToByteBuf(aOut);
 
         aOut.writeInt(dimID);
     }
 
     @Override
     public GT_Packet_New decode(ByteArrayDataInput aData) {
-        return new GT_Packet_TileEntityCover(
+        int coverId;
+        return new GT_Packet_TileEntityCoverNew(
                 aData.readInt(),
                 aData.readShort(),
                 aData.readInt(),
 
                 aData.readByte(),
-                aData.readInt(),
-                aData.readInt(),
+                coverId = aData.readInt(),
+                GregTech_API.getCoverBehaviorNew(coverId).createDataObject().readFromPacket(aData, mPlayer),
 
                 aData.readInt());
     }
 
     @Override
     public void process(IBlockAccess aWorld) {
+        if (mPlayer == null) // impossible, but who knows
+            return;
         World world = DimensionManager.getWorld(dimID);
         if (world != null) {
             TileEntity tile = world.getTileEntity(mX, mY, mZ);
             if (tile instanceof IGregTechTileEntity && !((IGregTechTileEntity) tile).isDead()) {
-                ((IGregTechTileEntity) tile).receiveCoverData(side, coverID, coverData);
+                ((IGregTechTileEntity) tile).receiveCoverData(side, coverID, coverData, mPlayer);
             }
         }
     }

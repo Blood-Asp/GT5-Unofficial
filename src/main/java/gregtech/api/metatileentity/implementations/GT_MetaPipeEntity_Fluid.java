@@ -15,8 +15,10 @@ import gregtech.api.metatileentity.BaseMetaPipeEntity;
 import gregtech.api.metatileentity.MetaPipeEntity;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_CoverBehavior;
+import gregtech.api.util.GT_CoverBehavior_New;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Utility;
+import gregtech.api.util.ISerializableObject;
 import gregtech.api.util.WorldSpawnedEventBuilder;
 import gregtech.common.GT_Client;
 import gregtech.common.covers.GT_Cover_Drain;
@@ -345,8 +347,8 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
             final IGregTechTileEntity gTank = tTank instanceof IGregTechTileEntity ? (IGregTechTileEntity) tTank : null;
 
             if (isConnectedAtSide(aSide) && tTank != null && (mLastReceivedFrom & (1 << aSide)) == 0 &&
-                    getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsFluidOut(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), tFluid.getFluid(), getBaseMetaTileEntity()) &&
-                    (gTank == null || gTank.getCoverBehaviorAtSide(tSide).letsFluidIn(tSide, gTank.getCoverIDAtSide(tSide), gTank.getCoverDataAtSide(tSide), tFluid.getFluid(), gTank))) {
+                    getBaseMetaTileEntity().getCoverBehaviorAtSideNew(aSide).letsFluidOut(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSideNew(aSide), tFluid.getFluid(), getBaseMetaTileEntity()) &&
+                    (gTank == null || gTank.getCoverBehaviorAtSideNew(tSide).letsFluidIn(tSide, gTank.getCoverIDAtSide(tSide), gTank.getCoverDataAtSideNew(tSide), tFluid.getFluid(), gTank))) {
                 if (tTank.fill(ForgeDirection.getOrientation(tSide), tFluid, false) > 0) {
                     tTanks.add(new MutableTriple<>(tTank, ForgeDirection.getOrientation(tSide), 0));
                 }
@@ -420,6 +422,16 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
     }
 
     @Override
+    public boolean letsIn(GT_CoverBehavior_New<?> coverBehavior, byte aSide, int aCoverID, ISerializableObject aCoverVariable, ICoverable aTileEntity) {
+        return coverBehavior.letsFluidIn(aSide, aCoverID, aCoverVariable, null, aTileEntity);
+    }
+
+    @Override
+    public boolean letsOut(GT_CoverBehavior_New<?> coverBehavior, byte aSide, int aCoverID, ISerializableObject aCoverVariable, ICoverable aTileEntity) {
+        return coverBehavior.letsFluidOut(aSide, aCoverID, aCoverVariable, null, aTileEntity);
+    }
+
+    @Override
     public boolean canConnect(byte aSide, TileEntity tTileEntity) {
         if (tTileEntity == null)
             return false;
@@ -429,7 +441,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
         if (baseMetaTile == null)
             return false;
 
-        final GT_CoverBehavior coverBehavior = baseMetaTile.getCoverBehaviorAtSide(aSide);
+        final GT_CoverBehavior_New<?> coverBehavior = baseMetaTile.getCoverBehaviorAtSideNew(aSide);
         final IGregTechTileEntity gTileEntity = (tTileEntity instanceof IGregTechTileEntity) ? (IGregTechTileEntity) tTileEntity : null;
 
         if (coverBehavior instanceof GT_Cover_Drain || (GregTech_API.mTConstruct && isTConstructFaucet(tTileEntity)))
@@ -442,7 +454,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
             if (tInfo != null) {
                 return tInfo.length > 0
                         || (GregTech_API.mTranslocator && isTranslocator(tTileEntity))
-                        || gTileEntity != null && gTileEntity.getCoverBehaviorAtSide(tSide) instanceof GT_Cover_FluidRegulator;
+                        || gTileEntity != null && gTileEntity.getCoverBehaviorAtSideNew(tSide) instanceof GT_Cover_FluidRegulator;
 
             }
         }
