@@ -16,6 +16,8 @@ import java.io.IOException;
 
 /**
  * We could well have used {@link java.io.Serializable}, but that's too slow and should generally be avoided
+ *
+ * @author glease
  */
 public interface ISerializableObject {
 

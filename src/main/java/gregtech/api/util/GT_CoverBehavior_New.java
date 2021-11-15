@@ -15,6 +15,8 @@ import static gregtech.api.enums.GT_Values.E;
 
 /**
  * For Covers with a special behavior.
+ *
+ * @author glease
  */
 public abstract class GT_CoverBehavior_New<T extends ISerializableObject> {
 
