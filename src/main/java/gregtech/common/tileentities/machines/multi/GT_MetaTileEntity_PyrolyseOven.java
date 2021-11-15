@@ -16,6 +16,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMul
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Single_Recipe_Check;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -129,19 +130,49 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_EnhancedMu
     }
 
     @Override
+    public boolean supportsSingleRecipeLocking() {
+        return true;
+    }
+
+    @Override
     public boolean checkRecipe(ItemStack aStack) {
-        ItemStack[] tInputs = getCompactedInputs();
-        FluidStack[] tFluids = getCompactedFluids();
-
-        if (tInputs.length <= 0)
-            return false;
-
         long tVoltage = getMaxInputVoltage();
         byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
-        GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sPyrolyseRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], tFluids, tInputs);
+        GT_Recipe tRecipe;
 
-        if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, tFluids, tInputs))
-            return false;
+        if (mLockedToSingleRecipe && mSingleRecipeCheck != null) {
+            if (!mSingleRecipeCheck.checkRecipeInputsSingleStack(true)) {
+                return false;
+            }
+
+            tRecipe = mSingleRecipeCheck.getRecipe();
+        } else {
+            GT_Single_Recipe_Check.Builder tSingleRecipeCheckBuilder = null;
+            if (mLockedToSingleRecipe) {
+                // We're locked to a single recipe, but haven't built the recipe checker yet.
+                // Build the checker on next successful recipe.
+                tSingleRecipeCheckBuilder = GT_Single_Recipe_Check.builder(this);
+            }
+
+            ItemStack[] tInputs = getCompactedInputs();
+            FluidStack[] tFluids = getCompactedFluids();
+
+            if (tInputs.length <= 0)
+                return false;
+
+            if (mLockedToSingleRecipe) {
+                tSingleRecipeCheckBuilder.setBefore();
+            }
+
+            tRecipe = GT_Recipe.GT_Recipe_Map.sPyrolyseRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], tFluids, tInputs);
+
+            if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, tFluids, tInputs))
+                return false;
+
+            if (mLockedToSingleRecipe) {
+                mSingleRecipeCheck = tSingleRecipeCheckBuilder.setAfter().setRecipe(tRecipe).build();
+            }
+        }
 
         this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
