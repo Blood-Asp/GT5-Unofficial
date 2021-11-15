@@ -7,6 +7,7 @@ import gregtech.GT_Mod;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.net.GT_Packet_Pollution;
+import gregtech.api.util.GT_ChunkAssociatedData;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -20,30 +21,34 @@ import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
+import net.minecraftforge.event.world.WorldEvent;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
-import static gregtech.common.GT_Proxy.GTPOLLUTION;
-import static gregtech.common.GT_Proxy.dimensionWiseChunkData;
 import static gregtech.common.GT_Proxy.dimensionWisePollution;
-import static gregtech.common.GT_Proxy.getDefaultChunkDataOnCreation;
 
 
 public class GT_Pollution {
+	private static final Storage STORAGE = new Storage();
 	/**
 	 * Pollution dispersion until effects start:
 	 * Calculation: ((Limit * 0.01) + 2000) * (4 <- spreading rate)
-	 * 
+	 *
 	 * SMOG(500k) 466.7 pollution/sec
 	 * Poison(750k) 633,3 pollution/sec
 	 * Dying Plants(1mio) 800 pollution/sec
 	 * Sour Rain(1.5mio) 1133.3 pollution/sec
-	 * 
+	 *
 	 * Pollution producers (pollution/sec)
 	 * Bronze Boiler(20)
 	 * Lava Boiler(20)
@@ -69,10 +74,10 @@ public class GT_Pollution {
 	 * LV (0%), MV (30%), HV (52%), EV (66%), IV (76%), LuV (84%), ZPM (89%), UV (92%), MAX (95%)
 	 */
 	private List<ChunkCoordIntPair> pollutionList = new ArrayList<>();//chunks left to process
-	private HashMap<ChunkCoordIntPair,int[]> chunkData;//link to chunk data that is saved/loaded
+	private final List<ChunkCoordIntPair> chunkData = new ArrayList<>();//link to chunk data that is saved/loaded
 	private int operationsPerTick=0;//how much chunks should be processed in each cycle
 	private static final short cycleLen=1200;
-	private final World aWorld;
+	private final World world;
 	public static int mPlayerPollution;
 
 	private static int POLLUTIONPACKET_MINVALUE = 1000;
@@ -80,13 +85,7 @@ public class GT_Pollution {
 	private static GT_PollutionEventHandler EVENT_HANDLER;
 
 	public GT_Pollution(World world){
-		aWorld=world;
-		chunkData=dimensionWiseChunkData.get(aWorld.provider.dimensionId);
-		if(chunkData==null){
-			chunkData=new HashMap<>(1024);
-			dimensionWiseChunkData.put(world.provider.dimensionId,chunkData);
-		}
-		dimensionWisePollution.put(aWorld.provider.dimensionId,this);
+		this.world = world;
 
 		if (EVENT_HANDLER == null) {
 			EVENT_HANDLER = new GT_PollutionEventHandler();
@@ -105,7 +104,9 @@ public class GT_Pollution {
 	private void tickPollutionInWorld(int aTickID){//called from method above
 		//gen data set
 		if(aTickID==0){
-			pollutionList = new ArrayList<>(chunkData.keySet());
+			// make a snapshot of what to work on
+			// counterintuitive as it seems, but this is the fastest way java collections framework offers us.
+			pollutionList = new ArrayList<>(chunkData);
 			//set operations per tick
 			if(pollutionList.size()>0) operationsPerTick =(pollutionList.size()/cycleLen);
 			else operationsPerTick=0;//SANity
@@ -114,10 +115,9 @@ public class GT_Pollution {
 		for(int chunksProcessed=0;chunksProcessed<=operationsPerTick;chunksProcessed++){
 			if(pollutionList.size()==0)break;//no more stuff to do
 			ChunkCoordIntPair actualPos=pollutionList.remove(pollutionList.size()-1);//faster
-			//add default data if missing
-			if(!chunkData.containsKey(actualPos)) chunkData.put(actualPos,getDefaultChunkDataOnCreation());
 			//get pollution
-			int tPollution = chunkData.get(actualPos)[GTPOLLUTION];
+			ChunkData currentData = STORAGE.get(world, actualPos);
+			int tPollution = currentData.getAmount();
 			//remove some
 			tPollution = (int)(0.9945f*tPollution);
 			//tPollution -= 2000;//This does not really matter...
@@ -131,15 +131,14 @@ public class GT_Pollution {
 				tNeighbors[2]=(new ChunkCoordIntPair(actualPos.chunkXPos,actualPos.chunkZPos+1));
 				tNeighbors[3]=(new ChunkCoordIntPair(actualPos.chunkXPos,actualPos.chunkZPos-1));
 				for(ChunkCoordIntPair neighborPosition : tNeighbors){
-					if(!chunkData.containsKey(neighborPosition)) chunkData.put(neighborPosition,getDefaultChunkDataOnCreation());
-
-					int neighborPollution = chunkData.get(neighborPosition)[GTPOLLUTION];
-					if(neighborPollution*6 < tPollution*5){//METHEMATICS...
+					ChunkData neighbor = STORAGE.get(world, neighborPosition);
+					int neighborPollution = neighbor.getAmount();
+					if(neighborPollution*6 < tPollution*5){//MATHEMATICS...
 						int tDiff = tPollution - neighborPollution;
 						tDiff = tDiff/20;
 						neighborPollution = GT_Utility.safeInt((long)neighborPollution+tDiff);//tNPol += tDiff;
 						tPollution -= tDiff;
-						chunkData.get(neighborPosition)[GTPOLLUTION] = neighborPollution;
+						neighbor.setAmount(neighborPollution);
 					}
 				}
 
@@ -148,7 +147,7 @@ public class GT_Pollution {
 				//Smog filter TODO
 				if(tPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit) {
 					AxisAlignedBB chunk = AxisAlignedBB.getBoundingBox(actualPos.chunkXPos << 4, 0, actualPos.chunkZPos << 4, (actualPos.chunkXPos << 4) + 16, 256, (actualPos.chunkZPos << 4) + 16);
-					List<EntityLivingBase> tEntitys = aWorld.getEntitiesWithinAABB(EntityLivingBase.class, chunk);
+					List<EntityLivingBase> tEntitys = world.getEntitiesWithinAABB(EntityLivingBase.class, chunk);
 					for (EntityLivingBase tEnt : tEntitys) {
 						if (tEnt instanceof EntityPlayerMP && ((EntityPlayerMP) tEnt).capabilities.isCreativeMode)
 							continue;
@@ -194,18 +193,18 @@ public class GT_Pollution {
 								int x = (actualPos.chunkXPos << 4) + XSTR_INSTANCE.nextInt(16);
 								int y = 60 + (-f + XSTR_INSTANCE.nextInt(f * 2 + 1));
 								int z = (actualPos.chunkZPos << 4) + XSTR_INSTANCE.nextInt(16);
-								damageBlock(aWorld, x, y, z, tPollution > GT_Mod.gregtechproxy.mPollutionSourRainLimit);
+								damageBlock(world, x, y, z, tPollution > GT_Mod.gregtechproxy.mPollutionSourRainLimit);
 							}
 						}
 					}
 				}
 			}
 			//Write new pollution to Hashmap !!!
-			chunkData.get(actualPos)[GTPOLLUTION] = tPollution;
+			currentData.setAmount(tPollution);
 
 			//Send new value to players nearby
 			if (tPollution > POLLUTIONPACKET_MINVALUE) {
-				NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(aWorld.provider.dimensionId, (actualPos.chunkXPos << 4), 64, (actualPos.chunkZPos << 4), 256);
+				NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(world.provider.dimensionId, (actualPos.chunkXPos << 4), 64, (actualPos.chunkZPos << 4), 256);
 				GT_Values.NW.sendToAllAround(new GT_Packet_Pollution(actualPos, tPollution), point);
 			}
 		}
@@ -266,19 +265,8 @@ public class GT_Pollution {
 	}
 
 	public static void addPollution(Chunk ch, int aPollution){
-		if(!GT_Mod.gregtechproxy.mPollution)return;
-		HashMap<ChunkCoordIntPair,int[]> dataMap=dimensionWiseChunkData.get(ch.worldObj.provider.dimensionId);
-		if(dataMap==null){
-			dataMap=new HashMap<>(1024);
-			dimensionWiseChunkData.put(ch.worldObj.provider.dimensionId,dataMap);
-		}
-		int[] dataArr=dataMap.get(ch.getChunkCoordIntPair());
-		if(dataArr==null){
-			dataArr=getDefaultChunkDataOnCreation();
-			dataMap.put(ch.getChunkCoordIntPair(),dataArr);
-		}
-		dataArr[GTPOLLUTION]+=aPollution;
-		if(dataArr[GTPOLLUTION]<0)dataArr[GTPOLLUTION]=0;
+		if(!GT_Mod.gregtechproxy.mPollution || aPollution == 0)return;
+		STORAGE.get(ch).changeAmount(aPollution);
 	}
 
 	public static int getPollution(IGregTechTileEntity te){
@@ -288,18 +276,19 @@ public class GT_Pollution {
 	public static int getPollution(Chunk ch){
 		if(!GT_Mod.gregtechproxy.mPollution)
 			return 0;
-		HashMap<ChunkCoordIntPair,int[]> dataMap=dimensionWiseChunkData.get(ch.worldObj.provider.dimensionId);
-		if(dataMap==null || dataMap.get(ch.getChunkCoordIntPair())==null) return 0;
-		return dataMap.get(ch.getChunkCoordIntPair())[GTPOLLUTION];
+		return STORAGE.get(ch).getAmount();
+	}
+
+	public static boolean hasPollution(Chunk ch) {
+		if (!GT_Mod.gregtechproxy.mPollution)
+			return false;
+		return STORAGE.isCreated(ch.worldObj, ch.getChunkCoordIntPair()) && STORAGE.get(ch).getAmount() > 0;
 	}
 
 	public static int getPollution(ChunkCoordIntPair aCh, int aDim) {
 		if (!GT_Mod.gregtechproxy.mPollution)
 			return 0;
-		HashMap<ChunkCoordIntPair, int[]> dataMap = dimensionWiseChunkData.get(aDim);
-		if (dataMap == null || dataMap.get(aCh) == null)
-			return 0;
-		return dataMap.get(aCh)[GTPOLLUTION];
+		return STORAGE.get(DimensionManager.getWorld(aDim), aCh.chunkXPos, aCh.chunkZPos).getAmount();
 	}
 
 	//Add compatibility with old code
@@ -310,15 +299,100 @@ public class GT_Pollution {
 		addPollution(aWorld.getChunkFromBlockCoords(aPos.chunkPosX,aPos.chunkPosZ),aPollution);
 	}
 
-	public class GT_PollutionEventHandler {
+	static void migrate(ChunkDataEvent.Load e) {
+		addPollution(e.getChunk(), e.getData().getInteger("GTPOLLUTION"));
+	}
+
+	public static class GT_PollutionEventHandler {
 		@SubscribeEvent
 		public void chunkWatch(ChunkWatchEvent.Watch event) {
-            if(!GT_Mod.gregtechproxy.mPollution) return;
-			if (chunkData.containsKey(event.chunk)) {
-				int pollution = chunkData.get(event.chunk)[GTPOLLUTION];
+			if (!GT_Mod.gregtechproxy.mPollution) return;
+			World world = event.player.worldObj;
+			if (STORAGE.isCreated(world, event.chunk)) {
+				int pollution = STORAGE.get(world, event.chunk).getAmount();
 				if (pollution > POLLUTIONPACKET_MINVALUE)
 					GT_Values.NW.sendToPlayer(new GT_Packet_Pollution(event.chunk, pollution), event.player);
 			}
+		}
+
+		@SubscribeEvent
+		public void onWorldLoad(WorldEvent.Load e) {
+			// super class loads everything lazily. We force it to load them all.
+			STORAGE.loadAll(e.world);
+		}
+	}
+
+	@ParametersAreNonnullByDefault
+	private static final class Storage extends GT_ChunkAssociatedData<ChunkData> {
+		private Storage() {
+			super("Pollution", ChunkData.class, 64, (byte) 0, false);
+		}
+
+		@Override
+		protected void writeElement(DataOutput output, ChunkData element, World world, int chunkX, int chunkZ) throws IOException {
+			output.writeInt(element.getAmount());
+		}
+
+		@Override
+		protected ChunkData readElement(DataInput input, int version, World world, int chunkX, int chunkZ) throws IOException {
+			ChunkData data = new ChunkData(input.readInt());
+			getChunkData(world).add(new ChunkCoordIntPair(chunkX, chunkZ));
+			return data;
+		}
+
+		private List<ChunkCoordIntPair> getChunkData(World world) {
+			return dimensionWisePollution.computeIfAbsent(world.provider.dimensionId, i -> new GT_Pollution(world)).chunkData;
+		}
+
+		@Override
+		protected ChunkData createElement(World world, int chunkX, int chunkZ) {
+			return new ChunkData();
+		}
+
+		@Override
+		public void loadAll(World w) {
+			super.loadAll(w);
+		}
+
+		public void set(World world, ChunkCoordIntPair coord, ChunkData data) {
+			set(world, coord.chunkXPos, coord.chunkZPos, data);
+			getChunkData(world).add(coord);
+		}
+
+		public boolean isCreated(World world, ChunkCoordIntPair coord) {
+			return isCreated(world.provider.dimensionId, coord.chunkXPos, coord.chunkZPos);
+		}
+	}
+
+	private static final class ChunkData implements GT_ChunkAssociatedData.IData {
+		public int amount;
+
+		private ChunkData() {
+			this(0);
+		}
+
+		private ChunkData(int amount) {
+			this.amount = amount;
+		}
+
+		/**
+		 * Current pollution amount.
+		 */
+		public int getAmount() {
+			return amount;
+		}
+
+		public void setAmount(int amount) {
+			this.amount = Math.max(amount, 0);
+		}
+
+		public void changeAmount(int delta) {
+			this.amount = Math.max(amount + delta, 0);
+		}
+
+		@Override
+		public boolean isSameAsDefault() {
+			return amount == 0;
 		}
 	}
 }

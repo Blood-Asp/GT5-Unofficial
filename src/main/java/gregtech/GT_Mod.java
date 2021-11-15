@@ -286,6 +286,7 @@ public class GT_Mod implements IGT_Mod {
         GT_Values.debugBlockMiner = tMainConfig.get(aTextGeneral, "debugBlockMiner", false).getBoolean(false);
         GT_Values.debugBlockPump = tMainConfig.get(aTextGeneral, "debugBlockPump", false).getBoolean(false);
         GT_Values.debugEntityCramming = tMainConfig.get(aTextGeneral, "debugEntityCramming", false).getBoolean(false);
+        GT_Values.debugWorldData = tMainConfig.get(aTextGeneral, "debugWorldData", false).getBoolean(false);
         GT_Values.oreveinPercentage = tMainConfig.get(aTextGeneral, "oreveinPercentage_100", 100).getInt(100);
         GT_Values.oreveinAttempts = tMainConfig.get(aTextGeneral, "oreveinAttempts_64", 64).getInt(64);
         GT_Values.oreveinMaxPlacementAttempts = tMainConfig.get(aTextGeneral, "oreveinMaxPlacementAttempts_8", 8).getInt(8);
