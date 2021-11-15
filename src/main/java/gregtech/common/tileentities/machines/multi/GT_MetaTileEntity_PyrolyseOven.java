@@ -147,21 +147,17 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_EnhancedMu
 
             tRecipe = mSingleRecipeCheck.getRecipe();
         } else {
-            GT_Single_Recipe_Check.Builder tSingleRecipeCheckBuilder = null;
-            if (mLockedToSingleRecipe) {
-                // We're locked to a single recipe, but haven't built the recipe checker yet.
-                // Build the checker on next successful recipe.
-                tSingleRecipeCheckBuilder = GT_Single_Recipe_Check.builder(this);
-            }
-
             ItemStack[] tInputs = getCompactedInputs();
             FluidStack[] tFluids = getCompactedFluids();
 
             if (tInputs.length <= 0)
                 return false;
 
+            GT_Single_Recipe_Check.Builder tSingleRecipeCheckBuilder = null;
             if (mLockedToSingleRecipe) {
-                tSingleRecipeCheckBuilder.setBefore();
+                // We're locked to a single recipe, but haven't built the recipe checker yet.
+                // Build the checker on next successful recipe.
+                tSingleRecipeCheckBuilder = GT_Single_Recipe_Check.builder(this).setBefore();
             }
 
             tRecipe = GT_Recipe.GT_Recipe_Map.sPyrolyseRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], tFluids, tInputs);
