@@ -43,12 +43,12 @@ public class GT_Pollution {
 	/**
 	 * Pollution dispersion until effects start:
 	 * Calculation: ((Limit * 0.01) + 2000) * (4 <- spreading rate)
-	 *
+	 * <p>
 	 * SMOG(500k) 466.7 pollution/sec
 	 * Poison(750k) 633,3 pollution/sec
 	 * Dying Plants(1mio) 800 pollution/sec
 	 * Sour Rain(1.5mio) 1133.3 pollution/sec
-	 *
+	 * <p>
 	 * Pollution producers (pollution/sec)
 	 * Bronze Boiler(20)
 	 * Lava Boiler(20)
@@ -57,7 +57,7 @@ public class GT_Pollution {
 	 * Diesel Generator(40/80/160)
 	 * Gas Turbine(20/40/80)
 	 * Charcoal Pile(100)
-	 * 
+	 * <p>
 	 * Large Diesel Engine(320)
 	 * Electric Blast Furnace(100)
 	 * Implosion Compressor(2000)
@@ -65,18 +65,18 @@ public class GT_Pollution {
 	 * Large Gas Turbine(160)
 	 * Multi Smelter(100)
 	 * Pyrolyse Oven(400)
-	 * 
+	 * <p>
 	 * Machine Explosion(100,000)
-	 * 
+	 * <p>
 	 * Other Random Shit: lots and lots
-	 * 
+	 * <p>
 	 * Muffler Hatch Pollution reduction:  ** inaccurate **
 	 * LV (0%), MV (30%), HV (52%), EV (66%), IV (76%), LuV (84%), ZPM (89%), UV (92%), MAX (95%)
 	 */
 	private List<ChunkCoordIntPair> pollutionList = new ArrayList<>();//chunks left to process
 	private final List<ChunkCoordIntPair> chunkData = new ArrayList<>();//link to chunk data that is saved/loaded
-	private int operationsPerTick=0;//how much chunks should be processed in each cycle
-	private static final short cycleLen=1200;
+	private int operationsPerTick = 0;//how much chunks should be processed in each cycle
+	private static final short cycleLen = 1200;
 	private final World world;
 	public static int mPlayerPollution;
 
@@ -84,7 +84,7 @@ public class GT_Pollution {
 
 	private static GT_PollutionEventHandler EVENT_HANDLER;
 
-	public GT_Pollution(World world){
+	public GT_Pollution(World world) {
 		this.world = world;
 
 		if (EVENT_HANDLER == null) {
@@ -93,50 +93,50 @@ public class GT_Pollution {
 		}
 	}
 
-	public static void onWorldTick(TickEvent.WorldTickEvent aEvent){//called from proxy
+	public static void onWorldTick(TickEvent.WorldTickEvent aEvent) {//called from proxy
 		//return if pollution disabled
-		if(!GT_Mod.gregtechproxy.mPollution) return;
+		if (!GT_Mod.gregtechproxy.mPollution) return;
 		final GT_Pollution pollutionInstance = dimensionWisePollution.get(aEvent.world.provider.dimensionId);
-		if(pollutionInstance==null)return;
-		pollutionInstance.tickPollutionInWorld((int)(aEvent.world.getTotalWorldTime()%cycleLen));
+		if (pollutionInstance == null) return;
+		pollutionInstance.tickPollutionInWorld((int) (aEvent.world.getTotalWorldTime() % cycleLen));
 	}
 
-	private void tickPollutionInWorld(int aTickID){//called from method above
+	private void tickPollutionInWorld(int aTickID) {//called from method above
 		//gen data set
-		if(aTickID==0){
+		if (aTickID == 0) {
 			// make a snapshot of what to work on
 			// counterintuitive as it seems, but this is the fastest way java collections framework offers us.
 			pollutionList = new ArrayList<>(chunkData);
 			//set operations per tick
-			if(pollutionList.size()>0) operationsPerTick =(pollutionList.size()/cycleLen);
-			else operationsPerTick=0;//SANity
+			if (pollutionList.size() > 0) operationsPerTick = (pollutionList.size() / cycleLen);
+			else operationsPerTick = 0;//SANity
 		}
 
-		for(int chunksProcessed=0;chunksProcessed<=operationsPerTick;chunksProcessed++){
-			if(pollutionList.size()==0)break;//no more stuff to do
-			ChunkCoordIntPair actualPos=pollutionList.remove(pollutionList.size()-1);//faster
+		for (int chunksProcessed = 0; chunksProcessed <= operationsPerTick; chunksProcessed++) {
+			if (pollutionList.size() == 0) break;//no more stuff to do
+			ChunkCoordIntPair actualPos = pollutionList.remove(pollutionList.size() - 1);//faster
 			//get pollution
 			ChunkData currentData = STORAGE.get(world, actualPos);
 			int tPollution = currentData.getAmount();
 			//remove some
-			tPollution = (int)(0.9945f*tPollution);
+			tPollution = (int) (0.9945f * tPollution);
 			//tPollution -= 2000;//This does not really matter...
 
-			if(tPollution<=0) tPollution = 0;//SANity check
-			else if(tPollution>400000){//Spread Pollution
+			if (tPollution <= 0) tPollution = 0;//SANity check
+			else if (tPollution > 400000) {//Spread Pollution
 
 				ChunkCoordIntPair[] tNeighbors = new ChunkCoordIntPair[4];//array is faster
-				tNeighbors[0]=(new ChunkCoordIntPair(actualPos.chunkXPos+1,actualPos.chunkZPos));
-				tNeighbors[1]=(new ChunkCoordIntPair(actualPos.chunkXPos-1,actualPos.chunkZPos));
-				tNeighbors[2]=(new ChunkCoordIntPair(actualPos.chunkXPos,actualPos.chunkZPos+1));
-				tNeighbors[3]=(new ChunkCoordIntPair(actualPos.chunkXPos,actualPos.chunkZPos-1));
-				for(ChunkCoordIntPair neighborPosition : tNeighbors){
+				tNeighbors[0] = (new ChunkCoordIntPair(actualPos.chunkXPos + 1, actualPos.chunkZPos));
+				tNeighbors[1] = (new ChunkCoordIntPair(actualPos.chunkXPos - 1, actualPos.chunkZPos));
+				tNeighbors[2] = (new ChunkCoordIntPair(actualPos.chunkXPos, actualPos.chunkZPos + 1));
+				tNeighbors[3] = (new ChunkCoordIntPair(actualPos.chunkXPos, actualPos.chunkZPos - 1));
+				for (ChunkCoordIntPair neighborPosition : tNeighbors) {
 					ChunkData neighbor = STORAGE.get(world, neighborPosition);
 					int neighborPollution = neighbor.getAmount();
-					if(neighborPollution*6 < tPollution*5){//MATHEMATICS...
+					if (neighborPollution * 6 < tPollution * 5) {//MATHEMATICS...
 						int tDiff = tPollution - neighborPollution;
-						tDiff = tDiff/20;
-						neighborPollution = GT_Utility.safeInt((long)neighborPollution+tDiff);//tNPol += tDiff;
+						tDiff = tDiff / 20;
+						neighborPollution = GT_Utility.safeInt((long) neighborPollution + tDiff);//tNPol += tDiff;
 						tPollution -= tDiff;
 						neighbor.setAmount(neighborPollution);
 					}
@@ -145,7 +145,7 @@ public class GT_Pollution {
 
 				//Create Pollution effects
 				//Smog filter TODO
-				if(tPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit) {
+				if (tPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit) {
 					AxisAlignedBB chunk = AxisAlignedBB.getBoundingBox(actualPos.chunkXPos << 4, 0, actualPos.chunkZPos << 4, (actualPos.chunkXPos << 4) + 16, 256, (actualPos.chunkZPos << 4) + 16);
 					List<EntityLivingBase> tEntitys = world.getEntitiesWithinAABB(EntityLivingBase.class, chunk);
 					for (EntityLivingBase tEnt : tEntitys) {
@@ -210,71 +210,76 @@ public class GT_Pollution {
 		}
 	}
 
-	private static void damageBlock(World world, int x, int y, int z, boolean sourRain){
-		if (world.isRemote)	return;
+	private static void damageBlock(World world, int x, int y, int z, boolean sourRain) {
+		if (world.isRemote) return;
 		Block tBlock = world.getBlock(x, y, z);
 		int tMeta = world.getBlockMetadata(x, y, z);
-		if (tBlock == Blocks.air || tBlock == Blocks.stone || tBlock == Blocks.sand|| tBlock == Blocks.deadbush)return;
+		if (tBlock == Blocks.air || tBlock == Blocks.stone || tBlock == Blocks.sand || tBlock == Blocks.deadbush)
+			return;
 
-			if (tBlock == Blocks.leaves || tBlock == Blocks.leaves2 || tBlock.getMaterial() == Material.leaves)
-				world.setBlockToAir(x, y, z);
-			if (tBlock == Blocks.reeds) {
-				tBlock.dropBlockAsItem(world, x, y, z, tMeta, 0);
-				world.setBlockToAir(x, y, z);
-			}
-			if (tBlock == Blocks.tallgrass)
-				world.setBlock(x, y, z, Blocks.deadbush);
-			if (tBlock == Blocks.vine) {
-				tBlock.dropBlockAsItem(world, x, y, z, tMeta, 0);
-				world.setBlockToAir(x, y, z);
-			}
-			if (tBlock == Blocks.waterlily || tBlock == Blocks.wheat || tBlock == Blocks.cactus ||
+		if (tBlock == Blocks.leaves || tBlock == Blocks.leaves2 || tBlock.getMaterial() == Material.leaves)
+			world.setBlockToAir(x, y, z);
+		if (tBlock == Blocks.reeds) {
+			tBlock.dropBlockAsItem(world, x, y, z, tMeta, 0);
+			world.setBlockToAir(x, y, z);
+		}
+		if (tBlock == Blocks.tallgrass)
+			world.setBlock(x, y, z, Blocks.deadbush);
+		if (tBlock == Blocks.vine) {
+			tBlock.dropBlockAsItem(world, x, y, z, tMeta, 0);
+			world.setBlockToAir(x, y, z);
+		}
+		if (tBlock == Blocks.waterlily || tBlock == Blocks.wheat || tBlock == Blocks.cactus ||
 				tBlock.getMaterial() == Material.cactus || tBlock == Blocks.melon_block || tBlock == Blocks.melon_stem) {
-				tBlock.dropBlockAsItem(world, x, y, z, tMeta, 0);
-				world.setBlockToAir(x, y, z);
-			}
-			if (tBlock == Blocks.red_flower || tBlock == Blocks.yellow_flower || tBlock == Blocks.carrots ||
+			tBlock.dropBlockAsItem(world, x, y, z, tMeta, 0);
+			world.setBlockToAir(x, y, z);
+		}
+		if (tBlock == Blocks.red_flower || tBlock == Blocks.yellow_flower || tBlock == Blocks.carrots ||
 				tBlock == Blocks.potatoes || tBlock == Blocks.pumpkin || tBlock == Blocks.pumpkin_stem) {
-				tBlock.dropBlockAsItem(world, x, y, z, tMeta, 0);
-				world.setBlockToAir(x, y, z);
-			}
-			if (tBlock == Blocks.sapling || tBlock.getMaterial() == Material.plants)
-				world.setBlock(x, y, z, Blocks.deadbush);
-			if (tBlock == Blocks.cocoa) {
-				tBlock.dropBlockAsItem(world, x, y, z, tMeta, 0);
-				world.setBlockToAir(x, y, z);
-			}
-			if (tBlock == Blocks.mossy_cobblestone)
+			tBlock.dropBlockAsItem(world, x, y, z, tMeta, 0);
+			world.setBlockToAir(x, y, z);
+		}
+		if (tBlock == Blocks.sapling || tBlock.getMaterial() == Material.plants)
+			world.setBlock(x, y, z, Blocks.deadbush);
+		if (tBlock == Blocks.cocoa) {
+			tBlock.dropBlockAsItem(world, x, y, z, tMeta, 0);
+			world.setBlockToAir(x, y, z);
+		}
+		if (tBlock == Blocks.mossy_cobblestone)
+			world.setBlock(x, y, z, Blocks.cobblestone);
+		if (tBlock == Blocks.grass || tBlock.getMaterial() == Material.grass)
+			world.setBlock(x, y, z, Blocks.dirt);
+		if (tBlock == Blocks.farmland || tBlock == Blocks.dirt) {
+			world.setBlock(x, y, z, Blocks.sand);
+		}
+
+		if (sourRain && world.isRaining() && (tBlock == Blocks.stone || tBlock == Blocks.gravel || tBlock == Blocks.cobblestone) &&
+				world.getBlock(x, y + 1, z) == Blocks.air && world.canBlockSeeTheSky(x, y, z)) {
+			if (tBlock == Blocks.stone) {
 				world.setBlock(x, y, z, Blocks.cobblestone);
-			if (tBlock == Blocks.grass || tBlock.getMaterial() == Material.grass )
-				world.setBlock(x, y, z, Blocks.dirt);
-			if(tBlock == Blocks.farmland || tBlock == Blocks.dirt){
+			} else if (tBlock == Blocks.cobblestone) {
+				world.setBlock(x, y, z, Blocks.gravel);
+			} else if (tBlock == Blocks.gravel) {
 				world.setBlock(x, y, z, Blocks.sand);
 			}
-
-			if(sourRain && world.isRaining() && (tBlock == Blocks.stone || tBlock == Blocks.gravel || tBlock == Blocks.cobblestone) &&
-				world.getBlock(x, y+1, z) == Blocks.air && world.canBlockSeeTheSky(x, y, z)){
-				if(tBlock == Blocks.stone){world.setBlock(x, y, z, Blocks.cobblestone);	}
-				else if(tBlock == Blocks.cobblestone){world.setBlock(x, y, z, Blocks.gravel);	}
-				else if(tBlock == Blocks.gravel){world.setBlock(x, y, z, Blocks.sand);	}
-			}
+		}
 	}
 
-	public static void addPollution(IGregTechTileEntity te, int aPollution){
-		addPollution(te.getWorld().getChunkFromBlockCoords(te.getXCoord(),te.getZCoord()), aPollution);
+	public static void addPollution(IGregTechTileEntity te, int aPollution) {
+		addPollution(te.getWorld().getChunkFromBlockCoords(te.getXCoord(), te.getZCoord()), aPollution);
 	}
 
-	public static void addPollution(Chunk ch, int aPollution){
-		if(!GT_Mod.gregtechproxy.mPollution || aPollution == 0)return;
+	public static void addPollution(Chunk ch, int aPollution) {
+		if (!GT_Mod.gregtechproxy.mPollution || aPollution == 0) return;
 		STORAGE.get(ch).changeAmount(aPollution);
 	}
 
-	public static int getPollution(IGregTechTileEntity te){
-		return getPollution(te.getWorld().getChunkFromBlockCoords(te.getXCoord(),te.getZCoord()));
+	public static int getPollution(IGregTechTileEntity te) {
+		return getPollution(te.getWorld().getChunkFromBlockCoords(te.getXCoord(), te.getZCoord()));
 	}
 
-	public static int getPollution(Chunk ch){
-		if(!GT_Mod.gregtechproxy.mPollution)
+	public static int getPollution(Chunk ch) {
+		if (!GT_Mod.gregtechproxy.mPollution)
 			return 0;
 		return STORAGE.get(ch).getAmount();
 	}
@@ -293,10 +298,10 @@ public class GT_Pollution {
 
 	//Add compatibility with old code
 	@Deprecated /*Don't use it... too weird way of passing position*/
-	public static void addPollution(World aWorld, ChunkPosition aPos, int aPollution){
+	public static void addPollution(World aWorld, ChunkPosition aPos, int aPollution) {
 		//The abuse of ChunkPosition to store block position and dim... 
 		//is just bad especially when that is both used to store ChunkPos and BlockPos depending on context
-		addPollution(aWorld.getChunkFromBlockCoords(aPos.chunkPosX,aPos.chunkPosZ),aPollution);
+		addPollution(aWorld.getChunkFromBlockCoords(aPos.chunkPosX, aPos.chunkPosZ), aPollution);
 	}
 
 	static void migrate(ChunkDataEvent.Load e) {
