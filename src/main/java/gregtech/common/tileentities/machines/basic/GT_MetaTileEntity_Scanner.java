@@ -15,6 +15,7 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
 import gregtech.api.objects.ItemData;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GT_AssemblyLineUtils;
 import gregtech.api.util.GT_Assemblyline_Server;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
@@ -339,6 +340,9 @@ public class GT_MetaTileEntity_Scanner extends GT_MetaTileEntity_BasicMachine {
                         tNBT.setTag("pages", tNBTList);
 
                         this.mOutputItems[0].setTagCompound(tNBT);
+                        
+                        // Add Recipe Hash String to Data stick.
+                        GT_AssemblyLineUtils.setRecipeHashOnDataStick(this.mOutputItems[0], GT_AssemblyLineUtils.generateRecipeHash(tRecipe));
 
                         aStack.stackSize -= 1;
                         calculateOverclockedNess(30, tRecipe.mResearchTime);

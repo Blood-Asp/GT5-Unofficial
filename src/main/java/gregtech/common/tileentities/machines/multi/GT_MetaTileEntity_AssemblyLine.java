@@ -17,6 +17,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_DataAccess;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GT_AssemblyLineUtils;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
@@ -258,10 +259,16 @@ public class GT_MetaTileEntity_AssemblyLine extends GT_MetaTileEntity_EnhancedMu
             }
 
             if (GT_Values.D1) GT_FML_LOGGER.info("Find avaiable recipe");
-            findRecipe = true;
+            
+            // Check data stick is valid.
+            if (GT_AssemblyLineUtils.processDataStick(tDataStick)) {
+                findRecipe = true;            	
+            }
+            
             break;
         }
         if (!findRecipe) return false;
+        
 
         if (GT_Values.D1) GT_FML_LOGGER.info("All checked start consuming inputs");
         for (int i = 0; i < 15; i++) {
