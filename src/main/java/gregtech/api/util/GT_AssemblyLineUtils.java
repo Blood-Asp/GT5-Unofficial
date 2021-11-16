@@ -19,9 +19,13 @@ import scala.actors.threadpool.Arrays;
 public class GT_AssemblyLineUtils {
 
 	/**
-	 * A cache of 
+	 * A cache of Recipes using the Output as Key.
 	 */
 	private static HashMap<GT_ItemStack, GT_Recipe_AssemblyLine> sRecipeCacheByOutput = new HashMap<GT_ItemStack, GT_Recipe_AssemblyLine>();
+	/**
+	 * A cache of Recipes using the Recipe Hash String as Key.
+	 */
+	private static HashMap<String, GT_Recipe_AssemblyLine> sRecipeCacheByRecipeHash = new HashMap<String, GT_Recipe_AssemblyLine>();
 
 	/**
 	 * Checks the DataStick for deprecated/invalid recipes, updating them as required.
@@ -62,6 +66,14 @@ public class GT_AssemblyLineUtils {
 		NBTTagCompound aTag = aDataStick.getTagCompound();
 		if (aTag == null) {
 			return null;
+		}
+		
+		//Get From Cache
+		if (doesDataStickHaveRecipeHash(aDataStick)) {
+			GT_Recipe_AssemblyLine aRecipeFromCache = sRecipeCacheByRecipeHash.get(getHashFromDataStack(aDataStick));
+			if (aRecipeFromCache != null) {
+				return aRecipeFromCache;
+			}
 		}
 
 		for (int i = 0; i < 15; i++) {
@@ -131,7 +143,11 @@ public class GT_AssemblyLineUtils {
 			for (GT_Recipe_AssemblyLine aRecipe : GT_Recipe.GT_Recipe_AssemblyLine.sAssemblylineRecipes) {
 				if (aRecipe.mEUt == aEU && aRecipe.mDuration == aTime) {
 					if (GT_Utility.areStacksEqual(aOutputs[0], aRecipe.mOutput, true)) {
-						if (Arrays.equals(aRecipe.mInputs, aInputs) && Arrays.equals(aRecipe.mFluidInputs, aFluidInputs)) {
+						if (Arrays.equals(aRecipe.mInputs, aInputs) && Arrays.equals(aRecipe.mFluidInputs, aFluidInputs)) {							
+							// Cache it
+							String aRecipeHash = generateRecipeHash(aRecipe);
+							sRecipeCacheByRecipeHash.put(aRecipeHash, aRecipe);
+							sRecipeCacheByOutput.put(new GT_ItemStack(aRecipe.mOutput), aRecipe);							
 							return aRecipe;
 						}
 					}
@@ -165,6 +181,7 @@ public class GT_AssemblyLineUtils {
 			if (GT_Utility.areStacksEqual(aRecipeOutput, aOutput)) {
 				// Cache it to prevent future iterations of all recipes
 				sRecipeCacheByOutput.put(aCacheStack, aRecipe);
+				sRecipeCacheByRecipeHash.put(generateRecipeHash(aRecipe), aRecipe);
 				return aRecipe;
 			}
 		}
