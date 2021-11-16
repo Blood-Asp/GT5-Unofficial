@@ -2,9 +2,12 @@ package gregtech.api.util;
 
 import static gregtech.GT_Mod.GT_FML_LOGGER;
 
+import java.util.HashMap;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
+import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.GT_Recipe.GT_Recipe_AssemblyLine;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,6 +17,11 @@ import net.minecraftforge.fluids.FluidStack;
 import scala.actors.threadpool.Arrays;
 
 public class GT_AssemblyLineUtils {
+
+	/**
+	 * A cache of 
+	 */
+	private static HashMap<GT_ItemStack, GT_Recipe_AssemblyLine> sRecipeCacheByOutput = new HashMap<GT_ItemStack, GT_Recipe_AssemblyLine>();
 
 	/**
 	 * Checks the DataStick for deprecated/invalid recipes, updating them as required.
@@ -140,27 +148,60 @@ public class GT_AssemblyLineUtils {
 	 * @return First found GT_Recipe_AssemblyLine with matching output.
 	 */
 	public static GT_Recipe_AssemblyLine findAssemblyLineRecipeByOutput(ItemStack aOutput) {
+		if (aOutput == null) {
+			return null;
+		}	
+		
+		// Check the cache
+		GT_ItemStack aCacheStack = new GT_ItemStack(aOutput);
+		GT_Recipe_AssemblyLine aRecipeFromCache = sRecipeCacheByOutput.get(aCacheStack);
+		if (aRecipeFromCache != null) {
+			return aRecipeFromCache;
+		}
+		
+		// Iterate all recipes and return the first matching based on Output.
 		for (GT_Recipe_AssemblyLine aRecipe : GT_Recipe.GT_Recipe_AssemblyLine.sAssemblylineRecipes) {
 			ItemStack aRecipeOutput = aRecipe.mOutput;
 			if (GT_Utility.areStacksEqual(aRecipeOutput, aOutput)) {
+				// Cache it to prevent future iterations of all recipes
+				sRecipeCacheByOutput.put(aCacheStack, aRecipe);
 				return aRecipe;
 			}
 		}
 		return null;
 	}
 
+	/**
+	 * @param aRecipe - The recipe to generate a Recipe Hash String from.
+	 * @return The Recipe Hash String.
+	 */
+	public static String generateRecipeHash(GT_Recipe_AssemblyLine aRecipe) {
+		String aHash = "Invalid.Recipe.Hash";		
+		if (aRecipe != null) {
+			aHash = "Hash."+aRecipe.hashCode();
+		}		
+		return aHash;
+	}
 
 	/**
-	 * Get the Output ItemStack from a Data Stick.
-	 * @param aDataStick - The Data Stick to check.
-	 * @return Output ItemStack contained on the Data Stick.
+	 * @param aHash - Recipe hash String, may be null but will just be treated as invalid.
+	 * @return Is this Recipe Hash String valid?
 	 */
-	public static ItemStack getDataStickOutput(ItemStack aDataStick) {
-		if (doesDataStickHaveOutput(aDataStick)) {
-			ItemStack aOutput = GT_Utility.loadItem(aDataStick.getTagCompound(), "output");
-			return aOutput;
+	public static boolean isValidHash(String aHash) {
+		if (aHash != null && aHash.length() > 0) {
+			if (!aHash.equals("Invalid.Recipe.Hash") && aHash.contains("Hash.")) {
+				return true;
+			}
 		}
-		return null;
+		return false;
+	}
+
+	/**
+	 * @param aStack - The ItemStack to check.
+	 * @return Is this ItemStack a Data Stick?
+	 */
+	public static boolean isItemDataStick(ItemStack aStack) {
+		return GT_Utility.isStackValid(aStack) && ItemList.Tool_DataStick.isStackEqual(aStack, false, true);
 	}
 
 	/**
@@ -207,6 +248,19 @@ public class GT_AssemblyLineUtils {
 	}
 
 	/**
+	 * Get the Output ItemStack from a Data Stick.
+	 * @param aDataStick - The Data Stick to check.
+	 * @return Output ItemStack contained on the Data Stick.
+	 */
+	public static ItemStack getDataStickOutput(ItemStack aDataStick) {
+		if (doesDataStickHaveOutput(aDataStick)) {
+			ItemStack aOutput = GT_Utility.loadItem(aDataStick.getTagCompound(), "output");
+			return aOutput;
+		}
+		return null;
+	}
+
+	/**
 	 * @param aDataStick - The Data Stick to procces.
 	 * @return The stored Recipe Hash String on the Data Stick, will return an invalid Hash if one is not found. <p>
 	 * Check with isValidHash(). <p> 
@@ -229,7 +283,7 @@ public class GT_AssemblyLineUtils {
 	 * @param aRecipeHash - The Recipe Hash String to update with.
 	 * @return Did we update the Recipe Hash String on the Data Stick?
 	 */
-	public static boolean writeRecipeHashToDataStick(ItemStack aDataStick, String aRecipeHash) {
+	public static boolean setRecipeHashOnDataStick(ItemStack aDataStick, String aRecipeHash) {
 		if (isItemDataStick(aDataStick) && aDataStick.hasTagCompound()) {
 			NBTTagCompound aNBT = aDataStick.getTagCompound();
 			aNBT.setString("Data.Recipe.Hash", aRecipeHash);
@@ -237,39 +291,6 @@ public class GT_AssemblyLineUtils {
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * @param aRecipe - The recipe to generate a Recipe Hash String from.
-	 * @return The Recipe Hash String.
-	 */
-	public static String generateRecipeHash(GT_Recipe_AssemblyLine aRecipe) {
-		String aHash = "Invalid.Recipe.Hash";		
-		if (aRecipe != null) {
-			aHash = "Hash."+aRecipe.hashCode();
-		}		
-		return aHash;
-	}
-
-	/**
-	 * @param aHash - Recipe hash String, may be null but will just be treated as invalid.
-	 * @return Is this Recipe Hash String valid?
-	 */
-	public static boolean isValidHash(String aHash) {
-		if (aHash != null && aHash.length() > 0) {
-			if (!aHash.equals("Invalid.Recipe.Hash") && aHash.contains("Hash.")) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * @param aStack - The ItemStack to check.
-	 * @return Is this ItemStack a Data Stick?
-	 */
-	public static boolean isItemDataStick(ItemStack aStack) {
-		return GT_Utility.isStackValid(aStack) && ItemList.Tool_DataStick.isStackEqual(aStack, false, true);
 	}
 
 	/**
@@ -365,7 +386,7 @@ public class GT_AssemblyLineUtils {
 			tNBT.setTag("pages", tNBTList);		
 			aDataStick.setTagCompound(tNBT);	
 			// Set recipe hash
-			writeRecipeHashToDataStick(aDataStick, generateRecipeHash(aNewRecipe));
+			setRecipeHashOnDataStick(aDataStick, generateRecipeHash(aNewRecipe));
 			return true;
 		}
 		return false;
