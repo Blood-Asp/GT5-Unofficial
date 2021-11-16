@@ -19,7 +19,7 @@ import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_ProcessingArray_Manager;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
-import gregtech.api.util.GT_Single_Recipe_Check;
+import gregtech.api.util.GT_Single_Recipe_Check_Processing_Array;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -50,12 +50,6 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_CubicMu
     private int mMult = 0;
     private boolean mSeparate = false;
     private String mMachineName = "";
-
-    /** If locked to a single recipe, the locked recipe's amperage. */
-    private int mSingleRecipeAmperage;
-
-    /** If locked to a single recipe, the single-block machines that were used to run that single recipe. */
-    private ItemStack mSingleRecipeMachineStack;
 
     public GT_MetaTileEntity_ProcessingArray(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -245,24 +239,12 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_CubicMu
     }
 
     public boolean processLockedRecipe() {
-        if (!GT_Utility.areStacksEqual(mSingleRecipeMachineStack, mInventory[1])) {
-            // Machine stack was modified. This is not allowed, so stop processing.
-            return false;
-        }
+        GT_Single_Recipe_Check_Processing_Array tSingleRecipeCheck = (GT_Single_Recipe_Check_Processing_Array) mSingleRecipeCheck;
 
         int machines = Math.min(64, mInventory[1].stackSize << mMult); //Upped max Cap to 64
-        int i = 0;
-        for (; i < machines; i++) {
-            // TODO we should create a separate single recipe check class just for PAs.
-            //  This class can memorize the amperage and machine stack for us, as well as compute
-            //  the max number of runs in a single iteration over the inputs, rather than requiring
-            //  one iteration per machine in the stack. But let's do that after we've tested this.
-            if (!mSingleRecipeCheck.checkRecipeInputs(true)) {
-                break;
-            }
-        }
+        int parallel = tSingleRecipeCheck.checkRecipeInputs(true, machines);
 
-        return processRecipeOutputs(mSingleRecipeCheck.getRecipe(), mSingleRecipeAmperage, i);
+        return processRecipeOutputs(tSingleRecipeCheck.getRecipe(), tSingleRecipeCheck.getRecipeAmperage(), parallel);
     }
 
     public boolean processRecipe(ItemStack[] tInputs, FluidStack[] tFluids, GT_Recipe.GT_Recipe_Map map) {
@@ -273,11 +255,11 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_CubicMu
                 !isValidForLowGravity(tRecipe, getBaseMetaTileEntity().getWorld().provider.dimensionId))
             return false;
 
-        GT_Single_Recipe_Check.Builder tSingleRecipeCheckBuilder = null;
+        GT_Single_Recipe_Check_Processing_Array.Builder tSingleRecipeCheckBuilder = null;
         if (mLockedToSingleRecipe) {
             // We're locked to a single recipe, but haven't built the recipe checker yet.
             // Build the checker on next successful recipe.
-            tSingleRecipeCheckBuilder = GT_Single_Recipe_Check.builder(this).setBefore();
+            tSingleRecipeCheckBuilder = GT_Single_Recipe_Check_Processing_Array.processingArrayBuilder(this).setBefore();
         }
 
         boolean recipeLocked = false;
@@ -289,9 +271,12 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_CubicMu
                 break;
             } else if (mLockedToSingleRecipe && !recipeLocked) {
                 // We want to lock to a single run of the recipe.
-                mSingleRecipeCheck = tSingleRecipeCheckBuilder.setAfter().setRecipe(tRecipe).build();
-                mSingleRecipeAmperage = map.mAmperage;
-                mSingleRecipeMachineStack = mInventory[1].copy();
+                mSingleRecipeCheck =
+                        tSingleRecipeCheckBuilder
+                                .setAfter()
+                                .setRecipe(tRecipe)
+                                .setRecipeAmperage(map.mAmperage)
+                                .build();
                 recipeLocked = true;
             }
         }

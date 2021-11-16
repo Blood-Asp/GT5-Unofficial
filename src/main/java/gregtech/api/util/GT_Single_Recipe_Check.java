@@ -17,14 +17,15 @@ import java.util.Map;
 
 /** Used by machines that are locked to a single recipe, for fast computation. */
 public class GT_Single_Recipe_Check {
-    private final GT_MetaTileEntity_MultiBlockBase multiBlockBase;
-    private final GT_Recipe recipe;
-    private final ImmutableMap<ItemId, Integer> itemCost;
-    private final ImmutableMap<Fluid, Integer> fluidCost;
-    private final int totalItemCost;
-    private final int totalFluidCost;
+    protected final GT_MetaTileEntity_MultiBlockBase multiBlockBase;
+    protected final GT_Recipe recipe;
+    protected final ImmutableMap<ItemId, Integer> itemCost;
+    protected final ImmutableMap<Fluid, Integer> fluidCost;
 
-    private GT_Single_Recipe_Check(
+    protected final int totalItemCost;
+    protected final int totalFluidCost;
+
+    protected GT_Single_Recipe_Check(
             GT_MetaTileEntity_MultiBlockBase multiBlockBase,
             GT_Recipe recipe,
             ImmutableMap<ItemId, Integer> itemCost,
@@ -176,7 +177,7 @@ public class GT_Single_Recipe_Check {
         return true;
     }
 
-    private static Map<ItemId, Integer> buildItemMap(
+    protected static Map<ItemId, Integer> buildItemMap(
             GT_MetaTileEntity_MultiBlockBase multiBlockBase) {
         Map<ItemId, Integer> itemMap = new HashMap<>();
         for (ItemStack itemStack : multiBlockBase.getStoredInputs()) {
@@ -185,7 +186,7 @@ public class GT_Single_Recipe_Check {
         return itemMap;
     }
 
-    private static Map<Fluid, Integer> buildFluidMap(
+    protected static Map<Fluid, Integer> buildFluidMap(
             GT_MetaTileEntity_MultiBlockBase multiBlockBase) {
         Map<Fluid, Integer> fluidMap = new HashMap<>();
         for (FluidStack fluidStack : multiBlockBase.getStoredFluids()) {
@@ -256,9 +257,9 @@ public class GT_Single_Recipe_Check {
     }
 
     @AutoValue
-    abstract static class ItemId {
+    protected abstract static class ItemId {
         /** This method copies NBT, as it is mutable. */
-        private static ItemId create(ItemStack itemStack) {
+        protected static ItemId create(ItemStack itemStack) {
             NBTTagCompound nbt = itemStack.getTagCompound();
             if (nbt != null) {
                 nbt = (NBTTagCompound) nbt.copy();
@@ -269,15 +270,15 @@ public class GT_Single_Recipe_Check {
         }
 
         /** This method does not copy NBT in order to save time. Make sure not to mutate it! */
-        private static ItemId createNoCopy(ItemStack itemStack) {
+        protected static ItemId createNoCopy(ItemStack itemStack) {
             return new AutoValue_GT_Single_Recipe_Check_ItemId(
                     itemStack.getItem(), itemStack.getItemDamage(), itemStack.getTagCompound());
         }
 
-        abstract Item item();
-        abstract int metaData();
+        protected abstract Item item();
+        protected abstract int metaData();
 
         @Nullable
-        abstract NBTTagCompound nbt();
+        protected abstract NBTTagCompound nbt();
     }
 }
