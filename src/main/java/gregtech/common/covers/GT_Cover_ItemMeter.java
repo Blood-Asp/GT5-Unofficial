@@ -6,12 +6,14 @@ import gregtech.api.gui.widgets.GT_GuiFakeItemButton;
 import gregtech.api.gui.widgets.GT_GuiIcon;
 import gregtech.api.gui.widgets.GT_GuiIconCheckButton;
 import gregtech.api.gui.widgets.GT_GuiIntegerTextBox;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.ICoverable;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.net.GT_Packet_TileEntityCover;
 import gregtech.api.util.GT_CoverBehavior;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.tileentities.machines.GT_MetaTileEntity_Hatch_OutputBus_ME;
 import gregtech.common.tileentities.storage.GT_MetaTileEntity_DigitalChestBase;
-
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -43,16 +45,22 @@ public class GT_Cover_ItemMeter extends GT_CoverBehavior {
 
         long tMax = 0;
         long tUsed = 0;
-        if (aTileEntity instanceof GT_MetaTileEntity_DigitalChestBase) {
-            GT_MetaTileEntity_DigitalChestBase dc = (GT_MetaTileEntity_DigitalChestBase)aTileEntity;
+        IMetaTileEntity mte = ((IGregTechTileEntity) aTileEntity).getMetaTileEntity();
+        if (mte instanceof GT_MetaTileEntity_DigitalChestBase) {
+            GT_MetaTileEntity_DigitalChestBase dc = (GT_MetaTileEntity_DigitalChestBase) mte;
             tMax = dc.getMaxItemCount(); // currently it is limited by int, but there is not much reason for that
             ItemStack[] inv = dc.getStoredItemData();
             if (inv != null && inv.length > 1 && inv[1] != null)
                 tUsed = inv[1].stackSize;
+        } else if (mte instanceof GT_MetaTileEntity_Hatch_OutputBus_ME) {
+            if (((GT_MetaTileEntity_Hatch_OutputBus_ME) mte).isLastOutputFailed()) {
+                tMax = 64;
+                tUsed = 64;
+            }
         } else {
             int[] tSlots = (aCoverVariable & SLOT_MASK) > 0 ?
-                 new int[] {(aCoverVariable & SLOT_MASK) - 1} :
-                 aTileEntity.getAccessibleSlotsFromSide(aSide);
+                    new int[]{(aCoverVariable & SLOT_MASK) - 1} :
+                    aTileEntity.getAccessibleSlotsFromSide(aSide);
 
             for (int i : tSlots) {
                 if (i >= 0 && i < aTileEntity.getSizeInventory()) {
