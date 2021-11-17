@@ -8,7 +8,7 @@ import gregtech.api.gui.widgets.GT_GuiIcon;
 import gregtech.api.gui.widgets.GT_GuiIconButton;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.net.GT_Packet_TileEntityCoverNew;
-import gregtech.api.util.GT_CoverBehavior_New;
+import gregtech.api.util.GT_CoverBehaviorBase;
 import gregtech.api.util.GT_Utility;
 import gregtech.api.util.ISerializableObject;
 import io.netty.buffer.ByteBuf;
@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 
 import static gregtech.api.enums.GT_Values.E;
 
-public class GT_Cover_Fluidfilter extends GT_CoverBehavior_New<GT_Cover_Fluidfilter.FluidFilterData> {
+public class GT_Cover_Fluidfilter extends GT_CoverBehaviorBase<GT_Cover_Fluidfilter.FluidFilterData> {
 
     // Uses the lower 3 bits of the cover variable, so we have 8 options to work with (0-7)
     private final int FILTER_INPUT_DENY_OUTPUT = 0; //  000

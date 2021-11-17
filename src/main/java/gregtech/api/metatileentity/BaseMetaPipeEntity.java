@@ -23,7 +23,7 @@ import gregtech.api.interfaces.tileentity.IPipeRenderedTileEntity;
 import gregtech.api.net.GT_Packet_TileEntity;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.GT_CoverBehavior;
-import gregtech.api.util.GT_CoverBehavior_New;
+import gregtech.api.util.GT_CoverBehaviorBase;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
@@ -53,7 +53,7 @@ import net.minecraftforge.fluids.*;
  * This is the main TileEntity for EVERYTHING.
  */
 public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileEntity, IPipeRenderedTileEntity {
-    private final GT_CoverBehavior_New<?>[] mCoverBehaviors = new GT_CoverBehavior_New<?>[]{GregTech_API.sNoBehavior, GregTech_API.sNoBehavior, GregTech_API.sNoBehavior, GregTech_API.sNoBehavior, GregTech_API.sNoBehavior, GregTech_API.sNoBehavior};
+    private final GT_CoverBehaviorBase<?>[] mCoverBehaviors = new GT_CoverBehaviorBase<?>[]{GregTech_API.sNoBehavior, GregTech_API.sNoBehavior, GregTech_API.sNoBehavior, GregTech_API.sNoBehavior, GregTech_API.sNoBehavior, GregTech_API.sNoBehavior};
     public byte mConnections = IConnectable.NO_CONNECTION;
     protected MetaPipeEntity mMetaTileEntity;
     private byte[] mSidedRedstone = new byte[]{0, 0, 0, 0, 0, 0};
@@ -173,7 +173,7 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
             if (mCoverData == null) {
                 mCoverData = new ISerializableObject[6];
                 for (byte i = 0; i<6; i++) {
-                    GT_CoverBehavior_New<?> tBehavior = getCoverBehaviorAtSideNew(i);
+                    GT_CoverBehaviorBase<?> tBehavior = getCoverBehaviorAtSideNew(i);
                     if (tBehavior == null)
                         continue;
                     mCoverData[i] = tBehavior.createDataObject();
@@ -301,7 +301,7 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
                             for (byte i = (byte) (tCode - 2); i < 6; i++)
                                 if (getCoverIDAtSide(i) != 0) {
                                     tCode++;
-                                    GT_CoverBehavior_New<?> tCover = getCoverBehaviorAtSideNew(i);
+                                    GT_CoverBehaviorBase<?> tCover = getCoverBehaviorAtSideNew(i);
                                     int tCoverTickRate = tCover.getTickRate(i, getCoverIDAtSide(i), mCoverData[i], this);
                                     if (tCoverTickRate > 0 && mTickTimer % tCoverTickRate == 0) {
                                         byte tRedstone = tCover.isRedstoneSensitive(i, getCoverIDAtSide(i), mCoverData[i], this, mTickTimer) ? getInputRedstoneSignal(i) : 0;
@@ -943,13 +943,13 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
                 if (GT_Utility.isStackInList(tCurrentItem, GregTech_API.sScrewdriverList)) {
                     if (getCoverIDAtSide(aSide) == 0 && getCoverIDAtSide(tSide) != 0) {
                         if (GT_ModHandler.damageOrDechargeItem(tCurrentItem, 1, 200, aPlayer)) {
-                            setCoverDataAtSide(tSide, getCoverBehaviorAtSideNew(tSide).onCoverScrewdriverClick(tSide, getCoverIDAtSide(tSide), getCoverDataAtSideNew(tSide), this, aPlayer, 0.5F, 0.5F, 0.5F));
+                            setCoverDataAtSide(tSide, getCoverBehaviorAtSideNew(tSide).onCoverScrewdriverClick(tSide, getCoverIDAtSide(tSide), getComplexCoverDataAtSide(tSide), this, aPlayer, 0.5F, 0.5F, 0.5F));
                             mMetaTileEntity.onScrewdriverRightClick(tSide, aPlayer, aX, aY, aZ);
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(100), 1.0F, -1, xCoord, yCoord, zCoord);
                         }
                     } else {
                         if (GT_ModHandler.damageOrDechargeItem(tCurrentItem, 1, 1000, aPlayer)) {
-                            setCoverDataAtSide(aSide, getCoverBehaviorAtSideNew(aSide).onCoverScrewdriverClick(aSide, getCoverIDAtSide(aSide), getCoverDataAtSideNew(aSide), this, aPlayer, aX, aY, aZ));
+                            setCoverDataAtSide(aSide, getCoverBehaviorAtSideNew(aSide).onCoverScrewdriverClick(aSide, getCoverIDAtSide(aSide), getComplexCoverDataAtSide(aSide), this, aPlayer, aX, aY, aZ));
                             mMetaTileEntity.onScrewdriverRightClick(aSide, aPlayer, aX, aY, aZ);
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(100), 1.0F, -1, xCoord, yCoord, zCoord);
                         }
@@ -1023,14 +1023,14 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
             }
             else if (aPlayer.isSneaking()) { //Sneak click, no tool -> open cover config or turn back.
                 aSide = (getCoverIDAtSide(aSide) == 0) ? GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ) : aSide;
-                return getCoverIDAtSide(aSide) > 0 && getCoverBehaviorAtSideNew(aSide).onCoverShiftRightClick(aSide, getCoverIDAtSide(aSide), getCoverDataAtSideNew(aSide), this, aPlayer);
+                return getCoverIDAtSide(aSide) > 0 && getCoverBehaviorAtSideNew(aSide).onCoverShiftRightClick(aSide, getCoverIDAtSide(aSide), getComplexCoverDataAtSide(aSide), this, aPlayer);
             }
 
-            if (getCoverBehaviorAtSideNew(aSide).onCoverRightClick(aSide, getCoverIDAtSide(aSide), getCoverDataAtSideNew(aSide), this, aPlayer, aX, aY, aZ))
+            if (getCoverBehaviorAtSideNew(aSide).onCoverRightClick(aSide, getCoverIDAtSide(aSide), getComplexCoverDataAtSide(aSide), this, aPlayer, aX, aY, aZ))
                 return true;
         }
 
-        if (!getCoverBehaviorAtSideNew(aSide).isGUIClickable(aSide, getCoverIDAtSide(aSide), getCoverDataAtSideNew(aSide), this))
+        if (!getCoverBehaviorAtSideNew(aSide).isGUIClickable(aSide, getCoverIDAtSide(aSide), getComplexCoverDataAtSide(aSide), this))
             return false;
 
         try {
@@ -1087,7 +1087,7 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
      */
     @Override
     public int[] getAccessibleSlotsFromSide(int aSide) {
-        if (canAccessData() && (getCoverBehaviorAtSideNew((byte) aSide).letsItemsOut((byte) aSide, getCoverIDAtSide((byte) aSide), getCoverDataAtSideNew((byte) aSide), -1, this) || getCoverBehaviorAtSide((byte) aSide).letsItemsIn((byte) aSide, getCoverIDAtSide((byte) aSide), getCoverDataAtSideNew((byte) aSide), -1, this)))
+        if (canAccessData() && (getCoverBehaviorAtSideNew((byte) aSide).letsItemsOut((byte) aSide, getCoverIDAtSide((byte) aSide), getComplexCoverDataAtSide((byte) aSide), -1, this) || getCoverBehaviorAtSide((byte) aSide).letsItemsIn((byte) aSide, getCoverIDAtSide((byte) aSide), getComplexCoverDataAtSide((byte) aSide), -1, this)))
             return mMetaTileEntity.getAccessibleSlotsFromSide(aSide);
         return new int[0];
     }
@@ -1097,7 +1097,7 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
      */
     @Override
     public boolean canInsertItem(int aIndex, ItemStack aStack, int aSide) {
-        return canAccessData() && getCoverBehaviorAtSide((byte) aSide).letsItemsIn((byte) aSide, getCoverIDAtSide((byte) aSide), getCoverDataAtSideNew((byte) aSide), aIndex, this) && mMetaTileEntity.canInsertItem(aIndex, aStack, aSide);
+        return canAccessData() && getCoverBehaviorAtSide((byte) aSide).letsItemsIn((byte) aSide, getCoverIDAtSide((byte) aSide), getComplexCoverDataAtSide((byte) aSide), aIndex, this) && mMetaTileEntity.canInsertItem(aIndex, aStack, aSide);
     }
 
     /**
@@ -1105,7 +1105,7 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
      */
     @Override
     public boolean canExtractItem(int aIndex, ItemStack aStack, int aSide) {
-        return canAccessData() && getCoverBehaviorAtSide((byte) aSide).letsItemsOut((byte) aSide, getCoverIDAtSide((byte) aSide), getCoverDataAtSideNew((byte) aSide), aIndex, this) && mMetaTileEntity.canExtractItem(aIndex, aStack, aSide);
+        return canAccessData() && getCoverBehaviorAtSide((byte) aSide).letsItemsOut((byte) aSide, getCoverIDAtSide((byte) aSide), getComplexCoverDataAtSide((byte) aSide), aIndex, this) && mMetaTileEntity.canExtractItem(aIndex, aStack, aSide);
     }
 
     @Override
@@ -1115,7 +1115,7 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
 
     @Override
     public byte getInternalInputRedstoneSignal(byte aSide) {
-        return (byte) (getCoverBehaviorAtSide(aSide).getRedstoneInput(aSide, getInputRedstoneSignal(aSide), getCoverIDAtSide(aSide), getCoverDataAtSideNew(aSide), this) & 15);
+        return (byte) (getCoverBehaviorAtSide(aSide).getRedstoneInput(aSide, getInputRedstoneSignal(aSide), getCoverIDAtSide(aSide), getComplexCoverDataAtSide(aSide), this) & 15);
     }
 
     @Override
@@ -1125,12 +1125,12 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
 
     @Override
     public byte getOutputRedstoneSignal(byte aSide) {
-        return (byte) (getCoverBehaviorAtSideNew(aSide).manipulatesSidedRedstoneOutput(aSide, getCoverIDAtSide(aSide), getCoverDataAtSideNew(aSide), this) || (getCoverBehaviorAtSideNew(aSide).letsRedstoneGoOut(aSide, getCoverIDAtSide(aSide), getCoverDataAtSideNew(aSide), this)) ? mSidedRedstone[aSide] & 15 : 0);
+        return (byte) (getCoverBehaviorAtSideNew(aSide).manipulatesSidedRedstoneOutput(aSide, getCoverIDAtSide(aSide), getComplexCoverDataAtSide(aSide), this) || (getCoverBehaviorAtSideNew(aSide).letsRedstoneGoOut(aSide, getCoverIDAtSide(aSide), getComplexCoverDataAtSide(aSide), this)) ? mSidedRedstone[aSide] & 15 : 0);
     }
 
     @Override
     public void setInternalOutputRedstoneSignal(byte aSide, byte aStrength) {
-        if (!getCoverBehaviorAtSideNew(aSide).manipulatesSidedRedstoneOutput(aSide, getCoverIDAtSide(aSide), getCoverDataAtSideNew(aSide), this))
+        if (!getCoverBehaviorAtSideNew(aSide).manipulatesSidedRedstoneOutput(aSide, getCoverIDAtSide(aSide), getComplexCoverDataAtSide(aSide), this))
             setOutputRedstoneSignal(aSide, aStrength);
     }
 
@@ -1258,12 +1258,12 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
     }
 
     @Override
-    public ISerializableObject getCoverDataAtSideNew(byte aSide) {
+    public ISerializableObject getComplexCoverDataAtSide(byte aSide) {
         return mCoverData[aSide];
     }
 
     @Override
-    public GT_CoverBehavior_New<?> getCoverBehaviorAtSideNew(byte aSide) {
+    public GT_CoverBehaviorBase<?> getCoverBehaviorAtSideNew(byte aSide) {
         return mCoverBehaviors[aSide];
     }
 
@@ -1285,7 +1285,7 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
     @Override
     public boolean dropCover(byte aSide, byte aDroppedSide, boolean aForced) {
         if (getCoverBehaviorAtSideNew(aSide).onCoverRemoval(aSide, getCoverIDAtSide(aSide), mCoverData[aSide], this, aForced) || aForced) {
-            ItemStack tStack = getCoverBehaviorAtSideNew(aSide).getDrop(aSide, getCoverIDAtSide(aSide), getCoverDataAtSideNew(aSide), this);
+            ItemStack tStack = getCoverBehaviorAtSideNew(aSide).getDrop(aSide, getCoverIDAtSide(aSide), getComplexCoverDataAtSide(aSide), this);
             if (tStack != null) {
                 tStack.setTagCompound(null);
                 EntityItem tEntity = new EntityItem(worldObj, getOffsetX(aDroppedSide, 1) + 0.5, getOffsetY(aDroppedSide, 1) + 0.5, getOffsetZ(aDroppedSide, 1) + 0.5, tStack);
@@ -1380,11 +1380,11 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
             return false;
 
         if(isFill && mMetaTileEntity.isLiquidInput((byte) aSide.ordinal())
-                && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidIn((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSideNew((byte) aSide.ordinal()), aFluid, this))
+                && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidIn((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getComplexCoverDataAtSide((byte) aSide.ordinal()), aFluid, this))
             return true;
 
         if (!isFill && mMetaTileEntity.isLiquidOutput((byte) aSide.ordinal())
-                && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidOut((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSideNew((byte) aSide.ordinal()),aFluid, this))
+                && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidOut((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getComplexCoverDataAtSide((byte) aSide.ordinal()),aFluid, this))
             return true;
 
         return false;
@@ -1430,8 +1430,8 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
         if (canAccessData()
             && (aSide == ForgeDirection.UNKNOWN 
                 || (mMetaTileEntity.isLiquidInput((byte) aSide.ordinal())
-                    && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidIn((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSideNew((byte) aSide.ordinal()), null, this))
-                || (mMetaTileEntity.isLiquidOutput((byte) aSide.ordinal()) && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidOut((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSideNew((byte) aSide.ordinal()), null, this))
+                    && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidIn((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getComplexCoverDataAtSide((byte) aSide.ordinal()), null, this))
+                || (mMetaTileEntity.isLiquidOutput((byte) aSide.ordinal()) && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidOut((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getComplexCoverDataAtSide((byte) aSide.ordinal()), null, this))
                     // Doesn't need to be connected to get Tank Info -- otherwise things can't connect
                )
             )

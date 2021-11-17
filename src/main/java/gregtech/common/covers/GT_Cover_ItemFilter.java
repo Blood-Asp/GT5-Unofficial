@@ -9,7 +9,7 @@ import gregtech.api.gui.widgets.GT_GuiIcon;
 import gregtech.api.gui.widgets.GT_GuiIconCheckButton;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.net.GT_Packet_TileEntityCoverNew;
-import gregtech.api.util.GT_CoverBehavior_New;
+import gregtech.api.util.GT_CoverBehaviorBase;
 import gregtech.api.util.GT_Utility;
 import gregtech.api.util.ISerializableObject;
 import io.netty.buffer.ByteBuf;
@@ -31,7 +31,7 @@ import java.util.List;
 import static gregtech.api.util.GT_Utility.intToStack;
 import static gregtech.api.util.GT_Utility.moveMultipleItemStacks;
 
-public class GT_Cover_ItemFilter extends GT_CoverBehavior_New<GT_Cover_ItemFilter.ItemFilterData> {
+public class GT_Cover_ItemFilter extends GT_CoverBehaviorBase<GT_Cover_ItemFilter.ItemFilterData> {
 
     private final boolean mExport;
 

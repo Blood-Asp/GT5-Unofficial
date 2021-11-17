@@ -714,9 +714,9 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
     public int[] getAccessibleSlotsFromSide(int aSide) {
         ArrayList<Integer> tList = new ArrayList<Integer>();
         IGregTechTileEntity tTileEntity = getBaseMetaTileEntity();
-        boolean tSkip = tTileEntity.getCoverBehaviorAtSideNew((byte) aSide).letsItemsIn((byte) aSide, tTileEntity.getCoverIDAtSide((byte) aSide), tTileEntity.getCoverDataAtSideNew((byte) aSide), -2, tTileEntity) || tTileEntity.getCoverBehaviorAtSideNew((byte) aSide).letsItemsOut((byte) aSide, tTileEntity.getCoverIDAtSide((byte) aSide), tTileEntity.getCoverDataAtSideNew((byte) aSide), -2, tTileEntity);
+        boolean tSkip = tTileEntity.getCoverBehaviorAtSideNew((byte) aSide).letsItemsIn((byte) aSide, tTileEntity.getCoverIDAtSide((byte) aSide), tTileEntity.getComplexCoverDataAtSide((byte) aSide), -2, tTileEntity) || tTileEntity.getCoverBehaviorAtSideNew((byte) aSide).letsItemsOut((byte) aSide, tTileEntity.getCoverIDAtSide((byte) aSide), tTileEntity.getComplexCoverDataAtSide((byte) aSide), -2, tTileEntity);
         for (int i = 0; i < getSizeInventory(); i++)
-            if (isValidSlot(i) && (tSkip || tTileEntity.getCoverBehaviorAtSideNew((byte) aSide).letsItemsOut((byte) aSide, tTileEntity.getCoverIDAtSide((byte) aSide), tTileEntity.getCoverDataAtSideNew((byte) aSide), i, tTileEntity) || tTileEntity.getCoverBehaviorAtSideNew((byte) aSide).letsItemsIn((byte) aSide, tTileEntity.getCoverIDAtSide((byte) aSide), tTileEntity.getCoverDataAtSideNew((byte) aSide), i, tTileEntity)))
+            if (isValidSlot(i) && (tSkip || tTileEntity.getCoverBehaviorAtSideNew((byte) aSide).letsItemsOut((byte) aSide, tTileEntity.getCoverIDAtSide((byte) aSide), tTileEntity.getComplexCoverDataAtSide((byte) aSide), i, tTileEntity) || tTileEntity.getCoverBehaviorAtSideNew((byte) aSide).letsItemsIn((byte) aSide, tTileEntity.getCoverIDAtSide((byte) aSide), tTileEntity.getComplexCoverDataAtSide((byte) aSide), i, tTileEntity)))
                 tList.add(i);
         int[] rArray = new int[tList.size()];
         for (int i = 0; i < rArray.length; i++) rArray[i] = tList.get(i);

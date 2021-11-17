@@ -10,7 +10,7 @@ import gregtech.api.interfaces.metatileentity.IMachineCallback;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_CoverBehavior_New;
+import gregtech.api.util.GT_CoverBehaviorBase;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
@@ -825,7 +825,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     @Override
     public boolean allowCoverOnSide(byte aSide, GT_ItemStack aCoverID) {
         if (aSide != mMainFacing) return true;
-        GT_CoverBehavior_New<?> tBehavior = GregTech_API.getCoverBehaviorNew(aCoverID.toStack());
+        GT_CoverBehaviorBase<?> tBehavior = GregTech_API.getCoverBehaviorNew(aCoverID.toStack());
         return tBehavior.isGUIClickable(aSide, GT_Utility.stackToInt(aCoverID.toStack()), tBehavior.createDataObject(), getBaseMetaTileEntity());}
 
     @Override

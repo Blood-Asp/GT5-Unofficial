@@ -59,7 +59,7 @@ public interface IMetaTileEntityItemPipe extends IMetaTileEntity {
                             continue;
                         j = GT_Utility.getOppositeSide(i);
                         if (aSuckItems) {
-                            if (aBaseMetaTileEntity.getCoverBehaviorAtSideNew(i).letsItemsIn(i, aBaseMetaTileEntity.getCoverIDAtSide(i), aBaseMetaTileEntity.getCoverDataAtSideNew(i), -2, aBaseMetaTileEntity)) {
+                            if (aBaseMetaTileEntity.getCoverBehaviorAtSideNew(i).letsItemsIn(i, aBaseMetaTileEntity.getCoverIDAtSide(i), aBaseMetaTileEntity.getComplexCoverDataAtSide(i), -2, aBaseMetaTileEntity)) {
                                 IGregTechTileEntity tItemPipe = aBaseMetaTileEntity.getIGregTechTileEntityAtSide(i);
                                 if (aBaseMetaTileEntity.getColorization() >= 0) {
                                     byte tColor = tItemPipe.getColorization();
@@ -69,13 +69,13 @@ public interface IMetaTileEntityItemPipe extends IMetaTileEntity {
                                 }
                                 if (tItemPipe instanceof BaseMetaPipeEntity) {
                                     IMetaTileEntity tMetaTileEntity = tItemPipe.getMetaTileEntity();
-                                    if (tMetaTileEntity instanceof IMetaTileEntityItemPipe && tItemPipe.getCoverBehaviorAtSideNew(j).letsItemsOut(j, tItemPipe.getCoverIDAtSide(j), tItemPipe.getCoverDataAtSideNew(j), -2, tItemPipe)) {
+                                    if (tMetaTileEntity instanceof IMetaTileEntityItemPipe && tItemPipe.getCoverBehaviorAtSideNew(j).letsItemsOut(j, tItemPipe.getCoverIDAtSide(j), tItemPipe.getComplexCoverDataAtSide(j), -2, tItemPipe)) {
                                         scanPipes((IMetaTileEntityItemPipe) tMetaTileEntity, aMap, aStep, aSuckItems, aIgnoreCapacity);
                                     }
                                 }
                             }
                         } else {
-                            if (aBaseMetaTileEntity.getCoverBehaviorAtSideNew(i).letsItemsOut(i, aBaseMetaTileEntity.getCoverIDAtSide(i), aBaseMetaTileEntity.getCoverDataAtSideNew(i), -2, aBaseMetaTileEntity)) {
+                            if (aBaseMetaTileEntity.getCoverBehaviorAtSideNew(i).letsItemsOut(i, aBaseMetaTileEntity.getCoverIDAtSide(i), aBaseMetaTileEntity.getComplexCoverDataAtSide(i), -2, aBaseMetaTileEntity)) {
                                 IGregTechTileEntity tItemPipe = aBaseMetaTileEntity.getIGregTechTileEntityAtSide(i);
                                 if (tItemPipe != null) {
                                     if (aBaseMetaTileEntity.getColorization() >= 0) {
@@ -86,7 +86,7 @@ public interface IMetaTileEntityItemPipe extends IMetaTileEntity {
                                     }
                                     if (tItemPipe instanceof BaseMetaPipeEntity) {
                                         IMetaTileEntity tMetaTileEntity = tItemPipe.getMetaTileEntity();
-                                        if (tMetaTileEntity instanceof IMetaTileEntityItemPipe && tItemPipe.getCoverBehaviorAtSideNew(j).letsItemsIn(j, tItemPipe.getCoverIDAtSide(j), tItemPipe.getCoverDataAtSideNew(j), -2, tItemPipe)) {
+                                        if (tMetaTileEntity instanceof IMetaTileEntityItemPipe && tItemPipe.getCoverBehaviorAtSideNew(j).letsItemsIn(j, tItemPipe.getCoverIDAtSide(j), tItemPipe.getComplexCoverDataAtSide(j), -2, tItemPipe)) {
                                             scanPipes((IMetaTileEntityItemPipe) tMetaTileEntity, aMap, aStep, aSuckItems, aIgnoreCapacity);
                                         }
                                     }

@@ -18,12 +18,12 @@ import static gregtech.api.enums.GT_Values.E;
  *
  * @author glease
  */
-public abstract class GT_CoverBehavior_New<T extends ISerializableObject> {
+public abstract class GT_CoverBehaviorBase<T extends ISerializableObject> {
 
     public EntityPlayer lastPlayer = null;
     private final Class<T> typeToken;
 
-    protected GT_CoverBehavior_New(Class<T> typeToken) {
+    protected GT_CoverBehaviorBase(Class<T> typeToken) {
         this.typeToken = typeToken;
     }
 

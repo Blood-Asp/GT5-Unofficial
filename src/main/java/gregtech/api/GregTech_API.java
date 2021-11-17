@@ -113,7 +113,7 @@ public class GregTech_API {
     /**
      * The List of Cover Behaviors for the Covers
      */
-    public static final Map<GT_ItemStack, GT_CoverBehavior_New<?>> sCoverBehaviors = new ConcurrentHashMap<>();
+    public static final Map<GT_ItemStack, GT_CoverBehaviorBase<?>> sCoverBehaviors = new ConcurrentHashMap<>();
     /**
      * The List of Circuit Behaviors for the Redstone Circuit Block
      */
@@ -615,10 +615,10 @@ public class GregTech_API {
     }
 
     public static void registerCover(ItemStack aStack, ITexture aCover, GT_CoverBehavior aBehavior) {
-        registerCover(aStack, aCover, (GT_CoverBehavior_New<?>) aBehavior);
+        registerCover(aStack, aCover, (GT_CoverBehaviorBase<?>) aBehavior);
     }
 
-    public static void registerCover(ItemStack aStack, ITexture aCover, GT_CoverBehavior_New<?> aBehavior) {
+    public static void registerCover(ItemStack aStack, ITexture aCover, GT_CoverBehaviorBase<?> aBehavior) {
         if (!sCovers.containsKey(new GT_ItemStack(aStack)))
             sCovers.put(new GT_ItemStack(aStack), aCover == null || !aCover.isValidTexture() ? Textures.BlockIcons.ERROR_RENDERING[0] : aCover);
         if (aBehavior != null)
@@ -626,10 +626,10 @@ public class GregTech_API {
     }
 
     public static void registerCoverBehavior(ItemStack aStack, GT_CoverBehavior aBehavior) {
-        registerCoverBehavior(aStack, (GT_CoverBehavior_New<?>) aBehavior);
+        registerCoverBehavior(aStack, (GT_CoverBehaviorBase<?>) aBehavior);
     }
 
-    public static void registerCoverBehavior(ItemStack aStack, GT_CoverBehavior_New<?> aBehavior) {
+    public static void registerCoverBehavior(ItemStack aStack, GT_CoverBehaviorBase<?> aBehavior) {
         sCoverBehaviors.put(new GT_ItemStack(aStack), aBehavior == null ? sDefaultBehavior : aBehavior);
     }
 
@@ -647,7 +647,7 @@ public class GregTech_API {
      *
      * @param aBehavior can be null
      */
-    public static void registerCover(Collection<ItemStack> aStackList, ITexture aCover, GT_CoverBehavior_New<?> aBehavior) {
+    public static void registerCover(Collection<ItemStack> aStackList, ITexture aCover, GT_CoverBehaviorBase<?> aBehavior) {
         if (aCover.isValidTexture())
             aStackList.forEach(tStack -> GregTech_API.registerCover(tStack, aCover, aBehavior));
     }
@@ -659,7 +659,7 @@ public class GregTech_API {
     public static GT_CoverBehavior getCoverBehavior(ItemStack aStack) {
         if (aStack == null || aStack.getItem() == null)
             return sNoBehavior;
-        GT_CoverBehavior_New<?> rCover = sCoverBehaviors.get(new GT_ItemStack(aStack));
+        GT_CoverBehaviorBase<?> rCover = sCoverBehaviors.get(new GT_ItemStack(aStack));
         if (!(rCover instanceof GT_CoverBehavior) || rCover == null)
             return sDefaultBehavior;
         return (GT_CoverBehavior) rCover;
@@ -669,10 +669,10 @@ public class GregTech_API {
      * returns a Cover behavior, guaranteed to not return null after preload
      * @return
      */
-    public static GT_CoverBehavior_New<?> getCoverBehaviorNew(ItemStack aStack) {
+    public static GT_CoverBehaviorBase<?> getCoverBehaviorNew(ItemStack aStack) {
         if (aStack == null || aStack.getItem() == null)
             return sNoBehavior;
-        GT_CoverBehavior_New<?> rCover = sCoverBehaviors.get(new GT_ItemStack(aStack));
+        GT_CoverBehaviorBase<?> rCover = sCoverBehaviors.get(new GT_ItemStack(aStack));
         if (rCover == null)
             return sDefaultBehavior;
         return rCover;
@@ -691,7 +691,7 @@ public class GregTech_API {
     /**
      * returns a Cover behavior, guaranteed to not return null
      */
-    public static GT_CoverBehavior_New<?> getCoverBehaviorNew(int aStack) {
+    public static GT_CoverBehaviorBase<?> getCoverBehaviorNew(int aStack) {
         if (aStack == 0)
             return sNoBehavior;
         return getCoverBehaviorNew(GT_Utility.intToStack(aStack));
