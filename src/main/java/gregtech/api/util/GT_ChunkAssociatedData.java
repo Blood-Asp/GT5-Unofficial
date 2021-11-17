@@ -126,13 +126,13 @@ public abstract class GT_ChunkAssociatedData<T extends GT_ChunkAssociatedData.ID
 	public final T get(World world, int chunkX, int chunkZ) {
 		SuperRegion region = masterMap.computeIfAbsent(world.provider.dimensionId, ignored -> new ConcurrentHashMap<>())
 				.computeIfAbsent(getRegionID(chunkX, chunkZ), c -> new SuperRegion(world, c));
-		return region.get(chunkX % regionLength, chunkZ % regionLength);
+		return region.get(Math.floorMod(chunkX, regionLength), Math.floorMod(chunkZ, regionLength));
 	}
 
 	protected final void set(World world, int chunkX, int chunkZ, T data) {
 		SuperRegion region = masterMap.computeIfAbsent(world.provider.dimensionId, ignored -> new ConcurrentHashMap<>())
 				.computeIfAbsent(getRegionID(chunkX, chunkZ), c -> new SuperRegion(world, c));
-		region.set(chunkX % regionLength, chunkZ % regionLength, data);
+		region.set(Math.floorMod(chunkX, regionLength), Math.floorMod(chunkZ, regionLength), data);
 	}
 
 	protected final boolean isCreated(int dimId, int chunkX, int chunkZ) {
@@ -142,7 +142,7 @@ public abstract class GT_ChunkAssociatedData<T extends GT_ChunkAssociatedData.ID
 		SuperRegion region = dimData.getOrDefault(getRegionID(chunkX, chunkZ), null);
 		if (region == null) return false;
 
-		return region.isCreated(chunkX % regionLength, chunkZ % regionLength);
+		return region.isCreated(Math.floorMod(chunkX, regionLength), Math.floorMod(chunkZ, regionLength));
 	}
 
 	public void clear() {
@@ -162,7 +162,9 @@ public abstract class GT_ChunkAssociatedData<T extends GT_ChunkAssociatedData.ID
 	}
 
 	public void save(World world) {
-		saveRegions(masterMap.get(world.provider.dimensionId).values().stream());
+		Map<ChunkCoordIntPair, SuperRegion> map = masterMap.get(world.provider.dimensionId);
+		if (map != null)
+			saveRegions(map.values().stream());
 	}
 
 	private void saveRegions(Stream<SuperRegion> stream) {
