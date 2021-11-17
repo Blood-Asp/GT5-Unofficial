@@ -115,7 +115,7 @@ import static gregtech.api.enums.GT_Values.MOD_ID_FR;
                 " after:TConstruct;" +
                 " after:Translocator;")
 public class GT_Mod implements IGT_Mod {
-    public static final int VERSION = 509, SUBVERSION = 33;
+    public static final int VERSION = 509, SUBVERSION = 39;
     public static final int TOTAL_VERSION = calculateTotalGTVersion(VERSION, SUBVERSION);
     public static final int REQUIRED_IC2 = 624;
     @Mod.Instance("gregtech")
@@ -286,6 +286,7 @@ public class GT_Mod implements IGT_Mod {
         GT_Values.debugBlockMiner = tMainConfig.get(aTextGeneral, "debugBlockMiner", false).getBoolean(false);
         GT_Values.debugBlockPump = tMainConfig.get(aTextGeneral, "debugBlockPump", false).getBoolean(false);
         GT_Values.debugEntityCramming = tMainConfig.get(aTextGeneral, "debugEntityCramming", false).getBoolean(false);
+        GT_Values.debugWorldData = tMainConfig.get(aTextGeneral, "debugWorldData", false).getBoolean(false);
         GT_Values.oreveinPercentage = tMainConfig.get(aTextGeneral, "oreveinPercentage_100", 100).getInt(100);
         GT_Values.oreveinAttempts = tMainConfig.get(aTextGeneral, "oreveinAttempts_64", 64).getInt(64);
         GT_Values.oreveinMaxPlacementAttempts = tMainConfig.get(aTextGeneral, "oreveinMaxPlacementAttempts_8", 8).getInt(8);

@@ -3,6 +3,7 @@ package gregtech.common.covers;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.util.GT_CoverBehavior;
 import gregtech.api.util.GT_Utility;
+import gregtech.api.util.ISerializableObject;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -58,6 +59,29 @@ public class GT_Cover_SolarPanel extends GT_CoverBehavior {
     }
 
     @Override
+    protected boolean onCoverRightClickImpl(byte aSide, int aCoverID, ISerializableObject.LegacyCoverData aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        if(aPlayer.capabilities.isCreativeMode){
+            GT_Utility.sendChatToPlayer(aPlayer,"Cleaned solar panel from "+(aCoverVariable.get()>>2)+"% dirt");
+             aCoverVariable.set(aCoverVariable.get() & 0x3);
+            return true;
+        }
+        for(int i=0;i<aPlayer.inventory.mainInventory.length;i++){
+            ItemStack is=aPlayer.inventory.mainInventory[i];
+            if(is==null) continue;
+            if(is.getUnlocalizedName().equals(new ItemStack(Items.water_bucket).getUnlocalizedName())){
+                aPlayer.inventory.mainInventory[i]=new ItemStack(Items.bucket);
+                if (aPlayer.inventoryContainer != null) aPlayer.inventoryContainer.detectAndSendChanges();
+                GT_Utility.sendChatToPlayer(aPlayer,"Cleaned solar panel from "+(aCoverVariable.get()>>2)+"% dirt");
+                aCoverVariable.set(aCoverVariable.get() & 0x3);
+                return true;
+            }
+        }
+        GT_Utility.sendChatToPlayer(aPlayer,"You need water bucket in inventory to clean the panel.");
+        return false;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
     public boolean onCoverRightclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if(aPlayer.capabilities.isCreativeMode){
             GT_Utility.sendChatToPlayer(aPlayer,"Cleaned solar panel from "+(aCoverVariable>>2)+"% dirt");

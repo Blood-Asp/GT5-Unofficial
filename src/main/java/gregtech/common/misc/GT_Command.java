@@ -61,7 +61,7 @@ public final class GT_Command extends CommandBase {
         } else if (test.equals("toggle")) {
             String test1 = ss[1].trim();
             Stream.of("D1", "D2", "debugCleanroom", "debugDriller", "debugBlockPump", "debugBlockMiner", "debugWorldGen", "debugEntityCramming",
-                    "debugOrevein", "debugSmallOres", "debugStones", "debugChunkloaders", "debugMulti")
+                    "debugOrevein", "debugSmallOres", "debugStones", "debugChunkloaders", "debugMulti", "debugWorldData")
                     .filter(s -> test1.isEmpty() || s.startsWith(test1))
                     .forEach(l::add);
 

@@ -186,7 +186,7 @@ public abstract class GT_MetaTileEntity_BasicMachine_Bronze extends GT_MetaTileE
 
     @Override
     public boolean allowCoverOnSide(byte aSide, GT_ItemStack aCoverID) {
-        return GregTech_API.getCoverBehavior(aCoverID.toStack()).isSimpleCover() && super.allowCoverOnSide(aSide, aCoverID);
+        return GregTech_API.getCoverBehaviorNew(aCoverID.toStack()).isSimpleCover() && super.allowCoverOnSide(aSide, aCoverID);
     }
 
     public float getSteamDamage() {

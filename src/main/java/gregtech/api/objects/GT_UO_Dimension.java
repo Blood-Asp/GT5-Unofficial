@@ -39,4 +39,11 @@ public class GT_UO_Dimension {
 		return null;
 	}
 
+	public String getUOFluidKey(GT_UO_Fluid uoFluid) {
+		return fFluids.inverse().get(uoFluid);
+	}
+
+	public GT_UO_Fluid getUOFluid(String key) {
+		return fFluids.get(key);
+	}
 }
