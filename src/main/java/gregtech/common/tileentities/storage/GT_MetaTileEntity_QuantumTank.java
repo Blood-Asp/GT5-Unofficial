@@ -7,6 +7,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicTank;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -16,8 +17,10 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_QTANK_GLOW;
 
 public class GT_MetaTileEntity_QuantumTank extends GT_MetaTileEntity_BasicTank {
     public GT_MetaTileEntity_QuantumTank(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 3,
-                "Stores " + GT_Utility.formatNumbers(commonSizeCompute(aTier)) + "L of fluid");
+        super(aID, aName, aNameRegional, aTier, 3, new String[]{
+                "Stores " + GT_Utility.formatNumbers(commonSizeCompute(aTier)) + "L of fluid",
+                "Can keep its contents when harvested"
+        });
     }
 
     private static int commonSizeCompute(int tier) {
@@ -48,6 +51,13 @@ public class GT_MetaTileEntity_QuantumTank extends GT_MetaTileEntity_BasicTank {
     @Override
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
         return new ITexture[0][0][0];
+    }
+
+    @Override
+    public void setItemNBT(NBTTagCompound aNBT) {
+        if (mFluid != null)
+            aNBT.setTag("mFluid", mFluid.writeToNBT(new NBTTagCompound()));
+        super.setItemNBT(aNBT);
     }
 
     @Override
