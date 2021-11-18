@@ -570,6 +570,9 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 			final int prime = 31;
 			int result = 1;			
 			GT_ItemStack[] thisInputs = new GT_ItemStack[this.mInputs.length];
+			for (int i=0;i<this.mInputs.length;i++) {
+				thisInputs[i] = new GT_ItemStack(this.mInputs[i]);
+			}
 			int inputHash = Arrays.deepHashCode(thisInputs);
 			int inputFluidHash = Arrays.deepHashCode(this.mFluidInputs);
 			GT_ItemStack thisOutput = new GT_ItemStack(mOutput);
