@@ -338,6 +338,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
 
         // Tank, From, Amount to receive
         List<MutableTriple<IFluidHandler, ForgeDirection, Integer>> tTanks = new ArrayList<>();
+        int amount = tFluid.amount;
 
         for (byte aSide, i = 0, j = (byte) aBaseMetaTileEntity.getRandomNumber(6); i < 6; i++) {
             // Get a list of tanks accepting fluids, and what side they're on
@@ -352,6 +353,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
                 if (tTank.fill(ForgeDirection.getOrientation(tSide), tFluid, false) > 0) {
                     tTanks.add(new MutableTriple<>(tTank, ForgeDirection.getOrientation(tSide), 0));
                 }
+                tFluid.amount = amount; // Because some mods do actually modify input fluid stack
             }
         }
 
