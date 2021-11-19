@@ -55,7 +55,7 @@ public class GT_MetaTileEntity_SuperTank extends GT_MetaTileEntity_BasicTank {
 
     @Override
     public void setItemNBT(NBTTagCompound aNBT) {
-        if (mFluid != null)
+        if (mFluid != null && mFluid.amount > 0)
             aNBT.setTag("mFluid", mFluid.writeToNBT(new NBTTagCompound()));
         super.setItemNBT(aNBT);
     }

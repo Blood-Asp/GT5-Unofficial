@@ -15,11 +15,19 @@ import gregtech.api.util.GT_ItsNotMyFaultException;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.tileentities.storage.GT_MetaTileEntity_QuantumChest;
+import gregtech.common.tileentities.storage.GT_MetaTileEntity_QuantumTank;
+import gregtech.common.tileentities.storage.GT_MetaTileEntity_SuperChest;
+import gregtech.common.tileentities.storage.GT_MetaTileEntity_SuperTank;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
@@ -210,5 +218,26 @@ public class GT_Item_Machines extends ItemBlock {
             this.field_150939_a.onPostBlockPlaced(aWorld, aX, aY, aZ, tDamage);
         }
         return true;
+    }
+
+    @Override
+    public void onUpdate(ItemStack aStack, World aWorld, Entity aPlayer, int aTimer, boolean aIsInHand) {
+        super.onUpdate(aStack, aWorld, aPlayer, aTimer, aIsInHand);
+        short tDamage = (short) getDamage(aStack);
+        EntityLivingBase tPlayer = (EntityPlayer) aPlayer;
+        if (GregTech_API.METATILEENTITIES[tDamage] instanceof GT_MetaTileEntity_SuperChest ||
+                GregTech_API.METATILEENTITIES[tDamage] instanceof GT_MetaTileEntity_QuantumChest ||
+                GregTech_API.METATILEENTITIES[tDamage] instanceof GT_MetaTileEntity_SuperTank ||
+                GregTech_API.METATILEENTITIES[tDamage] instanceof GT_MetaTileEntity_QuantumTank) {
+            NBTTagCompound tNBT = aStack.stackTagCompound;
+            if (tNBT == null) return;
+            if ((tNBT.hasKey("mItemCount") && tNBT.getInteger("mItemCount") > 0) ||
+                    tNBT.hasKey("mFluid")) {
+                tPlayer.addPotionEffect(new PotionEffect(Potion.hunger.id, 12000, 4));
+                tPlayer.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 12000, 4));
+                tPlayer.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, 12000, 4));
+                tPlayer.addPotionEffect(new PotionEffect(Potion.weakness.id, 12000, 4));
+            }
+        }
     }
 }
