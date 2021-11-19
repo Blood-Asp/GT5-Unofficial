@@ -502,7 +502,17 @@ public class GT_CraftingRecipeLoader implements Runnable {
 
         GT_ModHandler.addShapelessCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 5L), bits_no_remove_buffered, new Object[]{OrePrefixes.dust.get(Materials.Potassium), OrePrefixes.cell.get(Materials.Nitrogen), OrePrefixes.cell.get(Materials.Oxygen), OrePrefixes.cell.get(Materials.Oxygen), OrePrefixes.cell.get(Materials.Oxygen)});
         GT_ModHandler.removeRecipeByOutputDelayed(GT_ModHandler.getIC2Item("carbonFiber", 1L));
-        
+
+        ItemStack[] tChestAndTank = new ItemStack[]{
+                ItemList.Super_Chest_EV.get(1), ItemList.Super_Chest_IV.get(1), ItemList.Super_Chest_HV.get(1), ItemList.Super_Chest_MV.get(1), ItemList.Super_Chest_LV.get(1),
+                ItemList.Quantum_Chest_EV.get(1), ItemList.Quantum_Chest_IV.get(1), ItemList.Quantum_Chest_HV.get(1), ItemList.Quantum_Chest_MV.get(1), ItemList.Quantum_Chest_LV.get(1),
+                ItemList.Super_Tank_EV.get(1), ItemList.Super_Tank_IV.get(1), ItemList.Super_Tank_HV.get(1), ItemList.Super_Tank_MV.get(1), ItemList.Super_Tank_LV.get(1),
+                ItemList.Quantum_Chest_EV.get(1), ItemList.Quantum_Chest_IV.get(1), ItemList.Quantum_Chest_HV.get(1), ItemList.Quantum_Chest_MV.get(1), ItemList.Quantum_Chest_LV.get(1)
+        };
+        for (ItemStack tItem : tChestAndTank) {
+            GT_ModHandler.addShapelessCraftingRecipe(tItem, GT_ModHandler.RecipeBits.DISMANTLEABLE, new Object[]{tItem});
+        }
+
         if (GT_Mod.gregtechproxy.mDisableIC2Cables) {
 
             List<ItemStack> iToRemoveAndHide = Arrays.stream(new String[] {
