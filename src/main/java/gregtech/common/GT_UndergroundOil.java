@@ -66,12 +66,11 @@ public class GT_UndergroundOil {
                 // if XSTR_INSTANCE is < chance then subtract 1
                 chunkData.changeAmount(-decrease);//diminish amount, "randomly" adjusted to double value (averageDecrease)
             }
-        }else{//just get info
-            if(fluidInChunk.amount<=DIVIDER){
-                fluidInChunk.amount=0;//return informative stack
+        } else {//just get info
+            if (chunkData.amount <= DIVIDER) {
                 chunkData.setAmount(0);
-            }else{
-                fluidInChunk.amount=fluidInChunk.amount/DIVIDER;//give moderate extraction speed
+            } else {
+                fluidInChunk.amount = chunkData.amount / DIVIDER;//give moderate extraction speed
             }
         }
         return fluidInChunk;
@@ -81,8 +80,8 @@ public class GT_UndergroundOil {
         if (e.getData().hasKey("GTOIL") && e.getData().hasKey("GTOILFLUID")) {
             ChunkData chunkData = STORAGE.get(e.getChunk());
             Fluid fluid = chunkData.getFluid();
-            if (fluid != null && fluid.getID() == e.getData().getInteger("GTOIL"))
-                chunkData.setAmount(Math.min(chunkData.getAmount(), e.getData().getInteger("GTOILFLUID")));
+            if (fluid != null && fluid.getID() == e.getData().getInteger("GTOILFLUID"))
+                chunkData.setAmount(Math.min(0, Math.min(chunkData.getAmount(), e.getData().getInteger("GTOIL"))));
         }
     }
 
