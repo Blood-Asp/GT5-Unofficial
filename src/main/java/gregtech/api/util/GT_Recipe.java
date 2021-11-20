@@ -1045,6 +1045,10 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                     tFluid.amount = 0;
                     mRecipesByFluidInput.put(tFluid.getUnlocalizedName(), aRecipe);
                 }
+            } else if ((aRecipe.mInputs == null || GT_Utility.getNonnullElementCount(aRecipe.mInputs) == 0) &&
+                    aRecipe.mFluidInputs != null && GT_Utility.getNonnullElementCount(aRecipe.mFluidInputs) == 1 &&
+                    aRecipe.mFluidInputs[0] != null) {
+                mRecipesByFluidInput.put(aRecipe.mFluidInputs[0].getUnlocalizedName(), aRecipe);
             }
             return aRecipe;
         }
