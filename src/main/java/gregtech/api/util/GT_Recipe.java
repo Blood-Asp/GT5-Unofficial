@@ -376,6 +376,19 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         return isRecipeInputEqual(aDecreaseStacksizeBySuccess, false, aFluidInputs, aInputs);
     }
 
+    /**
+     * Okay, did some code archeology to figure out what's going on here.
+     *
+     * <p>This variable was added in
+     * <a href=https://github.com/GTNewHorizons/GT5-Unofficial/commit/9959ab7443982a19ad329bca424ab515493432e9>this commit,</a>
+     * in order to fix the issues mentioned in
+     * <a href=https://github.com/GTNewHorizons/GT5-Unofficial/pull/183>the PR</a>.
+     *
+     * <p>It looks like it controls checking NBT. At this point, since we are still using universal
+     * fluid cells which store their fluids in NBT, it probably will not be safe to disable the NBT
+     * checks in the near future. Data sticks may be another case. Anyway, we probably can't get rid
+     * of this without some significant changes to clean up recipe inputs.
+     */
     public static boolean GTppRecipeHelper;
 
     /**
@@ -443,7 +456,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                     for (int i = 0; i < aInputs.length; i++) {
                         ItemStack providedItem = aInputs[i];
                         if (GT_OreDictUnificator.isInputStackEqual(providedItem, unifiedItemCost)) {
-                            if (GTppRecipeHelper) { // remove once the fix is out
+                            if (GTppRecipeHelper) { // Please see JavaDoc on GTppRecipeHelper for why this is here.
                                 if (GT_Utility.areStacksEqual(providedItem, Ic2Items.FluidCell.copy(), true) || GT_Utility.areStacksEqual(providedItem, ItemList.Tool_DataStick.get(1L), true) || GT_Utility.areStacksEqual(providedItem, ItemList.Tool_DataOrb.get(1L), true)) {
                                     if (!GT_Utility.areStacksEqual(providedItem, recipeItemCost, false))
                                         continue;
