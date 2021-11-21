@@ -504,6 +504,8 @@ public interface IGT_RecipeAdder {
 
     boolean addVacuumFreezerRecipe(ItemStack aInput1, ItemStack aOutput1, int aDuration, int aEUt);
 
+    boolean addVacuumFreezerRecipe(FluidStack aInput1, FluidStack aOutput1, int aDuration, int aEUt);
+
     /**
      * Adds a Fuel for My Generators
      *
@@ -584,6 +586,8 @@ public interface IGT_RecipeAdder {
      */
     boolean addChemicalBathRecipe(ItemStack aInput, FluidStack aBathingFluid, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, int[] aChances, int aDuration, int aEUt);
 
+    boolean addChemicalBathRecipe(ItemStack aInput, FluidStack aBathingFluid, FluidStack aFluidOutput, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, int[] aChances, int aDuration, int aEUt);
+
     /**
      * Adds a Recipe for the Electromagnetic Separator
      */
@@ -615,6 +619,8 @@ public interface IGT_RecipeAdder {
     boolean addAutoclaveSpaceRecipe(ItemStack aInput, ItemStack aCircuit, FluidStack aFluid, ItemStack aOutput, int aChance, int aDuration, int aEUt, boolean aCleanroom);
 
 
+    boolean addAutoclave4Recipe(ItemStack aInput, ItemStack aCircuit, FluidStack aFluidIn, FluidStack aFluidOut, ItemStack[] aOutputs, int[] aChances, int aDuration, int aEUt, boolean aCleanroom);
+
     /**
      * Adds a Recipe for the Mixer
      */
@@ -623,6 +629,8 @@ public interface IGT_RecipeAdder {
     boolean addMixerRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aInput3, ItemStack aInput4, ItemStack aInput5, ItemStack aInput6, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, int aDuration, int aEUt);
 
     boolean addMixerRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aInput3, ItemStack aInput4, ItemStack aInput5, ItemStack aInput6, ItemStack aInput7, ItemStack aInput8, ItemStack aInput9, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, int aDuration, int aEUt);
+
+    boolean addMixerRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aInput3, ItemStack aInput4, ItemStack aInput5, ItemStack aInput6, ItemStack aInput7, ItemStack aInput8, ItemStack aInput9, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, ItemStack aOutput4, int aDuration, int aEUt);
 
     /**
      * Adds a Recipe for the Laser Engraver
@@ -721,4 +729,6 @@ public interface IGT_RecipeAdder {
      * @return true if the Sound got added, otherwise false.
      */
     boolean addSonictronSound(ItemStack aItemStack, String aSoundName);
+
+    boolean addChemicalBathRecipe(ItemStack aInput, FluidStack aBathingFluid, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, FluidStack aFluidOutput, int[] aChances, int aDuration, int aEUt);
 }

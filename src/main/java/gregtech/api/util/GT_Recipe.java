@@ -302,6 +302,13 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         }
     }
 
+    public GT_Recipe(FluidStack aInput1, FluidStack aOutput1, int aDuration, int aEUt) {
+        this(false, null, null, null, null, new FluidStack[]{aInput1}, new FluidStack[]{aOutput1}, Math.max(aDuration, 1), aEUt, 0);
+        if (mFluidInputs.length > 0 && mFluidOutputs[0] != null) {
+            GT_Recipe_Map.sVacuumRecipes.addRecipe(this);
+        }
+    }
+
     //Dummy GT_Recipe maker...
     public GT_Recipe(ItemStack[] aInputs, ItemStack[] aOutputs, Object aSpecialItems, int[] aChances, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue){
         this(true, aInputs, aOutputs, aSpecialItems, aChances, aFluidInputs, aFluidOutputs, aDuration, aEUt, aSpecialValue);
@@ -557,6 +564,84 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         	mEUt = aEUt;
         	mOreDictAlt = aAlt;
         }
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;			
+			GT_ItemStack[] thisInputs = new GT_ItemStack[this.mInputs.length];
+			int totalInputStackSize = 0;
+			for (int i=0;i<this.mInputs.length;i++) {
+				thisInputs[i] = new GT_ItemStack(this.mInputs[i]);
+				totalInputStackSize += thisInputs[i].mStackSize;
+			}
+			int inputHash = Arrays.deepHashCode(thisInputs);
+			int inputFluidHash = Arrays.deepHashCode(this.mFluidInputs);
+			GT_ItemStack thisOutput = new GT_ItemStack(mOutput);
+			GT_ItemStack thisResearch = new GT_ItemStack(mResearchItem);
+			int miscRecipeDataHash = Arrays.deepHashCode(new Object[] {
+					totalInputStackSize,
+					mDuration, mEUt, 
+					thisOutput,
+					thisResearch,
+					mResearchTime
+					});
+			result = prime * result + inputFluidHash;			
+			result = prime * result + inputHash;			
+			result = prime * result + miscRecipeDataHash;
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (!(obj instanceof GT_Recipe_AssemblyLine)) {
+				return false;
+			}
+			GT_Recipe_AssemblyLine other = (GT_Recipe_AssemblyLine) obj;
+			if (this.mInputs.length != other.mInputs.length) {
+				return false;
+			}
+			if (this.mFluidInputs.length != other.mFluidInputs.length) {
+				return false;
+			}
+			// Check Outputs Match
+			GT_ItemStack output1 = new GT_ItemStack(this.mOutput);
+			GT_ItemStack output2 = new GT_ItemStack(other.mOutput);
+			if (!output1.equals(output2)) {
+				return false;
+			}
+			// Check Scanned Item Match
+			GT_ItemStack scan1 = new GT_ItemStack(this.mResearchItem);
+			GT_ItemStack scan2 = new GT_ItemStack(other.mResearchItem);
+			if (!scan1.equals(scan2)) {
+				return false;
+			}
+			// Check Items Match
+			GT_ItemStack[] thisInputs = new GT_ItemStack[this.mInputs.length];
+			GT_ItemStack[] otherInputs = new GT_ItemStack[other.mInputs.length];
+			for (int i=0;i<thisInputs.length;i++) {
+				thisInputs[i] = new GT_ItemStack(this.mInputs[i]);
+				otherInputs[i] = new GT_ItemStack(other.mInputs[i]);
+			}
+			for (int i=0;i<thisInputs.length;i++) {
+				if (!thisInputs[i].equals(otherInputs[i]) || thisInputs[i].mStackSize != otherInputs[i].mStackSize) {
+					return false;
+				}
+			}
+			// Check Fluids Match
+			for (int i=0;i<this.mFluidInputs.length;i++) {
+				if (!this.mFluidInputs[i].isFluidStackIdentical(other.mFluidInputs[i])) {
+					return false;
+				}
+			}
+			
+			return this.mDuration == other.mDuration
+					&& this.mEUt == other.mEUt
+					&& this.mResearchTime == other.mResearchTime;
+		}
         
     }
 
@@ -565,6 +650,10 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
          * Contains all Recipe Maps
          */
         public static final Collection<GT_Recipe_Map> sMappings = new ArrayList<>();
+        /**
+         * All recipe maps indexed by their {@link #mUniqueIdentifier}.
+         */
+        public static final Map<String, GT_Recipe_Map> sIndexedMappings = new HashMap<>();
 
         public static final GT_Recipe_Map sOreWasherRecipes = new GT_Recipe_Map(new HashSet<>(500), "gt.recipe.orewasher", "Ore Washing Plant", null, RES_PATH_GUI + "basicmachines/OreWasher", 1, 3, 1, 1, 1, E, 1, E, true, true);
         public static final GT_Recipe_Map sThermalCentrifugeRecipes = new GT_Recipe_Map(new HashSet<>(1000), "gt.recipe.thermalcentrifuge", "Thermal Centrifuge", null, RES_PATH_GUI + "basicmachines/ThermalCentrifuge", 1, 3, 1, 0, 2, E, 1, E, true, true);
@@ -588,8 +677,8 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         public static final GT_Recipe_Map sSifterRecipes = new GT_Recipe_Map(new HashSet<>(105), "gt.recipe.sifter", "Sifter", null, RES_PATH_GUI + "basicmachines/Sifter", 1, 9, 1, 0, 1, E, 1, E, true, true);
         public static final GT_Recipe_Map sPressRecipes = new GT_Recipe_Map_FormingPress(new HashSet<>(300), "gt.recipe.press", "Forming Press", null, RES_PATH_GUI + "basicmachines/Press", 2, 1, 2, 0, 1, E, 1, E, true, true);
         public static final GT_Recipe_Map sLaserEngraverRecipes = new GT_Recipe_Map(new HashSet<>(810), "gt.recipe.laserengraver", "Precision Laser Engraver", null, RES_PATH_GUI + "basicmachines/LaserEngraver", 2, 1, 2, 0, 1, E, 1, E, true, true);
-        public static final GT_Recipe_Map sMixerRecipes = new GT_Recipe_Map(new HashSet<>(900), "gt.recipe.mixer", "Mixer", null, RES_PATH_GUI + "basicmachines/Mixer2", 9, 1, 1, 0, 1, E, 1, E, true, true);
-        public static final GT_Recipe_Map sAutoclaveRecipes = new GT_Recipe_Map(new HashSet<>(300), "gt.recipe.autoclave", "Autoclave", null, RES_PATH_GUI + "basicmachines/Autoclave", 2, 1, 1, 1, 1, E, 1, E, true, true);
+        public static final GT_Recipe_Map sMixerRecipes = new GT_Recipe_Map(new HashSet<>(900), "gt.recipe.mixer", "Mixer", null, RES_PATH_GUI + "basicmachines/Mixer6", 9, 4, 1, 0, 1, E, 1, E, true, true);
+        public static final GT_Recipe_Map sAutoclaveRecipes = new GT_Recipe_Map(new HashSet<>(300), "gt.recipe.autoclave", "Autoclave", null, RES_PATH_GUI + "basicmachines/Autoclave4", 2, 4, 1, 1, 1, E, 1, E, true, true);
         public static final GT_Recipe_Map sElectroMagneticSeparatorRecipes = new GT_Recipe_Map(new HashSet<>(50), "gt.recipe.electromagneticseparator", "Electromagnetic Separator", null, RES_PATH_GUI + "basicmachines/ElectromagneticSeparator", 1, 3, 1, 0, 1, E, 1, E, true, true);
         public static final GT_Recipe_Map sPolarizerRecipes = new GT_Recipe_Map(new HashSet<>(300), "gt.recipe.polarizer", "Electromagnetic Polarizer", null, RES_PATH_GUI + "basicmachines/Polarizer", 1, 1, 1, 0, 1, E, 1, E, true, true);
         public static final GT_Recipe_Map sMaceratorRecipes = new GT_Recipe_Map_Macerator(new HashSet<>(16600), "gt.recipe.macerator", "Pulverization", null, RES_PATH_GUI + "basicmachines/Macerator4", 1, 4, 1, 0, 1, E, 1, E, true, true);
@@ -609,7 +698,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         public static final GT_Recipe_Map sBlastRecipes = new GT_Recipe_Map(new HashSet<>(800), "gt.recipe.blastfurnace", "Blast Furnace", null, RES_PATH_GUI + "basicmachines/Default", 2, 2, 1, 0, 1, "Heat Capacity: ", 1, " K", false, true);
         public static final GT_Recipe_Map sPrimitiveBlastRecipes = new GT_Recipe_Map(new HashSet<>(200), "gt.recipe.primitiveblastfurnace", "Primitive Blast Furnace", null, RES_PATH_GUI + "basicmachines/Default", 3, 3, 1, 0, 1, E, 1, E, false, true);
         public static final GT_Recipe_Map sImplosionRecipes = new GT_Recipe_Map(new HashSet<>(900), "gt.recipe.implosioncompressor", "Implosion Compressor", null, RES_PATH_GUI + "basicmachines/Default", 2, 2, 2, 0, 1, E, 1, E, true, true);
-        public static final GT_Recipe_Map sVacuumRecipes = new GT_Recipe_Map(new HashSet<>(305), "gt.recipe.vacuumfreezer", "Vacuum Freezer", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 1, 0, 1, E, 1, E, false, true);
+        public static final GT_Recipe_Map sVacuumRecipes = new GT_Recipe_Map(new HashSet<>(305), "gt.recipe.vacuumfreezer", "Vacuum Freezer", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 0, 0, 1, E, 1, E, false, true);
         public static final GT_Recipe_Map sChemicalRecipes = new GT_Recipe_Map(new HashSet<>(1170), "gt.recipe.chemicalreactor", "Chemical Reactor", null, RES_PATH_GUI + "basicmachines/ChemicalReactor", 2, 2, 1, 0, 1, E, 1, E, true, true);
         public static final GT_Recipe_Map sMultiblockChemicalRecipes = new GT_Recipe_Map_LargeChemicalReactor();
         public static final GT_Recipe_Map sDistillationRecipes = new GT_Recipe_Map_DistillationTower();
@@ -646,7 +735,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         public static final GT_Recipe_Map_Fuel sHugeNaquadahReactorFuels = new GT_Recipe_Map_Fuel(new HashSet<>(1), "gt.recipe.fluidnaquadahreactor", "Naquadah Reactor MkIII", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 0, 0, 1, "Fuel Value: ", 1000, " EU", true, true);
         public static final GT_Recipe_Map_Fuel sExtremeNaquadahReactorFuels = new GT_Recipe_Map_Fuel(new HashSet<>(1), "gt.recipe.hugenaquadahreactor", "Naquadah Reactor MkIV", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 0, 0, 1, "Fuel Value: ", 1000, " EU", true, true);
         public static final GT_Recipe_Map_Fuel sUltraHugeNaquadahReactorFuels = new GT_Recipe_Map_Fuel(new HashSet<>(1), "gt.recipe.extrahugenaquadahreactor", "Naquadah Reactor MkV", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 0, 0, 1, "Fuel Value: ", 1000, " EU", true, true);
-        public static final GT_Recipe_Map_Fuel sFluidNaquadahReactorFuels = new GT_Recipe_Map_Fuel(new HashSet<>(1), "gt.recipe.fluidnaquadahreactor", "Fluid Naquadah Reactor", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 0, 0, 1, "Fuel Value: ", 1000, " EU", true, true);
+        public static final GT_Recipe_Map_Fuel sFluidNaquadahReactorFuels = new GT_Recipe_Map_Fuel(new HashSet<>(1), "gt.recipe.fluidfuelnaquadahreactor", "Fluid Naquadah Reactor", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 0, 0, 1, "Fuel Value: ", 1000, " EU", true, true);
         public static final GT_Recipe_Map_LargeBoilerFakeFuels sLargeBoilerFakeFuels = new GT_Recipe_Map_LargeBoilerFakeFuels();
 
         /**
@@ -677,6 +766,12 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         public final String mNEISpecialValuePre, mNEISpecialValuePost;
         public final int mUsualInputCount, mUsualOutputCount, mNEISpecialValueMultiplier, mMinimalInputItems, mMinimalInputFluids, mAmperage;
         public final boolean mNEIAllowed, mShowVoltageAmperageInNEI;
+
+        /**
+         * Unique identifier for this recipe map. Generated from aUnlocalizedName and a few other parameters.
+         * See constructor for details.
+         */
+        public final String mUniqueIdentifier;
 
         /**
          * Initialises a new type of Recipe Handler.
@@ -710,6 +805,9 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
             GregTech_API.sFluidMappings.add(mRecipeFluidMap);
             GregTech_API.sItemStackMappings.add(mRecipeItemMap);
             GT_LanguageManager.addStringLocalization(mUnlocalizedName = aUnlocalizedName, aLocalName);
+            mUniqueIdentifier = String.format("%s_%d_%d_%d_%d_%d", aUnlocalizedName, aAmperage, aUsualInputCount, aUsualOutputCount, aMinimalInputFluids, aMinimalInputItems);
+            if (sIndexedMappings.put(mUniqueIdentifier, this) != null)
+                throw new IllegalArgumentException("Duplicate recipe map registered: " + mUniqueIdentifier);
         }
 
         public GT_Recipe addRecipe(boolean aOptimize, ItemStack[] aInputs, ItemStack[] aOutputs, Object aSpecial, int[] aOutputChances, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue) {
@@ -793,7 +891,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
          * @return if this Item is a valid Input for any for the Recipes
          */
         public boolean containsInput(ItemStack aStack) {
-            return aStack != null && (mRecipeItemMap.containsKey(new GT_ItemStack(aStack)) || mRecipeItemMap.containsKey(new GT_ItemStack(GT_Utility.copyMetaData(W, aStack))));
+            return aStack != null && (mRecipeItemMap.containsKey(new GT_ItemStack(aStack)) || mRecipeItemMap.containsKey(new GT_ItemStack(aStack, true)));
         }
 
         /**
@@ -879,7 +977,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                     if (tRecipes != null) for (GT_Recipe tRecipe : tRecipes)
                         if (!tRecipe.mFakeRecipe && tRecipe.isRecipeInputEqual(false, aDontCheckStackSizes, aFluids, aInputs))
                             return tRecipe.mEnabled && aVoltage * mAmperage >= tRecipe.mEUt ? tRecipe : null;
-                    tRecipes = mRecipeItemMap.get(new GT_ItemStack(GT_Utility.copyMetaData(W, tStack)));
+                    tRecipes = mRecipeItemMap.get(new GT_ItemStack(tStack, true));
                     if (tRecipes != null) for (GT_Recipe tRecipe : tRecipes)
                         if (!tRecipe.mFakeRecipe && tRecipe.isRecipeInputEqual(false, aDontCheckStackSizes, aFluids, aInputs))
                             return tRecipe.mEnabled && aVoltage * mAmperage >= tRecipe.mEUt ? tRecipe : null;
@@ -1025,6 +1123,10 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                     tFluid.amount = 0;
                     mRecipesByFluidInput.put(tFluid.getUnlocalizedName(), aRecipe);
                 }
+            } else if ((aRecipe.mInputs == null || GT_Utility.getNonnullElementCount(aRecipe.mInputs) == 0) &&
+                    aRecipe.mFluidInputs != null && GT_Utility.getNonnullElementCount(aRecipe.mFluidInputs) == 1 &&
+                    aRecipe.mFluidInputs[0] != null) {
+                mRecipesByFluidInput.put(aRecipe.mFluidInputs[0].getUnlocalizedName(), aRecipe);
             }
             return aRecipe;
         }

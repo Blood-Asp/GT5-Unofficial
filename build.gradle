@@ -15,7 +15,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.github.GTNH2:ForgeGradle:FG_1.2-SNAPSHOT'
+        classpath 'com.github.GTNewHorizons:ForgeGradle:stable-2021-11-20'
     }
 }
 
@@ -59,7 +59,7 @@ repositories {
     }
     maven {
         name = "ic2, forestry"
-        url = "http://maven.ic2.player.to/"
+        url = "http://downloads.gtnewhorizons.com/Mods_for_Jenkins/"
     }
     maven { // EnderIO & EnderCore
         name = 'tterrag Repo'
@@ -109,7 +109,8 @@ dependencies {
 
     //Soft Depths (Without this, it wont compile, not needed as library)
     compileOnly 'commons-io:commons-io:2.4'
-    compileOnly "eu.usrv:YAMCore:${config.minecraft.version}-${config.yamcore.version}:deobf"
+    compileOnly 'com.google.auto.value:auto-value-annotations:1.8.2'
+    annotationProcessor 'com.google.auto.value:auto-value:1.8.2'
     compileOnly "tconstruct:TConstruct:${config.minecraft.version}-${config.tconstruct.version}:deobf"
     compileOnly "codechicken:Translocator:${config.minecraft.version}-${config.translocators.version}:dev"
     compileOnly "net.sengir.forestry:forestry_${config.minecraft.version}:${config.forestry.version}:dev"

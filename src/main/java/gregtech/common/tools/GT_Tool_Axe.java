@@ -4,6 +4,7 @@ import gregtech.api.GregTech_API;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.items.GT_MetaGenerated_Tool;
+import gregtech.api.util.GT_ToolHarvestHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
@@ -95,8 +96,8 @@ public class GT_Tool_Axe extends GT_Tool {
 
     @Override
     public boolean isMinableBlock(Block aBlock, byte aMetaData) {
-        String tTool = aBlock.getHarvestTool(aMetaData);
-        return aBlock.getHarvestLevel(aMetaData) != -1 &&  (tTool == null || tTool.isEmpty() || (tTool.equals("axe"))) || (aBlock.getMaterial() == Material.wood);
+     return GT_ToolHarvestHelper.isAppropriateTool(aBlock,aMetaData ,"axe")
+             || GT_ToolHarvestHelper.isAppropriateMaterial(aBlock ,Material.wood);
     }
 
     @Override

@@ -4,6 +4,7 @@ import gregtech.GT_Mod;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_ToolHarvestHelper;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -60,8 +61,14 @@ public class GT_Tool_JackHammer extends GT_Tool_Drill_LV {
 
     @Override
     public boolean isMinableBlock(Block aBlock, byte aMetaData) {
-        String tTool = aBlock.getHarvestTool(aMetaData);
-        return aBlock.getHarvestLevel(aMetaData) != -1 &&  (tTool == null || tTool.isEmpty() || (tTool.equals("pickaxe"))) || (aBlock.getMaterial() == Material.rock) || (aBlock.getMaterial() == Material.glass) || (aBlock.getMaterial() == Material.ice) || (aBlock.getMaterial() == Material.packedIce);
+        return GT_ToolHarvestHelper.isAppropriateTool(aBlock , aMetaData ,"pickaxe")//
+                || GT_ToolHarvestHelper.isAppropriateMaterial(aBlock,//
+                Material.rock,//
+                Material.glass,//
+                Material.ice,//
+                Material.packedIce//
+        );
+
     }
 
     @Override

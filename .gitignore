@@ -95,3 +95,7 @@ libs/
 *.errored
 /build/
 /run
+
+# Generated sources
+
+src/main/generated

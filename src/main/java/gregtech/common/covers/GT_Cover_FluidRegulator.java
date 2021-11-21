@@ -9,6 +9,7 @@ import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.net.GT_Packet_TileEntityCover;
 import gregtech.api.util.GT_CoverBehavior;
 import gregtech.api.util.GT_Utility;
+import gregtech.api.util.ISerializableObject;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -136,6 +137,18 @@ public class GT_Cover_FluidRegulator extends GT_CoverBehavior {
 	}
 
 	@Override
+	protected boolean onCoverRightClickImpl(byte aSide, int aCoverID, ISerializableObject.LegacyCoverData aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+		if (GT_Utility.getClickedFacingCoords(aSide, aX, aY, aZ)[0] >= 0.5F) {
+			aCoverVariable.set(adjustSpeed(aPlayer, aCoverVariable.get(), 1));
+		} else {
+			aCoverVariable.set(adjustSpeed(aPlayer, aCoverVariable.get(), -1));
+		}
+		aTileEntity.setCoverDataAtSide(aSide, aCoverVariable);
+		return true;
+	}
+
+	@Override
+	@SuppressWarnings("deprecation")
     public boolean onCoverRightclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity,
                                      EntityPlayer aPlayer, float aX, float aY, float aZ) {
 		if (GT_Utility.getClickedFacingCoords(aSide, aX, aY, aZ)[0] >= 0.5F) {

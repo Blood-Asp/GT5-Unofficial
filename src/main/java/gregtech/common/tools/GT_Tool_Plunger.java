@@ -5,6 +5,7 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.IItemBehaviour;
 import gregtech.api.items.GT_MetaGenerated_Tool;
+import gregtech.api.util.GT_ToolHarvestHelper;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.items.behaviors.Behaviour_Plunger_Fluid;
 import gregtech.common.items.behaviors.Behaviour_Plunger_Item;
@@ -48,8 +49,7 @@ public class GT_Tool_Plunger extends GT_Tool {
 
     @Override
     public boolean isMinableBlock(Block aBlock, byte aMetaData) {
-        String tTool = aBlock.getHarvestTool(aMetaData);
-        return aBlock.getHarvestLevel(aMetaData) != -1 &&  (tTool == null || tTool.isEmpty() || tTool.equals("plunger"));
+       return GT_ToolHarvestHelper.isAppropriateTool(aBlock,aMetaData , "plunger");
     }
 
     @Override

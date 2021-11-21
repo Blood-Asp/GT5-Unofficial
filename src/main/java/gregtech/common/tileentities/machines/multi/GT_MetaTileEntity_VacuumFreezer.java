@@ -14,8 +14,7 @@ import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
-
-import java.util.ArrayList;
+import net.minecraftforge.fluids.FluidStack;
 
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE;
@@ -49,6 +48,8 @@ public class GT_MetaTileEntity_VacuumFreezer extends GT_MetaTileEntity_CubicMult
                 .addCasingInfo("Frost Proof Machine Casing", 16)
                 .addEnergyHatch("Any casing", 1)
                 .addMaintenanceHatch("Any casing", 1)
+                .addInputHatch("Any casing", 1)
+                .addOutputHatch("Any casing", 1)
                 .addInputBus("Any casing", 1)
                 .addOutputBus("Any casing", 1)
                 .toolTipFinisher("Gregtech");
@@ -93,29 +94,29 @@ public class GT_MetaTileEntity_VacuumFreezer extends GT_MetaTileEntity_CubicMult
 
     @Override
     public boolean checkRecipe(ItemStack aStack) {
-        ArrayList<ItemStack> tInputList = getStoredInputs();
-        for (ItemStack tInput : tInputList) {
-            long tVoltage = getMaxInputVoltage();
-            byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
+        ItemStack[] tInputList = getCompactedInputs();
+        FluidStack[] tFluidList = getCompactedFluids();
 
-            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sVacuumRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], null, tInput);
-            if (tRecipe != null) {
-                if (tRecipe.isRecipeInputEqual(true, null, tInput)) {
-                    this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
-                    this.mEfficiencyIncrease = 10000;
+        long tVoltage = getMaxInputVoltage();
+        byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
+        GT_Recipe tRecipe = getRecipeMap().findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], tFluidList, tInputList);
+        if (tRecipe != null) {
+            if (tRecipe.isRecipeInputEqual(true, tFluidList, tInputList)) {
+                this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
+                this.mEfficiencyIncrease = 10000;
 
-                    calculateOverclockedNessMulti(tRecipe.mEUt, tRecipe.mDuration, 1, tVoltage);
-                    //In case recipe is too OP for that machine
-                    if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
-                        return false;
-                    if (this.mEUt > 0) {
-                        this.mEUt = (-this.mEUt);
-                    }
-                    this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
-                    this.mOutputItems = new ItemStack[]{tRecipe.getOutput(0)};
-                    updateSlots();
-                    return true;
+                calculateOverclockedNessMulti(tRecipe.mEUt, tRecipe.mDuration, 1, tVoltage);
+                //In case recipe is too OP for that machine
+                if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+                    return false;
+                if (this.mEUt > 0) {
+                    this.mEUt = (-this.mEUt);
                 }
+                this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
+                this.mOutputItems = new ItemStack[]{tRecipe.getOutput(0)};
+                this.mOutputFluids = new FluidStack[]{tRecipe.getFluidOutput(0)};
+                updateSlots();
+                return true;
             }
         }
         return false;

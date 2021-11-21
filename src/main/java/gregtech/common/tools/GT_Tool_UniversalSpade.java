@@ -4,6 +4,7 @@ import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.items.GT_MetaGenerated_Tool;
+import gregtech.api.util.GT_ToolHarvestHelper;
 import gregtech.common.items.behaviors.Behaviour_Crowbar;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -93,8 +94,27 @@ public class GT_Tool_UniversalSpade extends GT_Tool {
 
     @Override
     public boolean isMinableBlock(Block aBlock, byte aMetaData) {
-        String tTool = aBlock.getHarvestTool(aMetaData);
-        return aBlock.getHarvestLevel(aMetaData) != -1 &&  (tTool == null || tTool.isEmpty() || ((tTool.equals("shovel")) || (tTool.equals("axe")) || (tTool.equals("saw")) || (tTool.equals("sword")) || (tTool.equals("crowbar")))) || (aBlock.getMaterial() == Material.sand) || (aBlock.getMaterial() == Material.grass) || (aBlock.getMaterial() == Material.ground) || (aBlock.getMaterial() == Material.snow) || (aBlock.getMaterial() == Material.clay) || (aBlock.getMaterial() == Material.leaves) || (aBlock.getMaterial() == Material.vine) || (aBlock.getMaterial() == Material.wood) || (aBlock.getMaterial() == Material.cactus) || (aBlock.getMaterial() == Material.circuits) || (aBlock.getMaterial() == Material.gourd) || (aBlock.getMaterial() == Material.web) || (aBlock.getMaterial() == Material.cloth) || (aBlock.getMaterial() == Material.carpet) || (aBlock.getMaterial() == Material.plants) || (aBlock.getMaterial() == Material.cake) || (aBlock.getMaterial() == Material.tnt) || (aBlock.getMaterial() == Material.sponge);
+        return GT_ToolHarvestHelper.isAppropriateTool(aBlock, aMetaData, "shovel", "axe", "saw", "sword", "crowbar")
+                || GT_ToolHarvestHelper.isAppropriateMaterial(aBlock,
+                Material.sand,
+                Material.grass,
+                Material.ground,
+                Material.snow,
+                Material.clay,
+                Material.leaves,
+                Material.vine,
+                Material.wood,
+                Material.cactus,
+                Material.circuits,
+                Material.gourd,
+                Material.web,
+                Material.cloth,
+                Material.carpet,
+                Material.plants,
+                Material.cake,
+                Material.tnt,
+                Material.sponge
+        );
     }
 
     @Override

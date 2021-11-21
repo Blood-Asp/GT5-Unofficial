@@ -36,8 +36,8 @@ public class GT_ContainerMetaTile_Machine extends GT_Container {
             oOutput = 0,
             oInput = 0,
             oID = 0,
-            oDisplayErrorCode = 0,
-            mTimer = 0;
+            oDisplayErrorCode = 0;
+    protected int mTimer = 0;
 
 
     public GT_ContainerMetaTile_Machine(InventoryPlayer aInventoryPlayer, IGregTechTileEntity aTileEntity) {
@@ -148,16 +148,16 @@ public class GT_ContainerMetaTile_Machine extends GT_Container {
         super.updateProgressBar(par1, par2);
         switch (par1) {
             case 0:
-                mEnergy = mEnergy & -65536 | par2;
+                mEnergy = mEnergy & 0xffff0000 | par2 & 0x0000ffff;
                 break;
             case 1:
-                mEnergy = mEnergy & 65535 | par2 << 16;
+                mEnergy = mEnergy & 0x0000ffff | par2 << 16;
                 break;
             case 2:
-                mStorage = mStorage & -65536 | par2;
+                mStorage = mStorage & 0xffff0000 | par2 & 0x0000ffff;
                 break;
             case 3:
-                mStorage = mStorage & 65535 | par2 << 16;
+                mStorage = mStorage & 0x0000ffff | par2 << 16;
                 break;
             case 4:
                 mOutput = par2;
@@ -169,16 +169,16 @@ public class GT_ContainerMetaTile_Machine extends GT_Container {
                 mDisplayErrorCode = par2;
                 break;
             case 11:
-                mProgressTime = mProgressTime & -65536 | par2;
+                mProgressTime = mProgressTime & 0xffff0000 | par2;
                 break;
             case 12:
-                mProgressTime = mProgressTime & 65535 | par2 << 16;
+                mProgressTime = mProgressTime & 0x0000ffff | par2 << 16;
                 break;
             case 13:
-                mMaxProgressTime = mMaxProgressTime & -65536 | par2;
+                mMaxProgressTime = mMaxProgressTime & 0xffff0000 | par2 & 0x0000ffff;
                 break;
             case 14:
-                mMaxProgressTime = mMaxProgressTime & 65535 | par2 << 16;
+                mMaxProgressTime = mMaxProgressTime & 0x0000ffff | par2 << 16;
                 break;
             case 15:
                 mID = par2;
@@ -187,16 +187,16 @@ public class GT_ContainerMetaTile_Machine extends GT_Container {
                 mActive = par2;
                 break;
             case 17:
-                mSteam = mSteam & -65536 | par2;
+                mSteam = mSteam & 0xffff0000 | par2 & 0x0000ffff;
                 break;
             case 18:
-                mSteam = mSteam & 65535 | par2 << 16;
+                mSteam = mSteam & 0x0000ffff | par2 << 16;
                 break;
             case 19:
-                mSteamStorage = mSteamStorage & -65536 | par2;
+                mSteamStorage = mSteamStorage & 0xffff0000 | par2 & 0x0000ffff;
                 break;
             case 20:
-                mSteamStorage = mSteamStorage & 65535 | par2 << 16;
+                mSteamStorage = mSteamStorage & 0x0000ffff | par2 << 16;
                 break;
         }
     }

@@ -12,6 +12,7 @@ import gregtech.api.net.GT_Packet_TileEntityCover;
 import gregtech.api.net.GT_Packet_WirelessRedstoneCover;
 import gregtech.api.util.GT_CoverBehavior;
 import gregtech.api.util.GT_Utility;
+import gregtech.api.util.ISerializableObject;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fluids.Fluid;
@@ -25,18 +26,33 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
 
     @Override
     public boolean onCoverRemoval(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, boolean aForced) {
-        GregTech_API.sWirelessRedstone.put(Integer.valueOf(aCoverVariable), Byte.valueOf((byte) 0));
+        GregTech_API.sWirelessRedstone.put(aCoverVariable, (byte) 0);
         return true;
     }
 
     @Override
+    protected boolean onCoverRightClickImpl(byte aSide, int aCoverID, ISerializableObject.LegacyCoverData aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        if (((aX > 0.375D) && (aX < 0.625D)) || ((aSide > 3) && ((aY > 0.375D) && (aY < 0.625D)))) {
+            GregTech_API.sWirelessRedstone.put(aCoverVariable.get(), (byte) 0);
+            aCoverVariable.set((aCoverVariable.get() & (PRIVATE_MASK | CHECKBOX_MASK)) | (((Integer)GT_Utility.stackToInt(aPlayer.inventory.getCurrentItem())).hashCode() & PUBLIC_MASK));
+            GT_Utility.sendChatToPlayer(aPlayer, trans("081", "Frequency: ") + aCoverVariable);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
     public boolean onCoverRightclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (((aX > 0.375D) && (aX < 0.625D)) || ((aSide > 3) && ((aY > 0.375D) && (aY < 0.625D)))) {
-            GregTech_API.sWirelessRedstone.put(Integer.valueOf(aCoverVariable), Byte.valueOf((byte) 0));
-            aCoverVariable = (aCoverVariable & (PRIVATE_MASK | CHECKBOX_MASK)) | (((Integer)GT_Utility.stackToInt(aPlayer.inventory.getCurrentItem())).hashCode() & PUBLIC_MASK);
+            GregTech_API.sWirelessRedstone.put(aCoverVariable, (byte) 0);
+
+            int val = GT_Utility.stackToInt(aPlayer.inventory.getCurrentItem()) * (1 + aPlayer.inventory.getCurrentItem().getItemDamage());
+
+            aCoverVariable = (aCoverVariable & (PRIVATE_MASK | CHECKBOX_MASK)) | (val & PUBLIC_MASK);
 
             aTileEntity.setCoverDataAtSide(aSide, aCoverVariable);
-            GT_Utility.sendChatToPlayer(aPlayer, trans("081", "Frequency: ") + aCoverVariable);
+            GT_Utility.sendChatToPlayer(aPlayer, trans("081", "Frequency: ") + (aCoverVariable & PUBLIC_MASK));
             return true;
         }
         return false;
@@ -45,7 +61,7 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
     @Override
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (((aX > 0.375D) && (aX < 0.625D)) || ((aSide <= 3) || (((aY > 0.375D) && (aY < 0.625D)) || ((((aZ <= 0.375D) || (aZ >= 0.625D))))))) {
-            GregTech_API.sWirelessRedstone.put(Integer.valueOf(aCoverVariable), Byte.valueOf((byte) 0));
+            GregTech_API.sWirelessRedstone.put(aCoverVariable, (byte) 0);
             float[] tCoords = GT_Utility.getClickedFacingCoords(aSide, aX, aY, aZ);
 
             short tAdjustVal = 0;
@@ -76,7 +92,7 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
                 aCoverVariable = (aCoverVariable & (PRIVATE_MASK | CHECKBOX_MASK)) | tPublicChannel;
             }
         }
-        GT_Utility.sendChatToPlayer(aPlayer, trans("081", "Frequency: ") + aCoverVariable);
+        GT_Utility.sendChatToPlayer(aPlayer, trans("081", "Frequency: ") + (aCoverVariable & PUBLIC_MASK));
         return aCoverVariable;
     }
 

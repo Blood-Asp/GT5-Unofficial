@@ -4,6 +4,7 @@ import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.items.GT_MetaGenerated_Tool;
+import gregtech.api.util.GT_ToolHarvestHelper;
 import gregtech.common.items.behaviors.Behaviour_Wrench;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -112,8 +113,10 @@ public class GT_Tool_Wrench extends GT_Tool {
     
     @Override
     public boolean isMinableBlock(Block aBlock, byte aMetaData) {
-        String tTool = aBlock.getHarvestTool(aMetaData);
-        return aBlock.getHarvestLevel(aMetaData) != -1 && (tTool == null || tTool.isEmpty() || (tTool.equals("wrench"))) || (aBlock.getMaterial() == Material.piston) || (aBlock == Blocks.hopper) || (aBlock == Blocks.dispenser) || (aBlock == Blocks.dropper);
+        return GT_ToolHarvestHelper.isAppropriateTool(aBlock, aMetaData, "wrench")
+                || GT_ToolHarvestHelper.isAppropriateMaterial(aBlock, Material.piston)
+                || GT_ToolHarvestHelper.isSpecialBlock(aBlock,Blocks.hopper, Blocks.dispenser, Blocks.dropper);
+
     }
 
     @Override

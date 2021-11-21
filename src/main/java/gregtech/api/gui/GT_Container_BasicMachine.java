@@ -204,7 +204,10 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
                     }
                     GT_MetaTileEntity_BasicTank tTank = (GT_MetaTileEntity_BasicTank) mTileEntity.getMetaTileEntity();
                     IFluidAccess tFillableAccess = IFluidAccess.from(tTank, true);
-                    return handleFluidSlotClick(tFillableAccess, aPlayer, aMouseclick == 0, true, true);
+                    ItemStack tToken = handleFluidSlotClick(tFillableAccess, aPlayer, aMouseclick == 0, true, true);
+                    if (mTileEntity.isServerSide() && tToken != null)
+                        mTileEntity.markInventoryBeenModified();
+                    return tToken;
                 } else {
                     return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
                 }
