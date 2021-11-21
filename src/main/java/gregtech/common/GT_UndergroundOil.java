@@ -11,6 +11,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -28,6 +29,7 @@ import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 public class GT_UndergroundOil {
     public static final short DIVIDER=5000;
     private static final GT_UndergroundOilStore STORAGE = new GT_UndergroundOilStore();
+    private static final ChunkData NIL_FLUID_STACK = new ChunkData(-1, null, null, false);
 
     public static FluidStack undergroundOilReadInformation(IGregTechTileEntity te){
         return undergroundOil(te.getWorld().getChunkFromBlockCoords(te.getXCoord(),te.getZCoord()),-1);
@@ -76,6 +78,25 @@ public class GT_UndergroundOil {
         return fluidInChunk;
     }
 
+    /**
+     * Get the deposit as if it is never exploited
+     * @return UO fluid kind and amount, or null if nothing here.
+     */
+    public static Pair<GT_UO_Fluid, Integer> getPristineAmount(World world, int chunkX, int chunkZ) {
+        int dimensionId = world.provider.dimensionId;
+        GT_UO_Dimension dimension = GT_Mod.gregtechproxy.mUndergroundOil.GetDimension(dimensionId);
+        if (dimension == null) return null;
+        // prepare RNG 🙏 🙏 🙏
+        final XSTR tVeinRNG = new XSTR(world.getSeed() + dimensionId * 2L + (chunkX >> 3) + 8267L * (chunkZ >> 3));
+        final XSTR tChunkRNG = new XSTR(world.getSeed() + dimensionId * 2L + chunkX + 8267L * chunkZ);
+        GT_UO_Fluid uoFluid = dimension.getRandomFluid(tVeinRNG);
+        // nothing here :(
+        if (uoFluid == null || uoFluid.getFluid() == null) return null;
+        // offset each chunk's fluid amount by +-25%
+        int amount = (int) ((float) uoFluid.getRandomAmount(tVeinRNG) * (0.75f + (tChunkRNG.nextFloat() / 2f)));
+        return Pair.of(uoFluid, amount);
+    }
+
     static void migrate(ChunkDataEvent.Load e) {
         if (e.getData().hasKey("GTOIL") && e.getData().hasKey("GTOILFLUID")) {
             ChunkData chunkData = STORAGE.get(e.getChunk());
@@ -114,7 +135,6 @@ public class GT_UndergroundOil {
      */
     @ParametersAreNonnullByDefault
     private static class GT_UndergroundOilStore extends GT_ChunkAssociatedData<ChunkData> {
-        private static final GT_UndergroundOil.ChunkData NIL_FLUID_STACK = new GT_UndergroundOil.ChunkData(-1, null, null, false);
         private static final WeakHashMap<GT_UO_Fluid, Integer> hashes = new WeakHashMap<>();
 
         private GT_UndergroundOilStore() {
@@ -154,17 +174,12 @@ public class GT_UndergroundOil {
 
         @Override
         protected GT_UndergroundOil.ChunkData createElement(World world, int chunkX, int chunkZ) {
+            Pair<GT_UO_Fluid, Integer> pristine = getPristineAmount(world, chunkX, chunkZ);
+            if (pristine == null)
+                return NIL_FLUID_STACK;
             int dimensionId = world.provider.dimensionId;
             GT_UO_Dimension dimension = GT_Mod.gregtechproxy.mUndergroundOil.GetDimension(dimensionId);
-            if (dimension == null) return NIL_FLUID_STACK;
-            // prepare RNG 🙏 🙏 🙏
-            final XSTR tRandom = new XSTR(world.getSeed() + dimensionId * 2L + (chunkX >> 3) + 8267L * (chunkZ >> 3));
-            GT_UO_Fluid uoFluid = dimension.getRandomFluid(tRandom);
-            // nothing here :(
-            if (uoFluid == null || uoFluid.getFluid() == null) return NIL_FLUID_STACK;
-            // offset each chunk's fluid amount by +-25%
-            int amount = (int) ((float) uoFluid.getRandomAmount(tRandom) * (0.75f + (XSTR_INSTANCE.nextFloat() / 2f)));
-            return new GT_UndergroundOil.ChunkData(amount, uoFluid, dimension.getUOFluidKey(uoFluid), false);
+            return new GT_UndergroundOil.ChunkData(pristine.getRight(), pristine.getLeft(), dimension.getUOFluidKey(pristine.getLeft()), false);
         }
 
         private static int hash(@Nullable GT_UO_Fluid fluid) {
