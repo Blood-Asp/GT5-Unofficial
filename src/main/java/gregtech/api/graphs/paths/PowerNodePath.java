@@ -98,7 +98,6 @@ public class PowerNodePath extends NodePath {
     private void reset(int aTimePassed) {
         if (aTimePassed < 0 || aTimePassed > 100) {
             mAmps = 0;
-            return;
         }
         mAmps = Math.max(0, mAmps - (mMaxAmps * aTimePassed));
     }
