@@ -4,6 +4,7 @@ import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.items.GT_MetaGenerated_Tool;
+import gregtech.api.util.GT_ToolHarvestHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -88,8 +89,20 @@ public class GT_Tool_Sword extends GT_Tool {
 
     @Override
     public boolean isMinableBlock(Block aBlock, byte aMetaData) {
-        String tTool = aBlock.getHarvestTool(aMetaData);
-        return aBlock.getHarvestLevel(aMetaData) != -1 &&  (tTool == null || tTool.isEmpty() || (tTool.equals("sword"))) || (aBlock.getMaterial() == Material.leaves) || (aBlock.getMaterial() == Material.gourd) || (aBlock.getMaterial() == Material.vine) || (aBlock.getMaterial() == Material.web) || (aBlock.getMaterial() == Material.cloth) || (aBlock.getMaterial() == Material.carpet) || (aBlock.getMaterial() == Material.plants) || (aBlock.getMaterial() == Material.cactus) || (aBlock.getMaterial() == Material.cake) || (aBlock.getMaterial() == Material.tnt) || (aBlock.getMaterial() == Material.sponge);
+        return GT_ToolHarvestHelper.isAppropriateTool(aBlock, aMetaData, "sword")
+                || GT_ToolHarvestHelper.isAppropriateMaterial(aBlock,
+                Material.leaves,
+                Material.gourd,
+                Material.vine,
+                Material.web,
+                Material.cloth,
+                Material.carpet,
+                Material.plants,
+                Material.cactus,
+                Material.cake,
+                Material.tnt,
+                Material.sponge
+        );
     }
 
     @Override

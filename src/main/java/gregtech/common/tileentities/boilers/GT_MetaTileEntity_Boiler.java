@@ -175,7 +175,7 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
 
     @Override
     public boolean allowCoverOnSide(byte aSide, GT_ItemStack aCover) {
-        return GregTech_API.getCoverBehavior(aCover.toStack()).isSimpleCover();
+        return GregTech_API.getCoverBehaviorNew(aCover.toStack()).isSimpleCover();
     }
 
     @Override

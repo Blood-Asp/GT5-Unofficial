@@ -10,9 +10,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
 /**
- * Client -> Server: Update cover data
+ * Client -> Server: Update cover data. use this only if you are using the legacy data storage
  */
-
 public class GT_Packet_TileEntityCover extends GT_Packet_New {
     protected int mX;
     protected short mY;

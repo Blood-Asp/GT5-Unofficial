@@ -1,3 +1,14 @@
+# Creative ItemGroup Tab
+itemGroup.GregTech.GTPP_BLOCKS=GT++ Blocks
+itemGroup.GregTech.GTPP_MACHINES=GT++ Machines
+itemGroup.GregTech.GTPP_MISC=GT++ Misc
+itemGroup.GregTech.GTPP_OTHER=GT++ Other
+itemGroup.GregTech.GTPP_OTHER_2=GT++ Other II
+itemGroup.GregTech.GTPP_TOOLS=GT++ Tools
+itemGroup.GregTech.Main=Main
+itemGroup.GregTech.Materials=Materials
+itemGroup.GregTech.Ores=Ores
+
 # Multiblock Tooltip Builder Keywords
 # Context can be found in the class gregtech.api.util.GT_Multiblock_Tooltip_Builder
 GT5U.MBTT.MachineType=Machine Type
@@ -72,6 +83,10 @@ GT5U.machines.voidoveflow.disabled=Overflow voiding disabled
 
 GT5U.hatch.disableFilter.true=Input Filter Off
 GT5U.hatch.disableFilter.false=Input Filter On
+GT5U.hatch.disableSort.true=Sorting mode: OFF
+GT5U.hatch.disableSort.false=Sorting mode: ON
+GT5U.hatch.disableLimited.true=Limiting mode: OFF
+GT5U.hatch.disableLimited.false=Limiting mode: ON
 
 GT5U.multiblock.pollution=Pollution reduced to
 GT5U.multiblock.energy=Stored Energy
@@ -1108,21 +1123,23 @@ fluid.Ammonium Dinitramide=Ammonium Dinitramide
 fluid.LMP-103S=LMP-103S
 fluid.Nitromethane=Nitromethane
 fluid.O-Xylene=O-Xylene
+//GT_MetaGenerated_Item_98 cells
+fluid.UnknownNutrientAgar=Unknown Nutrient Agar
+fluid.SeaweedBroth=Seaweed Broth
+fluid.EnzymesSollution=Enzyme Solution
+fluid.escherichiakolifluid=eColi Bacteria Fluid
+fluid.Penicillin=Penicillin
+fluid.FluorecentdDNA=Fluorescent DNA
+fluid.Polymerase=Polymerase
 //No cell, most from bart bio
 fluid.Monomethylhydrazine=Monomethylhydrazine
 fluid.binnibacteriafluid=binnibacteriafluid
-fluid.SeaweedBroth=SeaweedBroth
 fluid.barnadafisarboriatorisfluid=barnadafisarboriatorisfluid
-fluid.Polymerase=Polymerase
 fluid.GelatinMixture=GelatinMixture
-fluid.FluorecentdDNA=FluorecentdDNA
-fluid.Penicillin=Penicillin
 fluid.sludge=sludge
-fluid.EnzymesSollution=EnzymesSollution
 fluid.Formaldehyde=Formaldehyde
 fluid.tcetieisfucusserratusfluid=tcetieisfucusserratusfluid
 fluid.MeatExtract=MeatExtract
-fluid.UnknownNutrientAgar=UnknownNutrientAgar
 //No recipe
 fluid.CompressedOxygen=CompressedOxygen
 fluid.CompressedNitrogen=CompressedNitrogen

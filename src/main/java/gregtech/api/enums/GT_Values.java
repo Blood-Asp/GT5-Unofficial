@@ -272,6 +272,10 @@ public class GT_Values {
      */
     public static boolean debugEntityCramming = false;
     /**
+     * Debug parameter for {@link gregtech.api.util.GT_ChunkAssociatedData}
+     */
+    public static boolean debugWorldData = false;
+    /**
      * Number of ticks between sending sound packets to clients for electric machines. Default is 1.5 seconds. Trying to mitigate lag and FPS drops.
      */
     public static int ticksBetweenSounds = 30;

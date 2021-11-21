@@ -16,6 +16,7 @@ import static gregtech.api.enums.GT_Values.E;
 public class GT_LanguageManager {
     public static final HashMap<String, String> TEMPMAP = new HashMap<String, String>(), BUFFERMAP = new HashMap<String, String>(), LANGMAP = new HashMap<String, String>();
     public static Configuration sEnglishFile;
+	public static String sLanguage = "en_US";
     public static boolean sUseEnglishFile = false;
     public static boolean i18nPlaceholder = true;
 
@@ -31,7 +32,7 @@ public class GT_LanguageManager {
         	}
         }
         TEMPMAP.put(aKey.trim(), aEnglish);
-        LanguageRegistry.instance().injectLanguage("en_US", TEMPMAP);
+        LanguageRegistry.instance().injectLanguage(sLanguage, TEMPMAP);
         TEMPMAP.clear();
         if(sUseEnglishFile && !aWriteIntoLangFile){
             if (!LANGMAP.containsKey(aKey)) {
@@ -334,6 +335,8 @@ public class GT_LanguageManager {
 		addStringLocalization("Interaction_DESCRIPTION_Index_216", "Deprecated Recipe");
 		addStringLocalization("Interaction_DESCRIPTION_Index_217", "Stocking mode. Keeps this many items in destination input slots. This mode can be server unfriendly.");
 		addStringLocalization("Interaction_DESCRIPTION_Index_218", "Transfer size mode. Add exactly this many items in destination input slots as long as there is room.");
+		addStringLocalization("Interaction_DESCRIPTION_Index_219", "Single recipe locking enabled. Will lock to next recipe.");
+		addStringLocalization("Interaction_DESCRIPTION_Index_220", "Single recipe locking disabled.");
 		addStringLocalization("Interaction_DESCRIPTION_Index_500", "Fitting: Loose - More Flow");
 		addStringLocalization("Interaction_DESCRIPTION_Index_501", "Fitting: Tight - More Efficiency");
 
