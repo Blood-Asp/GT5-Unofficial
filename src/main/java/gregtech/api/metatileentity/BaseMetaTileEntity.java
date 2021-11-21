@@ -1864,20 +1864,24 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
             return ((ISerializableObject.LegacyCoverData) mCoverData[aSide]).get();
         return 0;
     }
-
     @Override
     public void setCoverDataAtSide(byte aSide, ISerializableObject aData) {
-        mCoverData[aSide] = aData;
+        if (aSide >= 0 && aSide < 6 && getCoverBehaviorAtSideNew(aSide) != null && getCoverBehaviorAtSideNew(aSide).cast(aData) != null)
+            mCoverData[aSide] = aData;
     }
 
     @Override
     public ISerializableObject getComplexCoverDataAtSide(byte aSide) {
-        return mCoverData[aSide];
+        if (aSide >= 0 && aSide < 6 && getCoverBehaviorAtSideNew(aSide) != null)
+            return mCoverData[aSide];
+        return GregTech_API.sNoBehavior.createDataObject();
     }
 
     @Override
     public GT_CoverBehaviorBase<?> getCoverBehaviorAtSideNew(byte aSide) {
-        return mCoverBehaviors[aSide];
+        if (aSide >= 0 && aSide < 6)
+            return mCoverBehaviors[aSide];
+        return GregTech_API.sNoBehavior;
     }
 
     public byte getLightValue() {
