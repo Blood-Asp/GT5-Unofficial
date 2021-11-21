@@ -378,45 +378,50 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 
     public static boolean GTppRecipeHelper;
 
+    /**
+     * WARNING: Do not call this method with both {@code aDecreaseStacksizeBySuccess} and {@code aDontCheckStackSizes} set to {@code true}!
+     * You'll get weird behavior.
+     */
     public boolean isRecipeInputEqual(boolean aDecreaseStacksizeBySuccess, boolean aDontCheckStackSizes, FluidStack[] aFluidInputs, ItemStack... aInputs) {
         if (mInputs.length > 0 && aInputs == null) return false;
         if (mFluidInputs.length > 0 && aFluidInputs == null) return false;
 
-        // We need to handle 0-size recipe ingredients. These are for ingredients that don't get consumed.
-        boolean found;
-        int amt;
+        // We need to handle 0-size recipe inputs. These are for inputs that don't get consumed.
+        boolean inputFound;
+        int remainingCost;
 
         // Array tracking modified fluid amounts. For efficiency, we will lazily initialize this array.
-        // We use Integer so that we can have null as the default value, meaning uninitialized.
-        Integer[] fluidAmounts = null;
+        // We use Integer so that we can have null as the default value, meaning unchanged.
+        Integer[] newFluidAmounts = null;
         if (aFluidInputs != null) {
-            fluidAmounts = new Integer[aFluidInputs.length];
+            newFluidAmounts = new Integer[aFluidInputs.length];
 
-            for (FluidStack tFluid : mFluidInputs) {
-                if (tFluid != null) {
-                    found = false;
-                    amt = tFluid.amount;
+            for (FluidStack recipeFluidCost : mFluidInputs) {
+                if (recipeFluidCost != null) {
+                    inputFound = false;
+                    remainingCost = recipeFluidCost.amount;
 
                     for (int i = 0; i < aFluidInputs.length; i++) {
-                        FluidStack aFluid = aFluidInputs[i];
-                        if (aFluid != null && aFluid.isFluidEqual(tFluid)) {
-                            found = true;
-                            if (fluidAmounts[i] == null) {
-                                fluidAmounts[i] = aFluid.amount;
+                        FluidStack providedFluid = aFluidInputs[i];
+                        if (providedFluid != null && providedFluid.isFluidEqual(recipeFluidCost)) {
+                            inputFound = true;
+                            if (newFluidAmounts[i] == null) {
+                                newFluidAmounts[i] = providedFluid.amount;
                             }
 
-                            if (aDontCheckStackSizes || fluidAmounts[i] >= amt) {
-                                fluidAmounts[i] -= amt;
-                                amt = 0;
+                            if (aDontCheckStackSizes || newFluidAmounts[i] >= remainingCost) {
+                                newFluidAmounts[i] -= remainingCost;
+                                remainingCost = 0;
                                 break;
                             } else {
-                                amt -= fluidAmounts[i];
-                                fluidAmounts[i] = 0;
+                                remainingCost -= newFluidAmounts[i];
+                                newFluidAmounts[i] = 0;
                             }
                         }
                     }
 
-                    if (amt > 0 || !found) {
+                    if (remainingCost > 0 || !inputFound) {
+                        // Cost not satisfied, or for non-consumed inputs, input not found.
                         return false;
                     }
                 }
@@ -424,44 +429,45 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         }
 
         // Array tracking modified item stack sizes. For efficiency, we will lazily initialize this array.
-        // We use Integer so that we can have null as the default value, meaning uninitialized.
-        Integer[] stackSizes = null;
+        // We use Integer so that we can have null as the default value, meaning unchanged.
+        Integer[] newItemAmounts = null;
         if (aInputs != null) {
-            stackSizes = new Integer[aInputs.length];
+            newItemAmounts = new Integer[aInputs.length];
 
-            for (ItemStack tStack : mInputs) {
-                ItemStack unified_tStack = GT_OreDictUnificator.get_nocopy(true, tStack);
-                if (unified_tStack != null) {
-                    found = false;
-                    amt = tStack.stackSize;
+            for (ItemStack recipeItemCost : mInputs) {
+                ItemStack unifiedItemCost = GT_OreDictUnificator.get_nocopy(true, recipeItemCost);
+                if (unifiedItemCost != null) {
+                    inputFound = false;
+                    remainingCost = recipeItemCost.stackSize;
 
                     for (int i = 0; i < aInputs.length; i++) {
-                        ItemStack aStack = aInputs[i];
-                        if (GT_OreDictUnificator.isInputStackEqual(aStack, unified_tStack)) {
+                        ItemStack providedItem = aInputs[i];
+                        if (GT_OreDictUnificator.isInputStackEqual(providedItem, unifiedItemCost)) {
                             if (GTppRecipeHelper) { // remove once the fix is out
-                                if (GT_Utility.areStacksEqual(aStack, Ic2Items.FluidCell.copy(), true) || GT_Utility.areStacksEqual(aStack, ItemList.Tool_DataStick.get(1L), true) || GT_Utility.areStacksEqual(aStack, ItemList.Tool_DataOrb.get(1L), true)) {
-                                    if (!GT_Utility.areStacksEqual(aStack, tStack, false))
+                                if (GT_Utility.areStacksEqual(providedItem, Ic2Items.FluidCell.copy(), true) || GT_Utility.areStacksEqual(providedItem, ItemList.Tool_DataStick.get(1L), true) || GT_Utility.areStacksEqual(providedItem, ItemList.Tool_DataOrb.get(1L), true)) {
+                                    if (!GT_Utility.areStacksEqual(providedItem, recipeItemCost, false))
                                         continue;
                                 }
                             }
 
-                            found = true;
-                            if (stackSizes[i] == null) {
-                                stackSizes[i] = aStack.stackSize;
+                            inputFound = true;
+                            if (newItemAmounts[i] == null) {
+                                newItemAmounts[i] = providedItem.stackSize;
                             }
 
-                            if (aDontCheckStackSizes || stackSizes[i] >= amt) {
-                                stackSizes[i] -= amt;
-                                amt = 0;
+                            if (aDontCheckStackSizes || newItemAmounts[i] >= remainingCost) {
+                                newItemAmounts[i] -= remainingCost;
+                                remainingCost = 0;
                                 break;
                             } else {
-                                amt -= stackSizes[i];
-                                stackSizes[i] = 0;
+                                remainingCost -= newItemAmounts[i];
+                                newItemAmounts[i] = 0;
                             }
                         }
                     }
 
-                    if (amt > 0 || !found) {
+                    if (remainingCost > 0 || !inputFound) {
+                        // Cost not satisfied, or for non-consumed inputs, input not found.
                         return false;
                     }
                 }
@@ -472,16 +478,16 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
             // Copy modified amounts into the input stacks.
             if (aFluidInputs != null) {
                 for (int i = 0; i < aFluidInputs.length; i++) {
-                    if (fluidAmounts[i] != null) {
-                        aFluidInputs[i].amount = fluidAmounts[i];
+                    if (newFluidAmounts[i] != null) {
+                        aFluidInputs[i].amount = newFluidAmounts[i];
                     }
                 }
             }
 
             if (aInputs != null) {
                 for (int i = 0; i < aInputs.length; i++) {
-                    if (stackSizes[i] != null) {
-                        aInputs[i].stackSize = stackSizes[i];
+                    if (newItemAmounts[i] != null) {
+                        aInputs[i].stackSize = newItemAmounts[i];
                     }
                 }
             }
