@@ -632,6 +632,12 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_leggings, 1, W));
         GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_boots, 1, W));
 
+        //Infinity Hazmat
+        addFullHazmatToGeneralItem("Avaritia", "Infinity_Helm", 1L);
+        addFullHazmatToGeneralItem("Avaritia", "Infinity_Chest", 1L);
+        addFullHazmatToGeneralItem("Avaritia", "Infinity_Pants", 1L);
+        addFullHazmatToGeneralItem("Avaritia", "Infinity_Shoes", 1L);
+
         GregTech_API.sLoadStarted = true;
         for (FluidContainerRegistry.FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
             if ((tData.filledContainer.getItem() == Items.potionitem) && (tData.filledContainer.getItemDamage() == 0)) {
