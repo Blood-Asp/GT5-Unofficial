@@ -246,7 +246,7 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
 
     private void pollute(long aTick) {
         if (this.mProcessingEnergy > 0 && (aTick % 20L == 0L)) {
-            GT_Pollution.addPollution(getBaseMetaTileEntity(), getPollution());
+            GT_Pollution.addPollution(getBaseMetaTileEntity(), 20*getPollution());
         }
     }
 

@@ -399,6 +399,9 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mPollutionLargeGasTurbine = tMainConfig.get("Pollution", "PollutionLargeGasTurbine", 15).getInt(15);
         gregtechproxy.mPollutionMultiSmelter = tMainConfig.get("Pollution", "PollutionMultiSmelter", 20).getInt(20);
         gregtechproxy.mPollutionPyrolyseOven = tMainConfig.get("Pollution", "PollutionPyrolyseOven", 30).getInt(30);
+        gregtechproxy.mPollutionSmallCoalBoiler = tMainConfig.get("Pollution", "PollutionSmallCoalBoiler", 1).getInt(1);
+        gregtechproxy.mPollutionHighPressureLavaBoiler = tMainConfig.get("Pollution", "PollutionHighPressureLavaBoiler", 1).getInt(1);
+        gregtechproxy.mPollutionHighPressureCoalBoiler = tMainConfig.get("Pollution", "PollutionHighPressureCoalBoiler", 2).getInt(2);
 
         gregtechproxy.mUndergroundOil.getConfig(tMainConfig, "undergroundfluid");
         gregtechproxy.mEnableCleanroom = tMainConfig.get("general", "EnableCleanroom", true).getBoolean(true);
