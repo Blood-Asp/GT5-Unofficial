@@ -132,6 +132,10 @@ public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_En
 
     public abstract int getEfficiencyIncrease();
 
+    public int getIntegratedCircuitConfig(){
+        return integratedCircuitConfig;
+    }
+
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing) {
@@ -298,12 +302,6 @@ public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_En
     @Override
     public int getMaxEfficiency(ItemStack aStack) {
         return 10000;
-    }
-
-    @Override
-    public int getPollutionPerTick(ItemStack aStack) {
-        int adjustedEUOutput = Math.max(25, getEUt() - 25 * integratedCircuitConfig);
-        return Math.max(1, 12 * adjustedEUOutput / getEUt());
     }
 
     @Override

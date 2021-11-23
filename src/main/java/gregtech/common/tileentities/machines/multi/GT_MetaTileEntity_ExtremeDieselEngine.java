@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.machines.multi;
 
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
@@ -159,7 +160,7 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
 
     @Override
     public int getPollutionPerTick(ItemStack aStack) {
-        return super.getPollutionPerTick(aStack) * 8;
+        return GT_Mod.gregtechproxy.mPollutionExtremeCombustionEngine;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.machines.multi;
 
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.ITexture;
@@ -69,7 +70,9 @@ public class GT_MetaTileEntity_Charcoal_Pit extends GT_MetaTileEntity_MultiBlock
             mEfficiency = 10000;
             mEfficiencyIncrease = 10000;
             mMaxProgresstime = Math.max(1, mMaxProgresstime);
-            GT_Pollution.addPollution(getBaseMetaTileEntity(), mMaxProgresstime * 10);
+
+            //adds all the pollution at once when the recipe starts
+            GT_Pollution.addPollution(getBaseMetaTileEntity(), mMaxProgresstime * getPollutionPerTick(null));
             return true;
         } else {
             mEfficiency = 0;
@@ -200,7 +203,7 @@ public class GT_MetaTileEntity_Charcoal_Pit extends GT_MetaTileEntity_MultiBlock
 
     @Override
     public int getPollutionPerTick(ItemStack aStack) {
-        return 0;
+        return GT_Mod.gregtechproxy.mPollutionCharcoalPit;
     }
 
     @Override
@@ -230,7 +233,7 @@ public class GT_MetaTileEntity_Charcoal_Pit extends GT_MetaTileEntity_MultiBlock
                 .addInfo("Controller for the Charcoal Pit")
                 .addInfo("Converts Logs into Brittle Charcoal blocks")
                 .addInfo("Will automatically start when valid")
-                .addPollutionAmount(100)
+                .addPollutionAmount(20*getPollutionPerTick(null))
                 .addSeparator()
                 .beginVariableStructureBlock(3, 11, 3, 6, 3, 11, false)
                 .addStructureInfo("Can be up to 11x6x11 in size, shape doesn't matter")

@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.machines.multi;
 
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -83,7 +84,7 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
 
     @Override
     public int getPollutionPerTick(ItemStack aStack) {
-        return 15;
+        return GT_Mod.gregtechproxy.mPollutionLargeGasTurbine;
     }
 
     @Override

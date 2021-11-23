@@ -3,6 +3,7 @@ package gregtech.common.tileentities.machines.multi;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
@@ -110,6 +111,11 @@ public class GT_MetaTileEntity_MultiFurnace extends GT_MetaTileEntity_AbstractMu
     @Override
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
         return GT_Recipe.GT_Recipe_Map.sFurnaceRecipes;
+    }
+
+    @Override
+    public int getPollutionPerTick(ItemStack aStack){
+        return GT_Mod.gregtechproxy.mPollutionMultiSmelter;
     }
 
     @Override

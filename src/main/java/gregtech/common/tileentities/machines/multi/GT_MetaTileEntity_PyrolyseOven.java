@@ -4,6 +4,7 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.IStructureElement;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import cpw.mods.fml.common.Loader;
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Textures;
@@ -226,7 +227,7 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_EnhancedMu
 
     @Override
     public int getPollutionPerTick(ItemStack aStack) {
-        return 30;
+        return GT_Mod.gregtechproxy.mPollutionPyrolyseOven;
     }
 
     @Override

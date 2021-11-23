@@ -1,6 +1,7 @@
 package gregtech.common.tileentities.machines.multi;
 
 import com.gtnewhorizon.structurelib.structure.IStructureElement;
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.enums.Textures.BlockIcons;
@@ -164,7 +165,7 @@ public class GT_MetaTileEntity_ImplosionCompressor extends GT_MetaTileEntity_Cub
 
     @Override
     public int getPollutionPerTick(ItemStack aStack) {
-        return 500;
+        return GT_Mod.gregtechproxy.mPollutionImplosionCompressor;
     }
 
     @Override

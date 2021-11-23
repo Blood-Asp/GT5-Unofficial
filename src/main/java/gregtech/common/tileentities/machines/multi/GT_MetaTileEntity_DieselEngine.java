@@ -2,6 +2,7 @@ package gregtech.common.tileentities.machines.multi;
 
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
@@ -265,7 +266,7 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_EnhancedMu
 
     @Override
     public int getPollutionPerTick(ItemStack aStack) {
-        return 24;
+        return GT_Mod.gregtechproxy.mPollutionLargeCombustionEngine;
     }
     
     @Override

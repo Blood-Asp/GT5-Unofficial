@@ -234,7 +234,7 @@ public abstract class GT_MetaTileEntity_PrimitiveBlastFurnace extends MetaTileEn
                 GT_Pollution.addPollution(this.getBaseMetaTileEntity().getWorld(),
                         new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(),
                                 this.getBaseMetaTileEntity().getZCoord()),
-                        200);
+                        20*GT_Mod.gregtechproxy.mPollutionPrimitveBlastFurnace);
             }
 
             aBaseMetaTileEntity.setActive((this.mMaxProgresstime > 0) && (this.mMachine));

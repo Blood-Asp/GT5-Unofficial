@@ -113,7 +113,7 @@ public interface IEnergyConnected extends IColoredTileEntity, IHasWorldObjectAnd
                                 tWorld.setBlock(tX, tY, tZ, Blocks.air);
                                 if (GregTech_API.sMachineExplosions)
                                     if (GT_Mod.gregtechproxy.mPollution)
-                                        GT_Pollution.addPollution(tWorld.getChunkFromBlockCoords(tX, tZ), 100000);
+                                        GT_Pollution.addPollution(tWorld.getChunkFromBlockCoords(tX, tZ), GT_Mod.gregtechproxy.mPollutionOnExplosion);
 
                                 new WorldSpawnedEventBuilder.ExplosionEffectEventBuilder()
                                         .setStrength(tStrength)
