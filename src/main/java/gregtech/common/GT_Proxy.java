@@ -236,6 +236,16 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
      */
     public boolean mRenderIndicatorsOnHatch = true;
 
+    /**
+     * This enables the rendering of dirt particles if pollution is enabled too
+     */
+    public boolean mRenderDirtParticles = true;
+
+    /**
+     * This enables the rendering of the pollution fog if pollution is enabled too
+     */
+    public boolean mRenderPollutionFog = true;
+
     public static final int GUI_ID_COVER_SIDE_BASE = 10; // Takes GUI ID 10 - 15
 
     public static Map<String, Integer> oreDictBurnTimes = new HashMap<>();
