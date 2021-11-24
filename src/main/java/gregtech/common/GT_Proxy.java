@@ -632,6 +632,12 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_leggings, 1, W));
         GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_boots, 1, W));
 
+        //Infinity Hazmat
+        addFullHazmatToGeneralItem("Avaritia", "Infinity_Helm", 1L);
+        addFullHazmatToGeneralItem("Avaritia", "Infinity_Chest", 1L);
+        addFullHazmatToGeneralItem("Avaritia", "Infinity_Pants", 1L);
+        addFullHazmatToGeneralItem("Avaritia", "Infinity_Shoes", 1L);
+
         GregTech_API.sLoadStarted = true;
         for (FluidContainerRegistry.FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
             if ((tData.filledContainer.getItem() == Items.potionitem) && (tData.filledContainer.getItemDamage() == 0)) {
@@ -709,8 +715,8 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     }
 
     public void onServerAboutToStart(){
-        dimensionWiseChunkData.clear();//!!! IMPORTANT for map switching...
         dimensionWisePollution.clear();//!!! IMPORTANT for map switching...
+        GT_ChunkAssociatedData.clearAll();
     }
 
     public void onServerStarting() {
@@ -776,6 +782,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
             } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
         }
         this.mUniverse = null;
+        //GT_ChunkAssociatedData.saveAll(); todo: figure out if this is needed
     }
 
     @SubscribeEvent
@@ -1981,87 +1988,25 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
 
     }
 
+    @Deprecated
     public static final HashMap<Integer,HashMap<ChunkCoordIntPair,int []>> dimensionWiseChunkData = new HashMap<>(16);//stores chunk data that is loaded/saved
     public static final HashMap<Integer,GT_Pollution> dimensionWisePollution = new HashMap<>(16);//stores GT_Polluttors objects
 	public static final byte GTOIL=3,GTOILFLUID=2,GTPOLLUTION=1,GTMETADATA=0,NOT_LOADED=0,LOADED=1;//consts
-    //@Deprecated
-	//public static final HashMap<ChunkPosition, int[]>  chunkData = new HashMap<>(0);
-
-    private static final byte oilVer=(byte)20;//non zero plz
 
     //TO get default's fast
+    @Deprecated
     public static int[] getDefaultChunkDataOnCreation(){
         return new int[]{NOT_LOADED,0,-1,-1};
     }
+    @Deprecated
     public static int[] getDefaultChunkDataOnLoad(){
         return new int[]{LOADED,0,-1,-1};
     }
 
     @SubscribeEvent
-    public void handleChunkSaveEvent(ChunkDataEvent.Save event) {//ALWAYS SAVE FROM THE HASH MAP DATA
-        HashMap<ChunkCoordIntPair,int []> chunkData=dimensionWiseChunkData.get(event.world.provider.dimensionId);
-        if(chunkData==null) return;//no dim info stored
-
-        int[] tInts = chunkData.get(event.getChunk().getChunkCoordIntPair());
-        if(tInts==null) return;//no chunk data stored
-        //assuming len of this array 4
-        if(tInts[3]>=0)event.getData().setInteger("GTOIL", tInts[GTOIL]);
-        else event.getData().removeTag("GTOIL");
-        if(tInts[2]>=0)event.getData().setInteger("GTOILFLUID", tInts[GTOILFLUID]);
-        else event.getData().removeTag("GTOILFLUID");
-        if(tInts[1]>0)event.getData().setInteger("GTPOLLUTION", tInts[GTPOLLUTION]);
-        else event.getData().removeTag("GTPOLLUTION");
-        event.getData().setByte("GTOILVER", oilVer);//version mark
-    }
-
-    @SubscribeEvent
     public void handleChunkLoadEvent(ChunkDataEvent.Load event) {
-        final int worldID=event.world.provider.dimensionId;
-        HashMap<ChunkCoordIntPair, int[]> chunkData = dimensionWiseChunkData.computeIfAbsent(worldID, k -> new HashMap<>(1024));
-        if (dimensionWisePollution.get(worldID) == null)
-            dimensionWisePollution.put(worldID, new GT_Pollution(event.world));
-
-        int[] tInts = chunkData.get(event.getChunk().getChunkCoordIntPair());
-        if (tInts == null) {
-            //NOT LOADED and NOT PROCESSED by pollution algorithms
-            //regular load
-            tInts = getDefaultChunkDataOnLoad();
-
-            if (event.getData().getByte("GTOILVER") == oilVer) {
-                if (event.getData().hasKey("GTOIL"))
-                    tInts[GTOIL] = event.getData().getInteger("GTOIL");
-                if (event.getData().hasKey("GTOILFLUID"))
-                    tInts[GTOILFLUID] = event.getData().getInteger("GTOILFLUID");
-            }
-
-            tInts[GTPOLLUTION] = event.getData().getInteger("GTPOLLUTION");//Defaults to 0
-
-            //store in HASH MAP if has useful data
-            if (tInts[GTPOLLUTION] > 0 || tInts[GTOIL] >= 0 || tInts[GTOILFLUID] >= 0)
-                chunkData.put(event.getChunk().getChunkCoordIntPair(), tInts);
-        } else if (tInts[GTMETADATA] == NOT_LOADED) {//was NOT loaded from chunk save game data
-            //NOT LOADED but generated
-            //append load
-            if (event.getData().getByte("GTOILVER") == oilVer) {
-                if (tInts[GTOIL] < 0 && event.getData().hasKey("GTOIL"))//if was not yet initialized
-                    tInts[GTOIL] = event.getData().getInteger("GTOIL");
-
-                if (tInts[GTOILFLUID] < 0 && event.getData().hasKey("GTOILFLUID"))//if was not yet initialized
-                    tInts[GTOILFLUID] = event.getData().getInteger("GTOILFLUID");
-            } else {
-                tInts[GTOIL] = -1;
-                tInts[GTOILFLUID] = -1;
-            }
-
-            tInts[GTPOLLUTION] += event.getData().getInteger("GTPOLLUTION");//Defaults to 0, add stored pollution to data
-            tInts[GTMETADATA] = LOADED;//mark as = loaded
-            //store in HASHMAP
-
-            chunkData.put(event.getChunk().getChunkCoordIntPair(), tInts);
-        }//else if(tInts[0]==1){
-        ////Already loaded chunk data
-        ////DO NOTHING - this chunk data was already loaded and stored in hash map
-        //}
+        GT_UndergroundOil.migrate(event);
+        GT_Pollution.migrate(event);
     }
     
     @SubscribeEvent

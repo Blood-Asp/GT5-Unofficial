@@ -28,6 +28,7 @@ import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import gregtech.common.items.behaviors.Behaviour_DataOrb;
 import gregtech.common.misc.GT_Command;
 import gregtech.common.tileentities.machines.basic.GT_MetaTileEntity_Massfabricator;
+import gregtech.common.tileentities.machines.long_distance.GT_MetaTileEntity_LongDistancePipelineBase;
 import gregtech.common.tileentities.machines.multi.GT_MetaTileEntity_Cleanroom;
 import gregtech.common.tileentities.storage.GT_MetaTileEntity_DigitalChestBase;
 import gregtech.loaders.ExtraIcons;
@@ -114,7 +115,7 @@ import static gregtech.api.enums.GT_Values.MOD_ID_FR;
                 " after:TConstruct;" +
                 " after:Translocator;")
 public class GT_Mod implements IGT_Mod {
-    public static final int VERSION = 509, SUBVERSION = 33;
+    public static final int VERSION = 509, SUBVERSION = 39;
     public static final int TOTAL_VERSION = calculateTotalGTVersion(VERSION, SUBVERSION);
     public static final int REQUIRED_IC2 = 624;
     @Mod.Instance("gregtech")
@@ -285,6 +286,7 @@ public class GT_Mod implements IGT_Mod {
         GT_Values.debugBlockMiner = tMainConfig.get(aTextGeneral, "debugBlockMiner", false).getBoolean(false);
         GT_Values.debugBlockPump = tMainConfig.get(aTextGeneral, "debugBlockPump", false).getBoolean(false);
         GT_Values.debugEntityCramming = tMainConfig.get(aTextGeneral, "debugEntityCramming", false).getBoolean(false);
+        GT_Values.debugWorldData = tMainConfig.get(aTextGeneral, "debugWorldData", false).getBoolean(false);
         GT_Values.oreveinPercentage = tMainConfig.get(aTextGeneral, "oreveinPercentage_100", 100).getInt(100);
         GT_Values.oreveinAttempts = tMainConfig.get(aTextGeneral, "oreveinAttempts_64", 64).getInt(64);
         GT_Values.oreveinMaxPlacementAttempts = tMainConfig.get(aTextGeneral, "oreveinMaxPlacementAttempts_8", 8).getInt(8);
@@ -409,6 +411,7 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.ic2EnergySourceCompat = tMainConfig.get("general", "Ic2EnergySourceCompat", true).getBoolean(true);
         gregtechproxy.costlyCableConnection = tMainConfig.get("general", "CableConnectionRequiresSolderingMaterial", false).getBoolean(false);
         GT_LanguageManager.i18nPlaceholder = tMainConfig.get("general", "EnablePlaceholderForMaterialNamesInLangFile", true).getBoolean(true);
+        GT_MetaTileEntity_LongDistancePipelineBase.minimalDistancePoints = tMainConfig.get("general", "LongDistancePipelineMinimalDistancePoints", 64).getInt(64);
 
         GregTech_API.mUseOnlyGoodSolderingMaterials = GregTech_API.sRecipeFile.get(ConfigCategories.Recipes.harderrecipes, "useonlygoodsolderingmaterials", GregTech_API.mUseOnlyGoodSolderingMaterials);
         gregtechproxy.mChangeHarvestLevels = GregTech_API.sMaterialProperties.get("havestLevel", "activateHarvestLevelChange", false);//TODO CHECK

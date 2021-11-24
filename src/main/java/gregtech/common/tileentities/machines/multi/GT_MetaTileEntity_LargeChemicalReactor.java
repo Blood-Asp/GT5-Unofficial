@@ -11,6 +11,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMul
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Single_Recipe_Check;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -123,68 +124,98 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_En
     }
 
     @Override
+    public boolean supportsSingleRecipeLocking() {
+        return true;
+    }
+
+    @Override
     public boolean checkRecipe(ItemStack aStack) {
-        ArrayList<ItemStack> tInputList = getStoredInputs();
-        int tInputList_sS = tInputList.size();
-        for (int i = 0; i < tInputList_sS - 1; i++) {
-            for (int j = i + 1; j < tInputList_sS; j++) {
-                if (GT_Utility.areStacksEqual(tInputList.get(i), tInputList.get(j))) {
-                    if (tInputList.get(i).stackSize >= tInputList.get(j).stackSize) {
-                        tInputList.remove(j--);
-                        tInputList_sS = tInputList.size();
-                    } else {
-                        tInputList.remove(i--);
-                        tInputList_sS = tInputList.size();
-                        break;
+        long tVoltage = getMaxInputVoltage();
+        byte tier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
+        GT_Recipe tRecipe;
+
+        if (mLockedToSingleRecipe && mSingleRecipeCheck != null) {
+            if (!mSingleRecipeCheck.checkRecipeInputsSingleStack(true)) {
+                return false;
+            }
+
+            tRecipe = mSingleRecipeCheck.getRecipe();
+        } else {
+            ArrayList<ItemStack> tInputList = getStoredInputs();
+            int tInputList_sS = tInputList.size();
+            for (int i = 0; i < tInputList_sS - 1; i++) {
+                for (int j = i + 1; j < tInputList_sS; j++) {
+                    if (GT_Utility.areStacksEqual(tInputList.get(i), tInputList.get(j))) {
+                        if (tInputList.get(i).stackSize >= tInputList.get(j).stackSize) {
+                            tInputList.remove(j--);
+                            tInputList_sS = tInputList.size();
+                        } else {
+                            tInputList.remove(i--);
+                            tInputList_sS = tInputList.size();
+                            break;
+                        }
                     }
                 }
             }
-        }
-        tInputList.add(mInventory[1]);
-        ItemStack[] inputs = tInputList.toArray(new ItemStack[0]);
+            tInputList.add(mInventory[1]);
+            ItemStack[] inputs = tInputList.toArray(new ItemStack[0]);
 
-        ArrayList<FluidStack> tFluidList = getStoredFluids();
-        int tFluidList_sS = tFluidList.size();
-        for (int i = 0; i < tFluidList_sS - 1; i++) {
-            for (int j = i + 1; j < tFluidList_sS; j++) {
-                if (GT_Utility.areFluidsEqual(tFluidList.get(i), tFluidList.get(j))) {
-                    if (tFluidList.get(i).amount >= tFluidList.get(j).amount) {
-                        tFluidList.remove(j--);
-                        tFluidList_sS = tFluidList.size();
-                    } else {
-                        tFluidList.remove(i--);
-                        tFluidList_sS = tFluidList.size();
-                        break;
+            ArrayList<FluidStack> tFluidList = getStoredFluids();
+            int tFluidList_sS = tFluidList.size();
+            for (int i = 0; i < tFluidList_sS - 1; i++) {
+                for (int j = i + 1; j < tFluidList_sS; j++) {
+                    if (GT_Utility.areFluidsEqual(tFluidList.get(i), tFluidList.get(j))) {
+                        if (tFluidList.get(i).amount >= tFluidList.get(j).amount) {
+                            tFluidList.remove(j--);
+                            tFluidList_sS = tFluidList.size();
+                        } else {
+                            tFluidList.remove(i--);
+                            tFluidList_sS = tFluidList.size();
+                            break;
+                        }
                     }
                 }
             }
-        }
-        FluidStack[] fluids = tFluidList.toArray(new FluidStack[0]);
+            FluidStack[] fluids = tFluidList.toArray(new FluidStack[0]);
 
-        if (inputs.length > 0 || fluids.length > 0) {
-            long tVoltage = getMaxInputVoltage();
-            byte tier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
-            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.findRecipe(getBaseMetaTileEntity(), false,
+            if (inputs.length == 0 && fluids.length == 0) {
+                return false;
+            }
+
+            GT_Single_Recipe_Check.Builder tSingleRecipeCheckBuilder = null;
+            if (mLockedToSingleRecipe) {
+                // We're locked to a single recipe, but haven't built the recipe checker yet.
+                // Build the checker on next successful recipe.
+                tSingleRecipeCheckBuilder = GT_Single_Recipe_Check.builder(this).setBefore();
+            }
+
+            tRecipe = GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.findRecipe(getBaseMetaTileEntity(), false,
                     false, gregtech.api.enums.GT_Values.V[tier], fluids, inputs);
-            if (tRecipe != null && tRecipe.isRecipeInputEqual(true, fluids, inputs)) {
-                this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
-                this.mEfficiencyIncrease = 10000;
 
-                calculatePerfectOverclockedNessMulti(tRecipe.mEUt, tRecipe.mDuration, 1, tVoltage);
-                //In case recipe is too OP for that machine
-                if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
-                    return false;
-                if (this.mEUt > 0) {
-                    this.mEUt = (-this.mEUt);
-                }
+            if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, fluids, inputs)) {
+                return false;
+            }
 
-                this.mOutputItems = tRecipe.mOutputs;
-                this.mOutputFluids = tRecipe.mFluidOutputs;
-                this.updateSlots();
-                return true;
+            if (mLockedToSingleRecipe) {
+                mSingleRecipeCheck = tSingleRecipeCheckBuilder.setAfter().setRecipe(tRecipe).build();
             }
         }
-        return false;
+
+        this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
+        this.mEfficiencyIncrease = 10000;
+
+        calculatePerfectOverclockedNessMulti(tRecipe.mEUt, tRecipe.mDuration, 1, tVoltage);
+        //In case recipe is too OP for that machine
+        if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+            return false;
+        if (this.mEUt > 0) {
+            this.mEUt = (-this.mEUt);
+        }
+
+        this.mOutputItems = tRecipe.mOutputs;
+        this.mOutputFluids = tRecipe.mFluidOutputs;
+        this.updateSlots();
+        return true;
     }
 
     @Override

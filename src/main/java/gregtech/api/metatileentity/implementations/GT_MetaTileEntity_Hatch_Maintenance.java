@@ -16,12 +16,16 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
+import ic2.core.IHasGui;
+import ic2.core.Ic2Items;
+import ic2.core.item.ItemToolbox;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import java.util.HashSet;
 
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_AUTOMAINTENANCE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_AUTOMAINTENANCE_GLOW;
@@ -218,17 +222,37 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
 
     public void onToolClick(ItemStack aStack, EntityLivingBase aPlayer) {
         if (aStack == null || aPlayer == null) return;
-        if (GT_Utility.isStackInList(aStack, GregTech_API.sWrenchList) && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer))
+        
+        // Allow IC2 Toolbox with tools to function for maint issues.
+        if (aStack.getItem() instanceof ItemToolbox && aPlayer instanceof EntityPlayer) {
+        	EntityPlayer aPlayerEntity = (EntityPlayer) aPlayer;
+        	ItemToolbox aToolbox = (ItemToolbox) aStack.getItem();
+        	IHasGui aToolboxGUI = aToolbox.getInventory(aPlayerEntity, aStack);
+        	HashSet<ItemStack> aToolboxContents = new HashSet<ItemStack>();
+        	for (int i=0; i<aToolboxGUI.getSizeInventory(); i++) {
+        		ItemStack aTemp = aToolboxGUI.getStackInSlot(i);
+        		if (aTemp != null) {
+        			aToolboxContents.add(aTemp);
+        		}
+        	}
+        	if (!aToolboxContents.isEmpty()) {
+        		for (ItemStack aTool : aToolboxContents) {
+        			onToolClick(aTool, aPlayer);
+        		}
+        	}
+        }
+        
+        if (GT_Utility.isStackInList(aStack, GregTech_API.sWrenchList) && !mWrench && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer))
             mWrench = true;
-        if (GT_Utility.isStackInList(aStack, GregTech_API.sScrewdriverList) && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer))
+        if (GT_Utility.isStackInList(aStack, GregTech_API.sScrewdriverList) && !mScrewdriver && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer))
             mScrewdriver = true;
-        if (GT_Utility.isStackInList(aStack, GregTech_API.sSoftHammerList) && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer))
+        if (GT_Utility.isStackInList(aStack, GregTech_API.sSoftHammerList) && !mSoftHammer && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer))
             mSoftHammer = true;
-        if (GT_Utility.isStackInList(aStack, GregTech_API.sHardHammerList) && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer))
+        if (GT_Utility.isStackInList(aStack, GregTech_API.sHardHammerList) && !mHardHammer && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer))
             mHardHammer = true;
-        if (GT_Utility.isStackInList(aStack, GregTech_API.sCrowbarList) && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer))
+        if (GT_Utility.isStackInList(aStack, GregTech_API.sCrowbarList) && !mCrowbar && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer))
             mCrowbar = true;
-        if (GT_ModHandler.useSolderingIron(aStack, aPlayer)) mSolderingTool = true;
+        if (!mSolderingTool && GT_ModHandler.useSolderingIron(aStack, aPlayer)) mSolderingTool = true;
         if (GT_OreDictUnificator.isItemStackInstanceOf(aStack, "craftingDuctTape")) {
             mWrench = mScrewdriver = mSoftHammer = mHardHammer = mCrowbar = mSolderingTool = true;
             getBaseMetaTileEntity().setActive(false);

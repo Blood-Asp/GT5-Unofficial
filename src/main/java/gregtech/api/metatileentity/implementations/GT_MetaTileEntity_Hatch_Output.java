@@ -29,7 +29,7 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
     public GT_MetaTileEntity_Hatch_Output(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 4, new String[]{
                 "Fluid Output for Multiblocks",
-                "Capacity: "  + GT_Utility.formatNumbers(8000+8000*(aTier*(aTier+1)>>1)) + "L",
+                "Capacity: "  + GT_Utility.formatNumbers(8000*(1<<aTier)) + "L",
                 "Right click with screwdriver to restrict output",
                 "Can be restricted to put out Items and/or Steam/No Steam/1 specific Fluid",
                 "Restricted Output Hatches are given priority for Multiblock Fluid output"});
@@ -92,18 +92,14 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
-        if (aBaseMetaTileEntity.isServerSide() && aBaseMetaTileEntity.isAllowedToWork() && (aTick&0x7)==0) {
+        if (aBaseMetaTileEntity.isServerSide() && aBaseMetaTileEntity.isAllowedToWork() && mFluid != null) {
             IFluidHandler tTileEntity = aBaseMetaTileEntity.getITankContainerAtSide(aBaseMetaTileEntity.getFrontFacing());
             if (tTileEntity != null) {
-                for (boolean temp = true; temp && mFluid != null; ) {
-                    temp = false;
-                    FluidStack tDrained = aBaseMetaTileEntity.drain(ForgeDirection.getOrientation(aBaseMetaTileEntity.getFrontFacing()), Math.max(1, mFluid.amount), false);
-                    if (tDrained != null) {
-                        int tFilledAmount = tTileEntity.fill(ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()), tDrained, false);
-                        if (tFilledAmount > 0) {
-                            temp = true;
-                            tTileEntity.fill(ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()), aBaseMetaTileEntity.drain(ForgeDirection.getOrientation(aBaseMetaTileEntity.getFrontFacing()), tFilledAmount, true), true);
-                        }
+                FluidStack tDrained = aBaseMetaTileEntity.drain(ForgeDirection.getOrientation(aBaseMetaTileEntity.getFrontFacing()), Math.max(1, mFluid.amount), false);
+                if (tDrained != null) {
+                    int tFilledAmount = tTileEntity.fill(ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()), tDrained, false);
+                    if (tFilledAmount > 0) {
+                        tTileEntity.fill(ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()), aBaseMetaTileEntity.drain(ForgeDirection.getOrientation(aBaseMetaTileEntity.getFrontFacing()), tFilledAmount, true), true);
                     }
                 }
             }
@@ -162,7 +158,7 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
         if (lockedFluidName == null || mMode < 8) mInventory[3] = null;
         else {
             FluidStack tLockedFluid = FluidRegistry.getFluidStack(lockedFluidName.replace("fluid.", "")
-                    .replace(".name", "").replace("ic2.fluid", "ic2").toLowerCase(), 1);
+                .replace("tile.", "").replace(".name", "").replace("ic2.fluid", "ic2").toLowerCase(), 1);
             // Because getStackDisplaySlot() only allow return one int, this place I only can manually set.
             if (tLockedFluid != null) {
                 mInventory[3] = GT_Utility.getFluidDisplayStack(tLockedFluid, false, true);
@@ -201,12 +197,12 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
 
     @Override
     public int getCapacity() {
-        return 8000+8000*(mTier*(mTier+1)>>1);
+        return 8000*(1<<mTier);
     }
 
     @Override
     public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (!getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).isGUIClickable(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), getBaseMetaTileEntity()))
+        if (!getBaseMetaTileEntity().getCoverBehaviorAtSideNew(aSide).isGUIClickable(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getComplexCoverDataAtSide(aSide), getBaseMetaTileEntity()))
             return;
         if (aPlayer.isSneaking()) {
             mMode = (byte) ((mMode + 9) % 10);
@@ -273,7 +269,7 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
     }
 
     private boolean tryToLockHatch(EntityPlayer aPlayer, byte aSide) {
-        if (!getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).isGUIClickable(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), getBaseMetaTileEntity()))
+        if (!getBaseMetaTileEntity().getCoverBehaviorAtSideNew(aSide).isGUIClickable(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getComplexCoverDataAtSide(aSide), getBaseMetaTileEntity()))
             return false;
         if (!isFluidLocked())
             return false;
@@ -329,7 +325,7 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
         return mMode % 4 < 2 && mMode != 9;
     }
 
-    public boolean isFluidLocked(){
+    public boolean isFluidLocked() {
         return mMode == 8 || mMode == 9;
     }
 
@@ -367,7 +363,7 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
                 EnumChatFormatting.GOLD + (mFluid == null ? "No Fluid" : mFluid.getLocalizedName()) + EnumChatFormatting.RESET,
                 EnumChatFormatting.GREEN + GT_Utility.formatNumbers(mFluid == null ? 0 : mFluid.amount) + " L" + EnumChatFormatting.RESET + " " +
                         EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(getCapacity()) + " L"+ EnumChatFormatting.RESET,
-                lockedFluidName == null ? "Not Locked" : ("Locked to " + StatCollector.translateToLocal(getLockedFluidName()))
+            (!isFluidLocked() || lockedFluidName == null) ? "Not Locked" : ("Locked to " + StatCollector.translateToLocal(getLockedFluidName()))
         };
     }
 }
