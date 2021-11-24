@@ -36,6 +36,10 @@ repositories {
         name = 'gtnh_download_source'
         artifactPattern("http://downloads.gtnewhorizons.com/Mods_for_Jenkins/[module]-[revision].[ext]")
     }
+
+    maven {
+        url "https://cursemaven.com"
+    }
     maven {
         name = "jitpack.io"
         url = "https://jitpack.io"
