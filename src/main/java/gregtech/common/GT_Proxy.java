@@ -194,7 +194,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public int mPollutionCharcoalPit = 5;
     public int mPollutionLargeCombustionEngine = 24;
     public int mPollutionExtremeCombustionEngine = 192;
-    public int mPollutionImplosionCompressor = 500;
+    public int mPollutionImplosionCompressorPerSecond = 10000;
     public int mPollutionLargeBronzeBoilerPerSecond = 1000;
     public int mPollutionLargeSteelBoilerPerSecond = 2000;
     public int mPollutionLargeTitaniumBoilerPerSecond = 3000;

@@ -46,7 +46,7 @@ public class GT_MetaTileEntity_ImplosionCompressor extends GT_MetaTileEntity_Cub
         tt.addMachineType("Implosion Compressor")
                 .addInfo("Explosions are fun")
                 .addInfo("Controller block for the Implosion Compressor")
-                .addPollutionAmount(20 * getPollutionPerTick(null))
+                .addPollutionAmount(getPollutionPerSecond(null))
                 .addSeparator()
                 .beginStructureBlock(3, 3, 3, true)
                 .addController("Front center")
@@ -165,9 +165,13 @@ public class GT_MetaTileEntity_ImplosionCompressor extends GT_MetaTileEntity_Cub
 
     @Override
     public int getPollutionPerTick(ItemStack aStack) {
-        return GT_Mod.gregtechproxy.mPollutionImplosionCompressor;
+        return getPollutionPerSecond(aStack)/20;
     }
 
+    @Override
+    public int getPollutionPerSecond(ItemStack aStack){
+        return GT_Mod.gregtechproxy.mPollutionImplosionCompressorPerSecond;
+    }
     @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
