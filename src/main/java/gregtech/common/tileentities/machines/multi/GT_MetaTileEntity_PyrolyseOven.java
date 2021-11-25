@@ -92,7 +92,7 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_EnhancedMu
                 .addInfo("Processing speed scales linearly with Coil tier:")
                 .addInfo("CuNi: 50%, FeAlCr: 100%, Ni4Cr: 150%, Fe50CW: 200%, etc.")
                 .addInfo("EU/t is not affected by Coil tier")
-                .addPollutionAmount(20 * getPollutionPerTick(null))
+                .addPollutionAmount(getPollutionPerSecond(null))
                 .addSeparator()
                 .beginStructureBlock(5, 4, 5, true)
                 .addController("Front center")
@@ -226,8 +226,13 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_EnhancedMu
     }
 
     @Override
-    public int getPollutionPerTick(ItemStack aStack) {
-        return GT_Mod.gregtechproxy.mPollutionPyrolyseOven;
+    public int getPollutionPerSecond(ItemStack aStack) {
+        return GT_Mod.gregtechproxy.mPollutionPyrolyseOvenPerSecond;
+    }
+
+    @Override
+    public int getPollutionPerTick(ItemStack aStack){
+        return getPollutionPerSecond(aStack)/20;
     }
 
     @Override
