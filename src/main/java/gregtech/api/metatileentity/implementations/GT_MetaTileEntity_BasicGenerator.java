@@ -214,6 +214,7 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
                     long tFluidAmountToUse = Math.min(mFluid.amount / tConsumed, (maxEUStore() - aBaseMetaTileEntity.getUniversalEnergyStored()) / tFuelValue);
 					//long tFluidAmountToUse = Math.min(mFluid.amount / tConsumed, (maxEUOutput() * 20 + getMinimumStoredEU() - aBaseMetaTileEntity.getUniversalEnergyStored()) / tFuelValue);//TODO CHECK
                     if (tFluidAmountToUse > 0 && aBaseMetaTileEntity.increaseStoredEnergyUnits(tFluidAmountToUse * tFuelValue, true)) {
+                        // divided by two because this is called every 10 ticks, not 20
                         GT_Pollution.addPollution(getBaseMetaTileEntity(),getPollution()/2);
                         mFluid.amount -= tFluidAmountToUse * tConsumed;
                     }
@@ -229,6 +230,7 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
                     if (aBaseMetaTileEntity.addStackToSlot(getOutputSlot(), tEmptyContainer)) {
                         aBaseMetaTileEntity.increaseStoredEnergyUnits(tFuelValue, true);
                         aBaseMetaTileEntity.decrStackSize(getInputSlot(), 1);
+                        // divided by two because this is called every 10 ticks, not 20
                         GT_Pollution.addPollution(getBaseMetaTileEntity(),getPollution()/2);
                     }
                 }
