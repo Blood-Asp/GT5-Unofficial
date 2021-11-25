@@ -206,8 +206,10 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public int mPollutionSmallCoalBoilerPerSecond = 20;
     public int mPollutionHighPressureLavaBoilerPerSecond = 20;
     public int mPollutionHighPressureCoalBoilerPerSecond = 30;
-    public int mPollutionBaseDieselGenerator = 2;
-    public int mPollutionBaseGasTurbine = 1;
+    public int mPollutionBaseDieselGeneratorPerSecond = 200;
+    public double[] mPollutionDieselGeneratorReleasedByTier = new double[]{0.1, 1.0, 0.9, 0.8};
+    public int mPollutionBaseGasTurbinePerSecond = 200;
+    public double[] mPollutionGasTurbineReleasedByTier = new double[]{0.1, 1.0, 0.9, 0.8};
     public final GT_UO_DimensionList mUndergroundOil = new GT_UO_DimensionList();
     public int mTicksUntilNextCraftSound = 0;
     public double mMagneticraftBonusOutputPercent = 100.0d;

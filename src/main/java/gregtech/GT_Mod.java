@@ -403,8 +403,9 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mPollutionSmallCoalBoilerPerSecond = tMainConfig.get("Pollution", "PollutionSmallCoalBoiler", gregtechproxy.mPollutionSmallCoalBoilerPerSecond).getInt(gregtechproxy.mPollutionSmallCoalBoilerPerSecond);
         gregtechproxy.mPollutionHighPressureLavaBoilerPerSecond = tMainConfig.get("Pollution", "PollutionHighPressureLavaBoiler", gregtechproxy.mPollutionHighPressureLavaBoilerPerSecond).getInt(gregtechproxy.mPollutionHighPressureLavaBoilerPerSecond);
         gregtechproxy.mPollutionHighPressureCoalBoilerPerSecond = tMainConfig.get("Pollution", "PollutionHighPressureCoalBoiler", gregtechproxy.mPollutionHighPressureCoalBoilerPerSecond).getInt(gregtechproxy.mPollutionHighPressureCoalBoilerPerSecond);
-        gregtechproxy.mPollutionBaseDieselGenerator = tMainConfig.get("Pollution", "PollutionBaseDieselGenerator",gregtechproxy.mPollutionBaseDieselGenerator).getInt(gregtechproxy.mPollutionBaseDieselGenerator);
-        gregtechproxy.mPollutionBaseGasTurbine = tMainConfig.get("Pollution", "PollutionBaseDieselGenerator", gregtechproxy.mPollutionBaseGasTurbine).getInt(gregtechproxy.mPollutionBaseGasTurbine);
+        gregtechproxy.mPollutionBaseDieselGeneratorPerSecond = tMainConfig.get("Pollution", "PollutionBaseDieselGenerator",gregtechproxy.mPollutionBaseDieselGeneratorPerSecond).getInt(gregtechproxy.mPollutionBaseDieselGeneratorPerSecond);
+        gregtechproxy.mPollutionDieselGeneratorReleasedByTier = tMainConfig.get("Pollution", "PollutionReleasedByTier", gregtechproxy.mPollutionDieselGeneratorReleasedByTier).getDoubleList();
+        gregtechproxy.mPollutionBaseGasTurbinePerSecond = tMainConfig.get("Pollution", "PollutionBaseDieselGenerator", gregtechproxy.mPollutionBaseGasTurbinePerSecond).getInt(gregtechproxy.mPollutionBaseGasTurbinePerSecond);
 
         gregtechproxy.mUndergroundOil.getConfig(tMainConfig, "undergroundfluid");
         gregtechproxy.mEnableCleanroom = tMainConfig.get("general", "EnableCleanroom", true).getBoolean(true);

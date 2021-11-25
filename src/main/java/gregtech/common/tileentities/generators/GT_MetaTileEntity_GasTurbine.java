@@ -20,7 +20,7 @@ public class GT_MetaTileEntity_GasTurbine extends GT_MetaTileEntity_BasicGenerat
     public GT_MetaTileEntity_GasTurbine(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, new String[]{
                 "Requires flammable Gasses",
-                "Causes " + (int) (20 * GT_Mod.gregtechproxy.mPollutionBaseGasTurbine * Math.pow(2, aTier - 1)) + " Pollution per second"});
+                "Causes " + (int) (GT_Mod.gregtechproxy.mPollutionBaseGasTurbinePerSecond * GT_Mod.gregtechproxy.mPollutionGasTurbineReleasedByTier[aTier]) + " Pollution per second"});
         onConfigLoad();
     }
 
@@ -138,6 +138,6 @@ public class GT_MetaTileEntity_GasTurbine extends GT_MetaTileEntity_BasicGenerat
 
     @Override
     public int getPollution() {
-        return (int) (GT_Mod.gregtechproxy.mPollutionBaseGasTurbine * Math.pow(2, mTier - 1));
+        return (int) (GT_Mod.gregtechproxy.mPollutionBaseGasTurbinePerSecond * GT_Mod.gregtechproxy.mPollutionGasTurbineReleasedByTier[mTier]);
     }
 }
