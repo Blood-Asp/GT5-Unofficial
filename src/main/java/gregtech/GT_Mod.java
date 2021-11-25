@@ -388,7 +388,7 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mExplosionItemDrop = tMainConfig.get("general", "ExplosionItemDrops", gregtechproxy.mExplosionItemDrop).getBoolean(gregtechproxy.mExplosionItemDrop);
         gregtechproxy.mPollutionPrimitveBlastFurnacePerSecond = tMainConfig.get("Pollution", "PollutionPrimitiveBlastFurnace", gregtechproxy.mPollutionPrimitveBlastFurnacePerSecond).getInt(gregtechproxy.mPollutionPrimitveBlastFurnacePerSecond);
         gregtechproxy.mPollutionCharcoalPit = tMainConfig.get("Pollution", "PollutionCharcoalPit", gregtechproxy.mPollutionCharcoalPit).getInt(gregtechproxy.mPollutionCharcoalPit);
-        gregtechproxy.mPollutionEBF = tMainConfig.get("Pollution", "PollutionEBF", gregtechproxy.mPollutionEBF).getInt(gregtechproxy.mPollutionEBF);
+        gregtechproxy.mPollutionEBFPerSecond = tMainConfig.get("Pollution", "PollutionEBF", gregtechproxy.mPollutionEBFPerSecond).getInt(gregtechproxy.mPollutionEBFPerSecond);
         gregtechproxy.mPollutionLargeCombustionEnginePerSecond = tMainConfig.get("Pollution", "PollutionLargeCombustionEngine",gregtechproxy.mPollutionLargeCombustionEnginePerSecond).getInt(gregtechproxy.mPollutionLargeCombustionEnginePerSecond);
         gregtechproxy.mPollutionExtremeCombustionEnginePerSecond = tMainConfig.get("Pollution", "PollutionExtremeCombustionEngine",gregtechproxy.mPollutionExtremeCombustionEnginePerSecond).getInt(gregtechproxy.mPollutionExtremeCombustionEnginePerSecond);
         gregtechproxy.mPollutionImplosionCompressorPerSecond = tMainConfig.get("Pollution", "PollutionImplosionCompressor", gregtechproxy.mPollutionImplosionCompressorPerSecond).getInt(gregtechproxy.mPollutionImplosionCompressorPerSecond);

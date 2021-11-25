@@ -19,7 +19,6 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Outpu
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_StructureUtility;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -89,7 +88,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace extends GT_MetaTileEntity_Ab
                 .addInfo("Each 1800K over the min. Heat required allows for one upgraded overclock instead of normal")
                 .addInfo("Upgraded overclocks reduce recipe time to 25% (instead of 50%) and increase EU/t to 400%")
                 .addInfo("Additionally gives +100K for every tier past MV")
-                .addPollutionAmount(20 * getPollutionPerTick(null))
+                .addPollutionAmount(getPollutionPerSecond(null))
                 .addSeparator()
                 .beginStructureBlock(3, 4, 3, true)
                 .addController("Front bottom")
@@ -130,8 +129,13 @@ public class GT_MetaTileEntity_ElectricBlastFurnace extends GT_MetaTileEntity_Ab
     }
 
     @Override
+    public int getPollutionPerSecond(ItemStack aStack){
+        return GT_Mod.gregtechproxy.mPollutionEBFPerSecond;
+    }
+
+    @Override
     public int getPollutionPerTick(ItemStack aStack){
-        return GT_Mod.gregtechproxy.mPollutionEBF;
+        return getPollutionPerSecond(aStack)/20;
     }
 
     @Override
