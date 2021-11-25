@@ -398,7 +398,7 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mPollutionLargeTungstenSteelBoilerPerSecond = tMainConfig.get("Pollution", "PollutionLargeTungstenSteelBoiler", gregtechproxy.mPollutionLargeTungstenSteelBoilerPerSecond).getInt(gregtechproxy.mPollutionLargeTungstenSteelBoilerPerSecond);
         gregtechproxy.mPollutionReleasedByThrottle = tMainConfig.get("Pollution", "PollutionReleasedByThrottle", gregtechproxy.mPollutionReleasedByThrottle).getDouble(gregtechproxy.mPollutionReleasedByThrottle);
         gregtechproxy.mPollutionLargeGasTurbinePerSecond = tMainConfig.get("Pollution", "PollutionLargeGasTurbine",  gregtechproxy.mPollutionLargeGasTurbinePerSecond).getInt( gregtechproxy.mPollutionLargeGasTurbinePerSecond);
-        gregtechproxy.mPollutionMultiSmelter = tMainConfig.get("Pollution", "PollutionMultiSmelter", gregtechproxy.mPollutionMultiSmelter).getInt(gregtechproxy.mPollutionMultiSmelter);
+        gregtechproxy.mPollutionMultiSmelterPerSecond = tMainConfig.get("Pollution", "PollutionMultiSmelter", gregtechproxy.mPollutionMultiSmelterPerSecond).getInt(gregtechproxy.mPollutionMultiSmelterPerSecond);
         gregtechproxy.mPollutionPyrolyseOven = tMainConfig.get("Pollution", "PollutionPyrolyseOven", gregtechproxy.mPollutionPyrolyseOven).getInt(gregtechproxy.mPollutionPyrolyseOven);
         gregtechproxy.mPollutionSmallCoalBoiler = tMainConfig.get("Pollution", "PollutionSmallCoalBoiler", gregtechproxy.mPollutionSmallCoalBoiler).getInt(gregtechproxy.mPollutionSmallCoalBoiler);
         gregtechproxy.mPollutionHighPressureLavaBoiler = tMainConfig.get("Pollution", "PollutionHighPressureLavaBoiler", gregtechproxy.mPollutionHighPressureLavaBoiler).getInt(gregtechproxy.mPollutionHighPressureLavaBoiler);
