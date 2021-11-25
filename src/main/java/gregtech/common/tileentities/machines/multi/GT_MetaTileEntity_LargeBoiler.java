@@ -90,7 +90,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_En
                 .addInfo("Produces " + (getEUt() * 40) * (runtimeBoost(20) / 20f) + "L of Steam with 1 Coal at " + getEUt() * 40 + "L/s")//?
                 .addInfo("A programmed circuit in the main block throttles the boiler (-1000L/s per config)")
                 .addInfo(String.format("Diesel fuels have 1/4 efficiency - Takes %.2f seconds to heat up", 500.0 / getEfficiencyIncrease()))//? check semifluid again
-                .addPollutionAmount(20 * getPollutionPerTick(null))
+                .addPollutionAmount(getPollutionPerSecond(null))
                 .addSeparator()
                 .beginStructureBlock(3, 5, 3, false)
                 .addController("Front bottom")

@@ -401,6 +401,13 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     public abstract int getPollutionPerTick(ItemStack aStack);
 
     /**
+     * Gets the pollution produced per second by this multiblock
+     */
+    public int getPollutionPerSecond(ItemStack aStack){
+        return 20 * getPollutionPerTick(aStack);
+    }
+
+    /**
      * Gets the damage to the ItemStack, usually 0 or 1.
      */
     public abstract int getDamageToComponent(ItemStack aStack);
