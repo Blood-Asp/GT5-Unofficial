@@ -73,6 +73,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_En
     private int excessProjectedEU = 0; //Eliminate rounding errors from throttling the boiler
     private int mCasingAmount;
     private int mFireboxAmount;
+    protected int pollutionPerSecond = 1; //placeholder for the child classes
 
     public GT_MetaTileEntity_LargeBoiler(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -134,6 +135,17 @@ public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_En
 
     public int getIntegratedCircuitConfig(){
         return integratedCircuitConfig;
+    }
+
+    @Override
+    public int getPollutionPerSecond(ItemStack aStack) {
+        //allows for 0 pollution if circuit throttle is too high
+        return Math.max(0, (int) (pollutionPerSecond * (1-GT_Mod.gregtechproxy.mPollutionReleasedByThrottle*getIntegratedCircuitConfig())));
+    }
+
+    @Override
+    public int getPollutionPerTick(ItemStack aStack){
+        return getPollutionPerSecond(aStack)/20;
     }
 
     @Override

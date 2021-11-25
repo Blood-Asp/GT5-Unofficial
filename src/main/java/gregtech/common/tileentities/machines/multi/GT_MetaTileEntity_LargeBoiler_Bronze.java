@@ -8,28 +8,20 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
 public class GT_MetaTileEntity_LargeBoiler_Bronze extends GT_MetaTileEntity_LargeBoiler {
+
     public GT_MetaTileEntity_LargeBoiler_Bronze(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        pollutionPerSecond = GT_Mod.gregtechproxy.mPollutionLargeBronzeBoilerPerSecond;
     }
 
     public GT_MetaTileEntity_LargeBoiler_Bronze(String aName) {
         super(aName);
+        pollutionPerSecond = GT_Mod.gregtechproxy.mPollutionLargeBronzeBoilerPerSecond;
     }
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_LargeBoiler_Bronze(this.mName);
-    }
-
-    @Override
-    public int getPollutionPerSecond(ItemStack aStack) {
-        int integratedCircuitConfig = getIntegratedCircuitConfig();
-        return Math.max(1, (int) (GT_Mod.gregtechproxy.mPollutionLargeBronzeBoilerPerSecond/(GT_Mod.gregtechproxy.mPollutionReleasedByThrottle * integratedCircuitConfig)));
-    }
-
-    @Override
-    public int getPollutionPerTick(ItemStack aStack){
-        return getPollutionPerSecond(aStack)/20;
     }
 
     @Override

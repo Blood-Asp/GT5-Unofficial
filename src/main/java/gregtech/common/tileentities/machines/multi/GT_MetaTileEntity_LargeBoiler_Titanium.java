@@ -10,26 +10,17 @@ import net.minecraft.item.ItemStack;
 public class GT_MetaTileEntity_LargeBoiler_Titanium extends GT_MetaTileEntity_LargeBoiler {
     public GT_MetaTileEntity_LargeBoiler_Titanium(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        pollutionPerSecond = GT_Mod.gregtechproxy.mPollutionLargeTitaniumBoilerPerSecond;
     }
 
     public GT_MetaTileEntity_LargeBoiler_Titanium(String aName) {
         super(aName);
+        pollutionPerSecond = GT_Mod.gregtechproxy.mPollutionLargeTitaniumBoilerPerSecond;
     }
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_LargeBoiler_Titanium(this.mName);
-    }
-
-    @Override
-    public int getPollutionPerSecond(ItemStack aStack) {
-        int integratedCircuitConfig = getIntegratedCircuitConfig();
-        return Math.max(1, (int) (GT_Mod.gregtechproxy.mPollutionLargeTitaniumBoilerPerSecond/(GT_Mod.gregtechproxy.mPollutionReleasedByThrottle * integratedCircuitConfig)));
-    }
-
-    @Override
-    public int getPollutionPerTick(ItemStack aStack){
-        return getPollutionPerSecond(aStack)/20;
     }
 
     @Override
