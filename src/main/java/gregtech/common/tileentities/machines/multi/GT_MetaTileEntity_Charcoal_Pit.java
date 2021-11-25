@@ -202,8 +202,13 @@ public class GT_MetaTileEntity_Charcoal_Pit extends GT_MetaTileEntity_MultiBlock
     }
 
     @Override
-    public int getPollutionPerTick(ItemStack aStack) {
-        return GT_Mod.gregtechproxy.mPollutionCharcoalPit;
+    public int getPollutionPerSecond(ItemStack aStack) {
+        return GT_Mod.gregtechproxy.mPollutionCharcoalPitPerSecond;
+    }
+
+    @Override
+    public int getPollutionPerTick(ItemStack aStack){
+        return getPollutionPerSecond(aStack)/20;
     }
 
     @Override
@@ -233,7 +238,7 @@ public class GT_MetaTileEntity_Charcoal_Pit extends GT_MetaTileEntity_MultiBlock
                 .addInfo("Controller for the Charcoal Pit")
                 .addInfo("Converts Logs into Brittle Charcoal blocks")
                 .addInfo("Will automatically start when valid")
-                .addPollutionAmount(20*getPollutionPerTick(null))
+                .addPollutionAmount(getPollutionPerSecond(null))
                 .addSeparator()
                 .beginVariableStructureBlock(3, 11, 3, 6, 3, 11, false)
                 .addStructureInfo("Can be up to 11x6x11 in size, shape doesn't matter")
