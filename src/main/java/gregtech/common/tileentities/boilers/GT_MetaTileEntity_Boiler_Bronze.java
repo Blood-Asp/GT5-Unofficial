@@ -31,7 +31,7 @@ public class GT_MetaTileEntity_Boiler_Bronze extends GT_MetaTileEntity_Boiler {
         super(aID, aName, aNameRegional, new String[]{
                 "An early way to get Steam Power",
                 "Produces 120L of Steam per second",
-                "Causes "+Integer.toString(GT_Mod.gregtechproxy.mPollutionSmallCoalBoiler*20)+" Pollution per second"});
+                "Causes "+Integer.toString(GT_Mod.gregtechproxy.mPollutionSmallCoalBoilerPerSecond)+" Pollution per second"});
     }
 
     public GT_MetaTileEntity_Boiler_Bronze(int aID, String aName, String aNameRegional, String[] aDescription) {
@@ -94,13 +94,13 @@ public class GT_MetaTileEntity_Boiler_Bronze extends GT_MetaTileEntity_Boiler {
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
         if ((aBaseMetaTileEntity.isServerSide()) && (aTick > 20L) && this.mProcessingEnergy > 0 && (aTick % 20L == 0L)) {
-            GT_Pollution.addPollution(getBaseMetaTileEntity(), 20*getPollution());
+            GT_Pollution.addPollution(getBaseMetaTileEntity(), getPollution());
         }
     }
 
     @Override
     protected int getPollution() {
-        return GT_Mod.gregtechproxy.mPollutionSmallCoalBoiler;
+        return GT_Mod.gregtechproxy.mPollutionSmallCoalBoilerPerSecond;
     }
 
     @Override

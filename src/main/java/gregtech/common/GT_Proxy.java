@@ -203,9 +203,9 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public int mPollutionLargeGasTurbinePerSecond = 300;
     public int mPollutionMultiSmelterPerSecond = 400;
     public int mPollutionPyrolyseOvenPerSecond = 300;
-    public int mPollutionSmallCoalBoiler = 1;
-    public int mPollutionHighPressureLavaBoiler = 1;
-    public int mPollutionHighPressureCoalBoiler = 2;
+    public int mPollutionSmallCoalBoilerPerSecond = 20;
+    public int mPollutionHighPressureLavaBoilerPerSecond = 20;
+    public int mPollutionHighPressureCoalBoilerPerSecond = 30;
     public int mPollutionBaseDieselGenerator = 2;
     public int mPollutionBaseGasTurbine = 1;
     public final GT_UO_DimensionList mUndergroundOil = new GT_UO_DimensionList();
