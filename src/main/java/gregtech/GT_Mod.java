@@ -386,7 +386,7 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mPollutionSourRainLimit = tMainConfig.get("Pollution", "SourRainLimit", gregtechproxy.mPollutionSourRainLimit).getInt(gregtechproxy.mPollutionSourRainLimit);
         gregtechproxy.mPollutionOnExplosion = tMainConfig.get("Pollution", "SourRainLimit", gregtechproxy.mPollutionOnExplosion).getInt(gregtechproxy.mPollutionOnExplosion);
         gregtechproxy.mExplosionItemDrop = tMainConfig.get("general", "ExplosionItemDrops", gregtechproxy.mExplosionItemDrop).getBoolean(gregtechproxy.mExplosionItemDrop);
-        gregtechproxy.mPollutionPrimitveBlastFurnace = tMainConfig.get("Pollution", "PollutionPrimitiveBlastFurnace", gregtechproxy.mPollutionPrimitveBlastFurnace).getInt(gregtechproxy.mPollutionPrimitveBlastFurnace);
+        gregtechproxy.mPollutionPrimitveBlastFurnacePerSecond = tMainConfig.get("Pollution", "PollutionPrimitiveBlastFurnace", gregtechproxy.mPollutionPrimitveBlastFurnacePerSecond).getInt(gregtechproxy.mPollutionPrimitveBlastFurnacePerSecond);
         gregtechproxy.mPollutionCharcoalPit = tMainConfig.get("Pollution", "PollutionCharcoalPit", gregtechproxy.mPollutionCharcoalPit).getInt(gregtechproxy.mPollutionCharcoalPit);
         gregtechproxy.mPollutionEBF = tMainConfig.get("Pollution", "PollutionEBF", gregtechproxy.mPollutionEBF).getInt(gregtechproxy.mPollutionEBF);
         gregtechproxy.mPollutionLargeCombustionEngine = tMainConfig.get("Pollution", "PollutionLargeCombustionEngine",gregtechproxy.mPollutionLargeCombustionEngine).getInt(gregtechproxy.mPollutionLargeCombustionEngine);

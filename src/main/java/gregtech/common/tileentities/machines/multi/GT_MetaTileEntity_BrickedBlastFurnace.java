@@ -35,7 +35,7 @@ public class GT_MetaTileEntity_BrickedBlastFurnace extends GT_MetaTileEntity_Pri
                 .addInfo("Controller Block for the Bricked Blast Furnace")
                 .addInfo("Usable for Steel and general Pyrometallurgy")
                 .addInfo("Has a useful interface, unlike other gregtech multis")
-                .addPollutionAmount(20 * GT_Mod.gregtechproxy.mPollutionPrimitveBlastFurnace)
+                .addPollutionAmount(GT_Mod.gregtechproxy.mPollutionPrimitveBlastFurnacePerSecond)
                 .addSeparator()
                 .beginStructureBlock(3, 4, 3, true)
                 .addController("Front center")
