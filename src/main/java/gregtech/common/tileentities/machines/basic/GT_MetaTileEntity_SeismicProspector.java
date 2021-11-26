@@ -95,7 +95,7 @@ public class GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_Basic
                     }else if(aStack.getItem() == Ic2Items.dynamite.getItem()){
                     aStack.stackSize -= 4;
                     }else if(aStack.getItem() == ItemList.Block_Powderbarrel.getItem() && aStack.getItemDamage()==ItemList.Block_Powderbarrel.get(1).getItemDamage()){
-                    aStack.stackSize -= 8;
+                    aStack.stackSize -=8;
                     }else{
                     aStack.stackSize -= 1;
                     }

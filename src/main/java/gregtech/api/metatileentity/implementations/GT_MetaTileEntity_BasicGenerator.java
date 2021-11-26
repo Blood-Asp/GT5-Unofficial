@@ -117,7 +117,7 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
 
     @Override
     public boolean isFacingValid(byte aSide) {
-        return true;
+        return aSide > 1;
     }
 
     @Override
