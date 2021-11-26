@@ -72,6 +72,7 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
     private static int sEnergyPerEssentia = 320;
     private static final Map<Aspect, Integer> sAspectsEnergy = new HashMap<>();
     private static int sDragonEggEnergyPerTick = 2048;
+    private static int sCreeperEggEnergyPerTick = 512;
     private int mEfficiency;
     private int mMaxVisPerDrain;
     private final MagicalEnergyBB mMagicalEnergyBB = new MagicalEnergyBB(this, mTier, mTier + 2);
@@ -96,6 +97,7 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
     private static void sharedConfigLoad(GT_Config aConfig) {
         sAllowMultipleEggs = aConfig.get(machineconfig, "MagicEnergyAbsorber.AllowMultipleEggs", false);
         sDragonEggEnergyPerTick = aConfig.get(machineconfig, "MagicEnergyAbsorber.EnergyPerTick.DragonEgg", 2048);
+        sCreeperEggEnergyPerTick = aConfig.get(machineconfig, "MagicEnergyAbsorber.EnergyPerTick.DragonEgg", 512);
         sEnergyPerEndercrystal = aConfig.get(machineconfig, "MagicEnergyAbsorber.EnergyPerTick.EnderCrystal", 512);
         if (THAUMCRAFT_LOADED) {
             sEnergyFromVis = aConfig.get(machineconfig, "MagicEnergyAbsorber.EnergyPerVis", 20);
@@ -422,7 +424,13 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
                 setActiveSiphon(this);
             }
         }
-        return sDragonEggEnergyPerTick;
+        Block egg = getBaseMetaTileEntity().getBlockOffset(0, 1, 0);
+        if (egg == Blocks.dragon_egg) {
+            return sDragonEggEnergyPerTick;
+        } else if (egg.getUnlocalizedName().contains("creeperEgg")) {
+            return sCreeperEggEnergyPerTick;
+        }
+        return 0;
     }
 
     private long absorbFromEnderCrystals() {
