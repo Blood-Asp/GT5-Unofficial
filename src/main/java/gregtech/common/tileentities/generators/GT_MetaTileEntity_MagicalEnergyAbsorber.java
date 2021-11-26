@@ -97,7 +97,7 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
     private static void sharedConfigLoad(GT_Config aConfig) {
         sAllowMultipleEggs = aConfig.get(machineconfig, "MagicEnergyAbsorber.AllowMultipleEggs", false);
         sDragonEggEnergyPerTick = aConfig.get(machineconfig, "MagicEnergyAbsorber.EnergyPerTick.DragonEgg", 2048);
-        sCreeperEggEnergyPerTick = aConfig.get(machineconfig, "MagicEnergyAbsorber.EnergyPerTick.DragonEgg", 512);
+        sCreeperEggEnergyPerTick = aConfig.get(machineconfig, "MagicEnergyAbsorber.EnergyPerTick.CreeperEgg", 512);
         sEnergyPerEndercrystal = aConfig.get(machineconfig, "MagicEnergyAbsorber.EnergyPerTick.EnderCrystal", 512);
         if (THAUMCRAFT_LOADED) {
             sEnergyFromVis = aConfig.get(machineconfig, "MagicEnergyAbsorber.EnergyPerVis", 20);
