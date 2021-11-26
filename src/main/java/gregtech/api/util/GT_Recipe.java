@@ -1585,23 +1585,8 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
             GT_Recipe rRecipe = super.findRecipe(aTileEntity, aRecipe, aNotUnificated, aVoltage, aFluids, aSpecialSlot, aInputs);
             if (aInputs == null || aInputs.length < 2 || aInputs[0] == null || aInputs[1] == null || !GregTech_API.sPostloadFinished)
                 return rRecipe;
-            if (rRecipe == null) {
-                if (ItemList.Shape_Mold_Name.isStackEqual(aInputs[0], false, true)) {
-                    ItemStack tOutput = GT_Utility.copyAmount(1, aInputs[1]);
-                    tOutput.setStackDisplayName(aInputs[0].getDisplayName());
-                    rRecipe = new GT_Recipe(false, new ItemStack[]{ItemList.Shape_Mold_Name.get(0), GT_Utility.copyAmount(1, aInputs[1])}, new ItemStack[]{tOutput}, null, null, null, null, 128, 8, 0);
-                    rRecipe.mCanBeBuffered = false;
-                    return rRecipe;
-                }
-                if (ItemList.Shape_Mold_Name.isStackEqual(aInputs[1], false, true)) {
-                    ItemStack tOutput = GT_Utility.copyAmount(1, aInputs[0]);
-                    tOutput.setStackDisplayName(aInputs[1].getDisplayName());
-                    rRecipe = new GT_Recipe(false, new ItemStack[]{ItemList.Shape_Mold_Name.get(0), GT_Utility.copyAmount(1, aInputs[0])}, new ItemStack[]{tOutput}, null, null, null, null, 128, 8, 0);
-                    rRecipe.mCanBeBuffered = false;
-                    return rRecipe;
-                }
-                return null;
-            }
+            if (rRecipe == null)
+                return findRenamingRecipe(aInputs);
             for (ItemStack aMold : aInputs) {
                 if (ItemList.Shape_Mold_Credit.isStackEqual(aMold, false, true)) {
                     NBTTagCompound tNBT = aMold.getTagCompound();
@@ -1616,6 +1601,40 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                 }
             }
             return rRecipe;
+        }
+
+        private ItemStack findNameMoldIndex(ItemStack[] inputs) {
+            for (ItemStack stack: inputs) {
+                if (ItemList.Shape_Mold_Name.isStackEqual(stack, false, true))
+                    return stack;
+            }
+            return null;
+        }
+
+        private ItemStack findStackToRename(ItemStack[] inputs, ItemStack mold) {
+            for (ItemStack stack: inputs) {
+                if (stack == mold || stack == null)
+                    continue;
+                return stack;
+            }
+            return null;
+        }
+
+        private GT_Recipe findRenamingRecipe(ItemStack[] inputs) {
+            ItemStack mold = findNameMoldIndex(inputs);
+            if (mold == null)
+                return null;
+            ItemStack input = findStackToRename(inputs, mold);
+            if (input == null)
+                return null;
+            ItemStack output = GT_Utility.copyAmount(1, input);
+            output.setStackDisplayName(mold.getDisplayName());
+            GT_Recipe recipe = new GT_Recipe(false,
+                new ItemStack[]{ ItemList.Shape_Mold_Name.get(0), GT_Utility.copyAmount(1, input) },
+                new ItemStack[]{ output },
+                null, null, null, null, 128, 8, 0);
+            recipe.mCanBeBuffered = false;
+            return recipe;
         }
     }
 
