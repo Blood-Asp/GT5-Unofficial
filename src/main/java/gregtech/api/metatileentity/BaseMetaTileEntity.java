@@ -1403,7 +1403,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                 }
             }
 
-            GT_Pollution.addPollution(this, 100000);
+            GT_Pollution.addPollution(this, GT_Mod.gregtechproxy.mPollutionOnExplosion);
             mMetaTileEntity.doExplosion(aAmount);
         }
     }

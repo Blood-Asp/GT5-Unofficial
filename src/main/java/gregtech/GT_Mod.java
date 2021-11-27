@@ -340,6 +340,8 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mRenderGlowTextures = GregTech_API.sClientDataFile.get("render", "GlowTextures", true);
         gregtechproxy.mRenderFlippedMachinesFlipped = GregTech_API.sClientDataFile.get("render", "RenderFlippedMachinesFlipped", true);
         gregtechproxy.mRenderIndicatorsOnHatch = GregTech_API.sClientDataFile.get("render", "RenderIndicatorsOnHatch", true);
+        gregtechproxy.mRenderDirtParticles =  GregTech_API.sClientDataFile.get("render", "RenderDirtParticles", true);
+        gregtechproxy.mRenderPollutionFog = GregTech_API.sClientDataFile.get("render", "RenderPollutionFog", true);
 
         gregtechproxy.mMaxEqualEntitiesAtOneSpot = tMainConfig.get(aTextGeneral, "MaxEqualEntitiesAtOneSpot", 3).getInt(3);
         gregtechproxy.mSkeletonsShootGTArrows = tMainConfig.get(aTextGeneral, "SkeletonsShootGTArrows", 16).getInt(16);
@@ -375,12 +377,36 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mTEMachineRecipes = tMainConfig.get("general", "TEMachineRecipes", false).getBoolean(false);
         gregtechproxy.mEnableAllMaterials = tMainConfig.get("general", "EnableAllMaterials", false).getBoolean(false);
         gregtechproxy.mEnableAllComponents = tMainConfig.get("general", "EnableAllComponents", false).getBoolean(false);
-        gregtechproxy.mPollution = tMainConfig.get("Pollution", "EnablePollution", true).getBoolean(true);
-        gregtechproxy.mPollutionSmogLimit = tMainConfig.get("Pollution", "SmogLimit", 500000).getInt(500000);
-        gregtechproxy.mPollutionPoisonLimit = tMainConfig.get("Pollution", "PoisonLimit", 750000).getInt(750000);
-        gregtechproxy.mPollutionVegetationLimit = tMainConfig.get("Pollution", "VegetationLimit", 1000000).getInt(1000000);
-        gregtechproxy.mPollutionSourRainLimit = tMainConfig.get("Pollution", "SourRainLimit", 2000000).getInt(2000000);
-        gregtechproxy.mExplosionItemDrop = tMainConfig.get("general", "ExplosionItemDrops", false).getBoolean(false);
+
+        //Pollution: edit GT_Proxy.java to change default values
+        gregtechproxy.mPollution = tMainConfig.get("Pollution", "EnablePollution", gregtechproxy.mPollution).getBoolean(gregtechproxy.mPollution);
+        gregtechproxy.mPollutionSmogLimit = tMainConfig.get("Pollution", "SmogLimit", gregtechproxy.mPollutionSmogLimit).getInt(gregtechproxy.mPollutionSmogLimit);
+        gregtechproxy.mPollutionPoisonLimit = tMainConfig.get("Pollution", "PoisonLimit", gregtechproxy.mPollutionPoisonLimit).getInt(gregtechproxy.mPollutionPoisonLimit);
+        gregtechproxy.mPollutionVegetationLimit = tMainConfig.get("Pollution", "VegetationLimit", gregtechproxy.mPollutionVegetationLimit).getInt(gregtechproxy.mPollutionVegetationLimit);
+        gregtechproxy.mPollutionSourRainLimit = tMainConfig.get("Pollution", "SourRainLimit", gregtechproxy.mPollutionSourRainLimit).getInt(gregtechproxy.mPollutionSourRainLimit);
+        gregtechproxy.mPollutionOnExplosion = tMainConfig.get("Pollution", "SourRainLimit", gregtechproxy.mPollutionOnExplosion).getInt(gregtechproxy.mPollutionOnExplosion);
+        gregtechproxy.mExplosionItemDrop = tMainConfig.get("general", "ExplosionItemDrops", gregtechproxy.mExplosionItemDrop).getBoolean(gregtechproxy.mExplosionItemDrop);
+        gregtechproxy.mPollutionPrimitveBlastFurnacePerSecond = tMainConfig.get("Pollution", "PollutionPrimitiveBlastFurnace", gregtechproxy.mPollutionPrimitveBlastFurnacePerSecond).getInt(gregtechproxy.mPollutionPrimitveBlastFurnacePerSecond);
+        gregtechproxy.mPollutionCharcoalPitPerSecond = tMainConfig.get("Pollution", "PollutionCharcoalPit", gregtechproxy.mPollutionCharcoalPitPerSecond).getInt(gregtechproxy.mPollutionCharcoalPitPerSecond);
+        gregtechproxy.mPollutionEBFPerSecond = tMainConfig.get("Pollution", "PollutionEBF", gregtechproxy.mPollutionEBFPerSecond).getInt(gregtechproxy.mPollutionEBFPerSecond);
+        gregtechproxy.mPollutionLargeCombustionEnginePerSecond = tMainConfig.get("Pollution", "PollutionLargeCombustionEngine",gregtechproxy.mPollutionLargeCombustionEnginePerSecond).getInt(gregtechproxy.mPollutionLargeCombustionEnginePerSecond);
+        gregtechproxy.mPollutionExtremeCombustionEnginePerSecond = tMainConfig.get("Pollution", "PollutionExtremeCombustionEngine",gregtechproxy.mPollutionExtremeCombustionEnginePerSecond).getInt(gregtechproxy.mPollutionExtremeCombustionEnginePerSecond);
+        gregtechproxy.mPollutionImplosionCompressorPerSecond = tMainConfig.get("Pollution", "PollutionImplosionCompressor", gregtechproxy.mPollutionImplosionCompressorPerSecond).getInt(gregtechproxy.mPollutionImplosionCompressorPerSecond);
+        gregtechproxy.mPollutionLargeBronzeBoilerPerSecond = tMainConfig.get("Pollution", "PollutionLargeBronzeBoiler", gregtechproxy.mPollutionLargeBronzeBoilerPerSecond).getInt(gregtechproxy.mPollutionLargeBronzeBoilerPerSecond);
+        gregtechproxy.mPollutionLargeSteelBoilerPerSecond = tMainConfig.get("Pollution", "PollutionLargeSteelBoiler", gregtechproxy.mPollutionLargeSteelBoilerPerSecond).getInt(gregtechproxy.mPollutionLargeSteelBoilerPerSecond);
+        gregtechproxy.mPollutionLargeTitaniumBoilerPerSecond = tMainConfig.get("Pollution", "PollutionLargeTitaniumBoiler", gregtechproxy.mPollutionLargeTitaniumBoilerPerSecond ).getInt(gregtechproxy.mPollutionLargeTitaniumBoilerPerSecond );
+        gregtechproxy.mPollutionLargeTungstenSteelBoilerPerSecond = tMainConfig.get("Pollution", "PollutionLargeTungstenSteelBoiler", gregtechproxy.mPollutionLargeTungstenSteelBoilerPerSecond).getInt(gregtechproxy.mPollutionLargeTungstenSteelBoilerPerSecond);
+        gregtechproxy.mPollutionReleasedByThrottle = tMainConfig.get("Pollution", "PollutionReleasedByThrottle", gregtechproxy.mPollutionReleasedByThrottle).getDouble(gregtechproxy.mPollutionReleasedByThrottle);
+        gregtechproxy.mPollutionLargeGasTurbinePerSecond = tMainConfig.get("Pollution", "PollutionLargeGasTurbine",  gregtechproxy.mPollutionLargeGasTurbinePerSecond).getInt( gregtechproxy.mPollutionLargeGasTurbinePerSecond);
+        gregtechproxy.mPollutionMultiSmelterPerSecond = tMainConfig.get("Pollution", "PollutionMultiSmelter", gregtechproxy.mPollutionMultiSmelterPerSecond).getInt(gregtechproxy.mPollutionMultiSmelterPerSecond);
+        gregtechproxy.mPollutionPyrolyseOvenPerSecond = tMainConfig.get("Pollution", "PollutionPyrolyseOven", gregtechproxy.mPollutionPyrolyseOvenPerSecond).getInt(gregtechproxy.mPollutionPyrolyseOvenPerSecond);
+        gregtechproxy.mPollutionSmallCoalBoilerPerSecond = tMainConfig.get("Pollution", "PollutionSmallCoalBoiler", gregtechproxy.mPollutionSmallCoalBoilerPerSecond).getInt(gregtechproxy.mPollutionSmallCoalBoilerPerSecond);
+        gregtechproxy.mPollutionHighPressureLavaBoilerPerSecond = tMainConfig.get("Pollution", "PollutionHighPressureLavaBoiler", gregtechproxy.mPollutionHighPressureLavaBoilerPerSecond).getInt(gregtechproxy.mPollutionHighPressureLavaBoilerPerSecond);
+        gregtechproxy.mPollutionHighPressureCoalBoilerPerSecond = tMainConfig.get("Pollution", "PollutionHighPressureCoalBoiler", gregtechproxy.mPollutionHighPressureCoalBoilerPerSecond).getInt(gregtechproxy.mPollutionHighPressureCoalBoilerPerSecond);
+        gregtechproxy.mPollutionBaseDieselGeneratorPerSecond = tMainConfig.get("Pollution", "PollutionBaseDieselGenerator",gregtechproxy.mPollutionBaseDieselGeneratorPerSecond).getInt(gregtechproxy.mPollutionBaseDieselGeneratorPerSecond);
+        gregtechproxy.mPollutionDieselGeneratorReleasedByTier = tMainConfig.get("Pollution", "PollutionReleasedByTier", gregtechproxy.mPollutionDieselGeneratorReleasedByTier).getDoubleList();
+        gregtechproxy.mPollutionBaseGasTurbinePerSecond = tMainConfig.get("Pollution", "PollutionBaseDieselGenerator", gregtechproxy.mPollutionBaseGasTurbinePerSecond).getInt(gregtechproxy.mPollutionBaseGasTurbinePerSecond);
+
         gregtechproxy.mUndergroundOil.getConfig(tMainConfig, "undergroundfluid");
         gregtechproxy.mEnableCleanroom = tMainConfig.get("general", "EnableCleanroom", true).getBoolean(true);
         if (gregtechproxy.mEnableCleanroom)

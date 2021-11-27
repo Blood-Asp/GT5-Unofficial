@@ -1,6 +1,7 @@
 package gregtech.common.tileentities.generators;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ConfigCategories;
 import gregtech.api.enums.ItemList;
@@ -19,14 +20,14 @@ import static gregtech.api.enums.Textures.BlockIcons.*;
 
 public class GT_MetaTileEntity_DieselGenerator extends GT_MetaTileEntity_BasicGenerator {
 
-    public static final int BASE_POLLUTION = 2;
+
 
     public int mEfficiency;
 
     public GT_MetaTileEntity_DieselGenerator(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, new String[]{
                 "Requires liquid Fuel",
-                "Causes " + (int) (20 * BASE_POLLUTION * Math.pow(2, aTier - 1)) + " Pollution per second"});
+                "Causes " + (int) (GT_Mod.gregtechproxy.mPollutionBaseDieselGeneratorPerSecond * GT_Mod.gregtechproxy.mPollutionDieselGeneratorReleasedByTier[aTier]) + " Pollution per second"});
         onConfigLoad();
     }
 
@@ -165,6 +166,6 @@ public class GT_MetaTileEntity_DieselGenerator extends GT_MetaTileEntity_BasicGe
 
     @Override
     public int getPollution() {
-        return (int) (BASE_POLLUTION * Math.pow(2, mTier - 1));
+        return (int) (GT_Mod.gregtechproxy.mPollutionBaseDieselGeneratorPerSecond * GT_Mod.gregtechproxy.mPollutionDieselGeneratorReleasedByTier[mTier]);
     }
 }
