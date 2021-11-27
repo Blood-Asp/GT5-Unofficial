@@ -3,7 +3,6 @@ package gregtech.common.tileentities.machines.multi;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Materials;
@@ -18,6 +17,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Outpu
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_StructureUtility;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -84,7 +84,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace extends GT_MetaTileEntity_Ab
                 .addInfo("Each 1800K over the min. Heat required allows for one upgraded overclock instead of normal")
                 .addInfo("Upgraded overclocks reduce recipe time to 25% (instead of 50%) and increase EU/t to 400%")
                 .addInfo("Additionally gives +100K for every tier past MV")
-                .addPollutionAmount(getPollutionPerSecond(null))
+                .addPollutionAmount(20 * getPollutionPerTick(null))
                 .addSeparator()
                 .beginStructureBlock(3, 4, 3, true)
                 .addController("Front bottom")
@@ -122,16 +122,6 @@ public class GT_MetaTileEntity_ElectricBlastFurnace extends GT_MetaTileEntity_Ab
     @Override
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "ElectricBlastFurnace.png");
-    }
-
-    @Override
-    public int getPollutionPerSecond(ItemStack aStack){
-        return GT_Mod.gregtechproxy.mPollutionEBFPerSecond;
-    }
-
-    @Override
-    public int getPollutionPerTick(ItemStack aStack){
-        return getPollutionPerSecond(aStack)/20;
     }
 
     @Override

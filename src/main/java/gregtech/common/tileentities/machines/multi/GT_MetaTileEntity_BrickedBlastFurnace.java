@@ -1,6 +1,5 @@
 package gregtech.common.tileentities.machines.multi;
 
-import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.enums.Textures.BlockIcons;
@@ -35,7 +34,7 @@ public class GT_MetaTileEntity_BrickedBlastFurnace extends GT_MetaTileEntity_Pri
                 .addInfo("Controller Block for the Bricked Blast Furnace")
                 .addInfo("Usable for Steel and general Pyrometallurgy")
                 .addInfo("Has a useful interface, unlike other gregtech multis")
-                .addPollutionAmount(GT_Mod.gregtechproxy.mPollutionPrimitveBlastFurnacePerSecond)
+                .addPollutionAmount(200)
                 .addSeparator()
                 .beginStructureBlock(3, 4, 3, true)
                 .addController("Front center")

@@ -6,7 +6,6 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gregtech.GT_Mod;
 import gregtech.common.entities.GT_EntityFXPollution;
 import gregtech.common.misc.GT_ClientPollutionMap;
 import net.minecraft.block.Block;
@@ -127,8 +126,6 @@ public class GT_PollutionRenderer {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void renderGTPollutionFog(EntityViewRenderEvent.RenderFogEvent event) {
-        if (!GT_Mod.gregtechproxy.mRenderPollutionFog) return;
-
         if ((!DEBUG && Minecraft.getMinecraft().thePlayer.capabilities.isCreativeMode) ||
             (fogIntensityLastTick <= 0 && fogIntensityLastTick >= FOG_START_EXP_RATIO))
             return;
@@ -145,8 +142,6 @@ public class GT_PollutionRenderer {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void renderGTPollutionFog(EntityViewRenderEvent.FogDensity event) {
-        if (!GT_Mod.gregtechproxy.mRenderPollutionFog) return;
-
         if (!DEBUG && Minecraft.getMinecraft().thePlayer.capabilities.isCreativeMode)
             return;
 
@@ -203,7 +198,6 @@ public class GT_PollutionRenderer {
     // Adding dirt particles in the air
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        if (!GT_Mod.gregtechproxy.mRenderDirtParticles) return;
         Minecraft mc = Minecraft.getMinecraft();
         if (mc == null)
             return;

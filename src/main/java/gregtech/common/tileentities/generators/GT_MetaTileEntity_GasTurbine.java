@@ -1,6 +1,5 @@
 package gregtech.common.tileentities.generators;
 
-import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ConfigCategories;
 import gregtech.api.interfaces.ITexture;
@@ -13,14 +12,14 @@ import gregtech.api.util.GT_Recipe;
 import static gregtech.api.enums.Textures.BlockIcons.*;
 
 public class GT_MetaTileEntity_GasTurbine extends GT_MetaTileEntity_BasicGenerator {
-
+    public static final int BASE_POLLUTION = 1;
 
     public int mEfficiency;
 
     public GT_MetaTileEntity_GasTurbine(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, new String[]{
                 "Requires flammable Gasses",
-                "Causes " + (int) (GT_Mod.gregtechproxy.mPollutionBaseGasTurbinePerSecond * GT_Mod.gregtechproxy.mPollutionGasTurbineReleasedByTier[aTier]) + " Pollution per second"});
+                "Causes " + (int) (20 * BASE_POLLUTION * Math.pow(2, aTier - 1)) + " Pollution per second"});
         onConfigLoad();
     }
 
@@ -138,6 +137,6 @@ public class GT_MetaTileEntity_GasTurbine extends GT_MetaTileEntity_BasicGenerat
 
     @Override
     public int getPollution() {
-        return (int) (GT_Mod.gregtechproxy.mPollutionBaseGasTurbinePerSecond * GT_Mod.gregtechproxy.mPollutionGasTurbineReleasedByTier[mTier]);
+        return (int) (BASE_POLLUTION * Math.pow(2, mTier - 1));
     }
 }

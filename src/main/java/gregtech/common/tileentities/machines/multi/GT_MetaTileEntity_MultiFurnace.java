@@ -3,7 +3,6 @@ package gregtech.common.tileentities.machines.multi;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
@@ -75,7 +74,7 @@ public class GT_MetaTileEntity_MultiFurnace extends GT_MetaTileEntity_AbstractMu
                 .addInfo("Controller Block for the Multi Smelter")
                 .addInfo("Smelts up to 8-128 items at once")
                 .addInfo("Items smelted increases with coil tier")
-                .addPollutionAmount(getPollutionPerSecond(null))
+                .addPollutionAmount(20 * getPollutionPerTick(null))
                 .addSeparator()
                 .beginStructureBlock(3, 3, 3, true)
                 .addController("Front bottom")
@@ -111,16 +110,6 @@ public class GT_MetaTileEntity_MultiFurnace extends GT_MetaTileEntity_AbstractMu
     @Override
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
         return GT_Recipe.GT_Recipe_Map.sFurnaceRecipes;
-    }
-
-    @Override
-    public int getPollutionPerSecond(ItemStack aStack){
-        return GT_Mod.gregtechproxy.mPollutionMultiSmelterPerSecond;
-    }
-
-    @Override
-    public int getPollutionPerTick(ItemStack aStack){
-        return getPollutionPerSecond(aStack)/20;
     }
 
     @Override
