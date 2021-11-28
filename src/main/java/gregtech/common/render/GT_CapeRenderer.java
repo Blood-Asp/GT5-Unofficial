@@ -16,14 +16,16 @@ import org.lwjgl.opengl.GL11;
 import java.util.Collection;
 
 public class GT_CapeRenderer extends RenderPlayer {
-        private final ResourceLocation[] mCapes = { new ResourceLocation("gregtech:textures/BrainTechCape.png"),
+        private final ResourceLocation[] mCapes = {
+            new ResourceLocation("gregtech:textures/BrainTechCape.png"),
             new ResourceLocation("gregtech:textures/GregTechCape.png"),
             new ResourceLocation("gregtech:textures/MrBrainCape.png"),
             new ResourceLocation("gregtech:textures/GregoriusCape.png"),
             new ResourceLocation("gregtech:textures/DonorCape.png"),
             new ResourceLocation("gregtech:textures/DevCape.png"),
-            new ResourceLocation("gregtech:textures/TecCape.png")};
-    private final Collection<String> mCapeList;
+            new ResourceLocation("gregtech:textures/TecCape.png"),
+            new ResourceLocation("gregtech:textures/MEGACAPE.png")};
+        private final Collection<String> mCapeList;
 
     public GT_CapeRenderer(Collection<String> aCapeList) {
         this.mCapeList = aCapeList;
@@ -65,6 +67,9 @@ public class GT_CapeRenderer extends RenderPlayer {
             }
             if (this.mCapeList.contains(aPlayer.getDisplayName().toLowerCase()+":capetec")) {
                 tResource = this.mCapes[6];
+            }
+            if (this.mCapeList.contains(aPlayer.getDisplayName().toLowerCase()+":capemega")) {
+                tResource = this.mCapes[7];
             }
 
             if ((tResource != null) && (!aPlayer.getHideCape())) {
