@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.boilers;
 
+import gregtech.GT_Mod;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.ITexture;
@@ -30,7 +31,7 @@ public class GT_MetaTileEntity_Boiler_Bronze extends GT_MetaTileEntity_Boiler {
         super(aID, aName, aNameRegional, new String[]{
                 "An early way to get Steam Power",
                 "Produces 120L of Steam per second",
-                "Causes 20 Pollution per second"});
+                "Causes "+Integer.toString(GT_Mod.gregtechproxy.mPollutionSmallCoalBoilerPerSecond)+" Pollution per second"});
     }
 
     public GT_MetaTileEntity_Boiler_Bronze(int aID, String aName, String aNameRegional, String[] aDescription) {
@@ -99,7 +100,7 @@ public class GT_MetaTileEntity_Boiler_Bronze extends GT_MetaTileEntity_Boiler {
 
     @Override
     protected int getPollution() {
-        return 20;
+        return GT_Mod.gregtechproxy.mPollutionSmallCoalBoilerPerSecond;
     }
 
     @Override

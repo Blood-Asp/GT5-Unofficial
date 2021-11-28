@@ -188,6 +188,28 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public int mPollutionPoisonLimit = 750000;
     public int mPollutionVegetationLimit = 1000000;
     public int mPollutionSourRainLimit = 2000000;
+    public int mPollutionOnExplosion = 100000;
+    public int mPollutionPrimitveBlastFurnacePerSecond = 200;
+    public int mPollutionEBFPerSecond = 400;
+    public int mPollutionCharcoalPitPerSecond = 100;
+    public int mPollutionLargeCombustionEnginePerSecond = 480;
+    public int mPollutionExtremeCombustionEnginePerSecond = 3840;
+    public int mPollutionImplosionCompressorPerSecond = 10000;
+    public int mPollutionLargeBronzeBoilerPerSecond = 1000;
+    public int mPollutionLargeSteelBoilerPerSecond = 2000;
+    public int mPollutionLargeTitaniumBoilerPerSecond = 3000;
+    public int mPollutionLargeTungstenSteelBoilerPerSecond = 4000;
+    public double mPollutionReleasedByThrottle = 1.0/24.0; // divided by 24 because 24 circuit conf
+    public int mPollutionLargeGasTurbinePerSecond = 300;
+    public int mPollutionMultiSmelterPerSecond = 400;
+    public int mPollutionPyrolyseOvenPerSecond = 300;
+    public int mPollutionSmallCoalBoilerPerSecond = 20;
+    public int mPollutionHighPressureLavaBoilerPerSecond = 20;
+    public int mPollutionHighPressureCoalBoilerPerSecond = 30;
+    public int mPollutionBaseDieselGeneratorPerSecond = 200;
+    public double[] mPollutionDieselGeneratorReleasedByTier = new double[]{0.1, 1.0, 0.9, 0.8};
+    public int mPollutionBaseGasTurbinePerSecond = 200;
+    public double[] mPollutionGasTurbineReleasedByTier = new double[]{0.1, 1.0, 0.9, 0.8};
     public final GT_UO_DimensionList mUndergroundOil = new GT_UO_DimensionList();
     public int mTicksUntilNextCraftSound = 0;
     public double mMagneticraftBonusOutputPercent = 100.0d;
@@ -235,6 +257,16 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
      * This enables indicators on input/output hatches
      */
     public boolean mRenderIndicatorsOnHatch = true;
+
+    /**
+     * This enables the rendering of dirt particles if pollution is enabled too
+     */
+    public boolean mRenderDirtParticles = true;
+
+    /**
+     * This enables the rendering of the pollution fog if pollution is enabled too
+     */
+    public boolean mRenderPollutionFog = true;
 
     public static final int GUI_ID_COVER_SIDE_BASE = 10; // Takes GUI ID 10 - 15
 
@@ -631,6 +663,12 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_chestplate, 1, W));
         GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_leggings, 1, W));
         GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_boots, 1, W));
+
+        //Infinity Hazmat
+        addFullHazmatToGeneralItem("Avaritia", "Infinity_Helm", 1L);
+        addFullHazmatToGeneralItem("Avaritia", "Infinity_Chest", 1L);
+        addFullHazmatToGeneralItem("Avaritia", "Infinity_Pants", 1L);
+        addFullHazmatToGeneralItem("Avaritia", "Infinity_Shoes", 1L);
 
         GregTech_API.sLoadStarted = true;
         for (FluidContainerRegistry.FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) {

@@ -2,6 +2,7 @@ package gregtech.common.tileentities.machines.multi;
 
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
@@ -78,7 +79,7 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_EnhancedMu
                 .addInfo("Default: Produces 2048EU/t at 100% fuel efficiency")
                 .addInfo("Boosted: Produces 6144EU/t at 150% fuel efficiency")
                 .addInfo("You need to wait for it to reach 300% to output full power")
-                .addPollutionAmount(20 * getPollutionPerTick(null))
+                .addPollutionAmount(getPollutionPerSecond(null))
                 .addSeparator()
                 .beginStructureBlock(3, 3, 4, false)
                 .addController("Front center")
@@ -264,8 +265,13 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_EnhancedMu
     }
 
     @Override
+    public int getPollutionPerSecond(ItemStack aStack) {
+        return GT_Mod.gregtechproxy.mPollutionLargeCombustionEnginePerSecond;
+    }
+
+    @Override
     public int getPollutionPerTick(ItemStack aStack) {
-        return 24;
+        return getPollutionPerSecond(aStack)/20;
     }
     
     @Override
