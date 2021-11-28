@@ -296,7 +296,7 @@ public abstract class GT_ChunkAssociatedData<T extends GT_ChunkAssociatedData.ID
 		}
 
 		public boolean isCreated(int subRegionX, int subRegionZ) {
-			return this.data[getIndex(subRegionX, subRegionZ)] == null;
+			return this.data[getIndex(subRegionX, subRegionZ)] != null;
 		}
 
 		public ChunkCoordIntPair getCoord() {

@@ -27,12 +27,16 @@ import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Consumer;
 
 import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 import static gregtech.common.GT_Proxy.dimensionWisePollution;
@@ -73,11 +77,12 @@ public class GT_Pollution {
 	 * Muffler Hatch Pollution reduction:  ** inaccurate **
 	 * LV (0%), MV (30%), HV (52%), EV (66%), IV (76%), LuV (84%), ZPM (89%), UV (92%), MAX (95%)
 	 */
-	private List<ChunkCoordIntPair> pollutionList = new ArrayList<>();//chunks left to process
-	private final List<ChunkCoordIntPair> chunkData = new ArrayList<>();//link to chunk data that is saved/loaded
+	private List<ChunkCoordIntPair> pollutionList = new ArrayList<>();//chunks left to process in this cycle
+	private final Set<ChunkCoordIntPair> pollutedChunks = new HashSet<>();// a global list of all chunks with positive pollution
 	private int operationsPerTick = 0;//how much chunks should be processed in each cycle
 	private static final short cycleLen = 1200;
 	private final World world;
+	private boolean blank = true;
 	public static int mPlayerPollution;
 
 	private static int POLLUTIONPACKET_MINVALUE = 1000;
@@ -103,16 +108,18 @@ public class GT_Pollution {
 
 	private void tickPollutionInWorld(int aTickID) {//called from method above
 		//gen data set
-		if (aTickID == 0) {
+		if (aTickID == 0 || blank) {
 			// make a snapshot of what to work on
-			// counterintuitive as it seems, but this is the fastest way java collections framework offers us.
-			pollutionList = new ArrayList<>(chunkData);
+			pollutionList = new ArrayList<>(pollutedChunks);
 			//set operations per tick
-			if (pollutionList.size() > 0) operationsPerTick = (pollutionList.size() / cycleLen);
-			else operationsPerTick = 0;//SANity
+			if (pollutionList.size() > 0)
+				operationsPerTick = Math.max(1, pollutionList.size() / cycleLen);
+			else
+				operationsPerTick = 0; //SANity
+			blank = false;
 		}
 
-		for (int chunksProcessed = 0; chunksProcessed <= operationsPerTick; chunksProcessed++) {
+		for (int chunksProcessed = 0; chunksProcessed < operationsPerTick; chunksProcessed++) {
 			if (pollutionList.size() == 0) break;//no more stuff to do
 			ChunkCoordIntPair actualPos = pollutionList.remove(pollutionList.size() - 1);//faster
 			//get pollution
@@ -120,10 +127,8 @@ public class GT_Pollution {
 			int tPollution = currentData.getAmount();
 			//remove some
 			tPollution = (int) (0.9945f * tPollution);
-			//tPollution -= 2000;//This does not really matter...
 
-			if (tPollution <= 0) tPollution = 0;//SANity check
-			else if (tPollution > 400000) {//Spread Pollution
+			if (tPollution > 400000) {//Spread Pollution
 
 				ChunkCoordIntPair[] tNeighbors = new ChunkCoordIntPair[4];//array is faster
 				tNeighbors[0] = (new ChunkCoordIntPair(actualPos.chunkXPos + 1, actualPos.chunkZPos));
@@ -138,7 +143,7 @@ public class GT_Pollution {
 						tDiff = tDiff / 20;
 						neighborPollution = GT_Utility.safeInt((long) neighborPollution + tDiff);//tNPol += tDiff;
 						tPollution -= tDiff;
-						neighbor.setAmount(neighborPollution);
+						setChunkPollution(neighborPosition, neighborPollution);
 					}
 				}
 
@@ -200,7 +205,7 @@ public class GT_Pollution {
 				}
 			}
 			//Write new pollution to Hashmap !!!
-			currentData.setAmount(tPollution);
+			setChunkPollution(actualPos, tPollution);
 
 			//Send new value to players nearby
 			if (tPollution > POLLUTIONPACKET_MINVALUE) {
@@ -208,6 +213,10 @@ public class GT_Pollution {
 				GT_Values.NW.sendToAllAround(new GT_Packet_Pollution(actualPos, tPollution), point);
 			}
 		}
+	}
+
+	private void setChunkPollution(ChunkCoordIntPair coord, int pollution) {
+		mutatePollution(world, coord.chunkXPos, coord.chunkZPos, c -> c.setAmount(pollution), pollutedChunks);
 	}
 
 	private static void damageBlock(World world, int x, int y, int z, boolean sourRain) {
@@ -265,13 +274,33 @@ public class GT_Pollution {
 		}
 	}
 
+	private static GT_Pollution getPollutionManager(World world) {
+		return dimensionWisePollution.computeIfAbsent(world.provider.dimensionId, i -> new GT_Pollution(world));
+	}
+
 	public static void addPollution(IGregTechTileEntity te, int aPollution) {
-		addPollution(te.getWorld().getChunkFromBlockCoords(te.getXCoord(), te.getZCoord()), aPollution);
+		if (!GT_Mod.gregtechproxy.mPollution || aPollution == 0) return;
+		mutatePollution(te.getWorld(), te.getXCoord() >> 4, te.getZCoord() >> 4, d -> d.changeAmount(aPollution), null);
 	}
 
 	public static void addPollution(Chunk ch, int aPollution) {
 		if (!GT_Mod.gregtechproxy.mPollution || aPollution == 0) return;
-		STORAGE.get(ch).changeAmount(aPollution);
+		mutatePollution(ch.worldObj, ch.xPosition, ch.zPosition, d -> d.changeAmount(aPollution), null);
+	}
+
+	private static void mutatePollution(World world, int x, int z, Consumer<ChunkData> mutator, @Nullable Set<ChunkCoordIntPair> chunks) {
+		ChunkData data = STORAGE.get(world, x, z);
+		boolean hadPollution = data.getAmount() > 0;
+		mutator.accept(data);
+		boolean hasPollution = data.getAmount() > 0;
+		if (hasPollution != hadPollution) {
+			if (chunks == null)
+				chunks = getPollutionManager(world).pollutedChunks;
+			if (hasPollution)
+				chunks.add(new ChunkCoordIntPair(x, z));
+			else
+				chunks.remove(new ChunkCoordIntPair(x, z));
+		}
 	}
 
 	public static int getPollution(IGregTechTileEntity te) {
@@ -341,12 +370,9 @@ public class GT_Pollution {
 		@Override
 		protected ChunkData readElement(DataInput input, int version, World world, int chunkX, int chunkZ) throws IOException {
 			ChunkData data = new ChunkData(input.readInt());
-			getChunkData(world).add(new ChunkCoordIntPair(chunkX, chunkZ));
+			if (data.getAmount() > 0)
+				getPollutionManager(world).pollutedChunks.add(new ChunkCoordIntPair(chunkX, chunkZ));
 			return data;
-		}
-
-		private List<ChunkCoordIntPair> getChunkData(World world) {
-			return dimensionWisePollution.computeIfAbsent(world.provider.dimensionId, i -> new GT_Pollution(world)).chunkData;
 		}
 
 		@Override
@@ -357,11 +383,6 @@ public class GT_Pollution {
 		@Override
 		public void loadAll(World w) {
 			super.loadAll(w);
-		}
-
-		public void set(World world, ChunkCoordIntPair coord, ChunkData data) {
-			set(world, coord.chunkXPos, coord.chunkZPos, data);
-			getChunkData(world).add(coord);
 		}
 
 		public boolean isCreated(World world, ChunkCoordIntPair coord) {
@@ -377,7 +398,7 @@ public class GT_Pollution {
 		}
 
 		private ChunkData(int amount) {
-			this.amount = amount;
+			this.amount = Math.max(0, amount);
 		}
 
 		/**
