@@ -104,7 +104,7 @@ public abstract class GT_ChunkAssociatedData<T extends GT_ChunkAssociatedData.ID
 	}
 
 	private ChunkCoordIntPair getRegionID(int aChunkX, int aChunkZ) {
-		return new ChunkCoordIntPair(aChunkX / regionLength, aChunkZ / regionLength);
+		return new ChunkCoordIntPair(Math.floorDiv(aChunkX, regionLength), Math.floorDiv(aChunkZ, regionLength));
 	}
 
 	/**
@@ -168,7 +168,7 @@ public abstract class GT_ChunkAssociatedData<T extends GT_ChunkAssociatedData.ID
 	}
 
 	private void saveRegions(Stream<SuperRegion> stream) {
-		stream.filter(r -> !r.isDirty())
+		stream.filter(r -> r.isDirty())
 				.map(c -> (Runnable) c::save)
 				.map(r -> CompletableFuture.runAsync(r, IO_WORKERS))
 				.reduce(CompletableFuture::allOf)
@@ -242,7 +242,12 @@ public abstract class GT_ChunkAssociatedData<T extends GT_ChunkAssociatedData.ID
 	}
 
 	protected File getSaveDirectory(World w) {
-		return new File(w.getSaveHandler().getWorldDirectory(), "gregtech");
+		File base;
+		if (w.provider.getSaveFolder() == null)
+			base = w.getSaveHandler().getWorldDirectory();
+		else
+			base = new File(w.getSaveHandler().getWorldDirectory(), w.provider.getSaveFolder());
+		return new File(base, "gregtech");
 	}
 
 	public interface IData {
@@ -256,20 +261,23 @@ public abstract class GT_ChunkAssociatedData<T extends GT_ChunkAssociatedData.ID
 		private final T[] data = createData();
 		private final File backingStorage;
 		private final WeakReference<World> world;
+		/**
+		 * Be aware, this means region coord, not bottom-left chunk coord
+		 */
 		private final ChunkCoordIntPair coord;
 
-		private SuperRegion(World world, int chunkX, int chunkZ) {
+		private SuperRegion(World world, int regionX, int regionZ) {
 			this.world = new WeakReference<>(world);
-			this.coord = new ChunkCoordIntPair(chunkX, chunkZ);
-			backingStorage = new File(getSaveDirectory(world), String.format("%s.%d.%d.dat", mId, chunkX, chunkZ));
+			this.coord = new ChunkCoordIntPair(regionX, regionZ);
+			backingStorage = new File(getSaveDirectory(world), String.format("%s.%d.%d.dat", mId, regionX, regionZ));
 			if (backingStorage.isFile())
 				load();
 		}
 
-		private SuperRegion(World world, ChunkCoordIntPair coord) {
+		private SuperRegion(World world, ChunkCoordIntPair regionCoord) {
 			this.world = new WeakReference<>(world);
-			this.coord = coord;
-			backingStorage = new File(getSaveDirectory(world), String.format("%s.%d.%d.dat", mId, coord.chunkXPos, coord.chunkZPos));
+			this.coord = regionCoord;
+			backingStorage = new File(getSaveDirectory(world), String.format("%s.%d.%d.dat", mId, regionCoord.chunkXPos, regionCoord.chunkZPos));
 			if (backingStorage.isFile())
 				load();
 		}
@@ -308,16 +316,16 @@ public abstract class GT_ChunkAssociatedData<T extends GT_ChunkAssociatedData.ID
 		}
 
 		private int getChunkX(int index) {
-			return index / regionLength + coord.chunkXPos;
+			return index / regionLength + coord.chunkXPos * regionLength;
 		}
 
 		private int getChunkZ(int index) {
-			return index % regionLength + coord.chunkZPos;
+			return index % regionLength + coord.chunkZPos * regionLength;
 		}
 
 		public boolean isDirty() {
 			for (T datum : data) {
-				if (datum != null && datum.isSameAsDefault())
+				if (datum != null && !datum.isSameAsDefault())
 					return true;
 			}
 			return false;
@@ -333,8 +341,6 @@ public abstract class GT_ChunkAssociatedData<T extends GT_ChunkAssociatedData.ID
 		}
 
 		private void save0() throws IOException {
-			if (!isDirty())
-				return;
 			//noinspection ResultOfMethodCallIgnored
 			backingStorage.getParentFile().mkdirs();
 			File tmpFile = getTmpFile();
@@ -392,19 +398,32 @@ public abstract class GT_ChunkAssociatedData<T extends GT_ChunkAssociatedData.ID
 		private void loadFromFile(File file) throws IOException {
 			World world = Objects.requireNonNull(this.world.get(), "Attempting to load region of another world!");
 			try (DataInputStream input = new DataInputStream(new FileInputStream(file))) {
-				boolean nullRange = input.readBoolean();
-				int ptr = 0;
-				while (ptr != data.length) {
-					int rangeEnd = ptr + input.readUnsignedShort();
-					if (!nullRange) {
-						for (; ptr < rangeEnd; ptr++) {
-							data[ptr] = readElement(input, version, world, getChunkX(ptr), getChunkZ(ptr));
-						}
-					} else {
-						Arrays.fill(data, ptr, rangeEnd, null);
-						ptr = rangeEnd;
-					}
+				byte b = input.readByte();
+				switch (b) {
+					case 0:
+						loadV0(input, world);
+						break;
+					default:
+						GT_Log.err.printf("Unknown ChunkAssociatedData version %d\n", b);
 				}
+			}
+		}
+
+		private void loadV0(DataInput input, World world) throws IOException {
+			int version = input.readByte();
+			boolean nullRange = input.readBoolean();
+			int ptr = 0;
+			while (ptr != data.length) {
+				int rangeEnd = ptr + input.readUnsignedShort();
+				if (!nullRange) {
+					for (; ptr < rangeEnd; ptr++) {
+						data[ptr] = readElement(input, version, world, getChunkX(ptr), getChunkZ(ptr));
+					}
+				} else {
+					Arrays.fill(data, ptr, rangeEnd, null);
+					ptr = rangeEnd;
+				}
+				nullRange = !nullRange;
 			}
 		}
 

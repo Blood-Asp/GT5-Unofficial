@@ -31,22 +31,46 @@ public class GT_UndergroundOil {
     private static final GT_UndergroundOilStore STORAGE = new GT_UndergroundOilStore();
     private static final ChunkData NIL_FLUID_STACK = new ChunkData(-1, null, null, false);
 
+    /**
+     * Effectively just call {@code undergroundOil(te, -1)} for you
+     * @see #undergroundOil(World, int, int, float)
+     */
     public static FluidStack undergroundOilReadInformation(IGregTechTileEntity te){
         return undergroundOil(te.getWorld().getChunkFromBlockCoords(te.getXCoord(),te.getZCoord()),-1);
     }
 
+    /**
+     * Effectively just call {@code undergroundOil(chunk, -1)} for you
+     * @see #undergroundOil(World, int, int, float)
+     */
     public static FluidStack undergroundOilReadInformation(Chunk chunk) {
         return undergroundOil(chunk,-1);
     }
 
+    /** @see #undergroundOil(World, int, int, float) */
     public static FluidStack undergroundOil(IGregTechTileEntity te, float readOrDrainCoefficient){
         return undergroundOil(te.getWorld().getChunkFromBlockCoords(te.getXCoord(),te.getZCoord()),readOrDrainCoefficient);
     }
 
     //Returns whole content for information purposes -> when drainSpeedCoefficient < 0
     //Else returns extracted fluidStack if amount > 0, or null otherwise
+    /** @see #undergroundOil(World, int, int, float) */
     public static FluidStack undergroundOil(Chunk chunk, float readOrDrainCoefficient) {
-        ChunkData chunkData = STORAGE.get(chunk);
+        return undergroundOil(chunk.worldObj, chunk.xPosition, chunk.zPosition, readOrDrainCoefficient);
+    }
+
+    /**
+     * Pump fluid or read info.
+     * @param w a remote World. For a WorldClient it will always tell you null
+     * @param chunkX chunk coordinate X, i.e. blockX >> 4
+     * @param chunkZ chunk coordinate Z, i.e. blockZ >> 4
+     * @param readOrDrainCoefficient how fast to pump. The higher the faster. use negative to read expected current output
+     * @return null if nothing here, or depleted already, or a client side world
+     */
+    public static FluidStack undergroundOil(World w, int chunkX, int chunkZ, float readOrDrainCoefficient) {
+        if (w.isRemote)
+            return null; // troublemakers go away
+        ChunkData chunkData = STORAGE.get(w, chunkX, chunkZ);
         if (chunkData.getVein() == null || chunkData.getFluid() == null) // nothing here...
             return null;
         //do stuff on it if needed
@@ -102,7 +126,7 @@ public class GT_UndergroundOil {
             ChunkData chunkData = STORAGE.get(e.getChunk());
             Fluid fluid = chunkData.getFluid();
             if (fluid != null && fluid.getID() == e.getData().getInteger("GTOILFLUID"))
-                chunkData.setAmount(Math.min(0, Math.min(chunkData.getAmount(), e.getData().getInteger("GTOIL"))));
+                chunkData.setAmount(Math.min(chunkData.getAmount(), e.getData().getInteger("GTOIL")));
         }
     }
 
@@ -250,7 +274,7 @@ public class GT_UndergroundOil {
         public void changeAmount(int delta) {
             if (delta != 0)
                 dirty = true;
-            this.amount = Math.max(0, amount - delta);
+            this.amount = Math.max(amount + delta, 0);
         }
 
         @Nullable
@@ -272,7 +296,7 @@ public class GT_UndergroundOil {
 
         @Override
         public boolean isSameAsDefault() {
-            return dirty;
+            return !dirty;
         }
     }
 }
