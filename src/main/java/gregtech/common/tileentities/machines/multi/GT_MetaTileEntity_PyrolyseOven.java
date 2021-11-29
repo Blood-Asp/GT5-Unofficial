@@ -231,11 +231,6 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_EnhancedMu
     }
 
     @Override
-    public int getPollutionPerTick(ItemStack aStack){
-        return getPollutionPerSecond(aStack)/20;
-    }
-
-    @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
     }

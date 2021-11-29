@@ -35,11 +35,6 @@ public abstract class GT_MetaTileEntity_AbstractMultiFurnace<T extends GT_MetaTi
     }
 
     @Override
-    public int getPollutionPerTick(ItemStack aStack) {
-        return 20;
-    }
-
-    @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
     }

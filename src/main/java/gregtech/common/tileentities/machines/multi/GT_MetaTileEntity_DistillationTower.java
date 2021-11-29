@@ -250,11 +250,6 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Enhan
     }
 
     @Override
-    public int getPollutionPerTick(ItemStack aStack) {
-        return 0;
-    }
-
-    @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
     }

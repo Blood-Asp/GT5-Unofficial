@@ -119,11 +119,6 @@ public class GT_MetaTileEntity_MultiFurnace extends GT_MetaTileEntity_AbstractMu
     }
 
     @Override
-    public int getPollutionPerTick(ItemStack aStack){
-        return getPollutionPerSecond(aStack)/20;
-    }
-
-    @Override
     public boolean checkRecipe(ItemStack aStack) {
         ArrayList<ItemStack> tInputList = getStoredInputs();
         if (tInputList.isEmpty())
