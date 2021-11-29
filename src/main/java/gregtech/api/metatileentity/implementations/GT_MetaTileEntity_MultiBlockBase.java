@@ -398,16 +398,13 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     /**
      * Gets the pollution this Device outputs to a Muffler per tick (10000 = one Pullution Block)
      */
-    public int getPollutionPerTick(ItemStack aStack){
-        return getPollutionPerSecond(aStack)/20;
-    }
+    public abstract int getPollutionPerTick(ItemStack aStack);
 
     /**
-     * Gets the pollution produced per second by this multiblock, default to 0. Override this with
-     * its actual value in the code of the multiblock.
+     * Gets the pollution produced per second by this multiblock
      */
     public int getPollutionPerSecond(ItemStack aStack){
-        return 0;
+        return 20 * getPollutionPerTick(aStack);
     }
 
     /**

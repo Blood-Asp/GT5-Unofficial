@@ -164,6 +164,11 @@ public class GT_MetaTileEntity_ImplosionCompressor extends GT_MetaTileEntity_Cub
     }
 
     @Override
+    public int getPollutionPerTick(ItemStack aStack) {
+        return getPollutionPerSecond(aStack)/20;
+    }
+
+    @Override
     public int getPollutionPerSecond(ItemStack aStack){
         return GT_Mod.gregtechproxy.mPollutionImplosionCompressorPerSecond;
     }

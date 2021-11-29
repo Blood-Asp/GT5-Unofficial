@@ -270,6 +270,11 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_EnhancedMu
     }
 
     @Override
+    public int getPollutionPerTick(ItemStack aStack) {
+        return getPollutionPerSecond(aStack)/20;
+    }
+    
+    @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return true;
     }

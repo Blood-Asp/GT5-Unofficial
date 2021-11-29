@@ -88,6 +88,11 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
     }
 
     @Override
+    public int getPollutionPerTick(ItemStack aStack){
+        return getPollutionPerSecond(aStack)/20;
+    }
+
+    @Override
     int fluidIntoPower(ArrayList<FluidStack> aFluids, int aOptFlow, int aBaseEff) {
         if (aFluids.size() >= 1) {
             int tEU = 0;

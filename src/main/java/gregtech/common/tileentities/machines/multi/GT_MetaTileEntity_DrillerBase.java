@@ -429,6 +429,11 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_En
     }
 
     @Override
+    public int getPollutionPerTick(ItemStack aStack) {
+        return 0;
+    }
+
+    @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
     }

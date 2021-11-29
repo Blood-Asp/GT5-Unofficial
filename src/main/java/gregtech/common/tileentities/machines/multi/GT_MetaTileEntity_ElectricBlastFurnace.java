@@ -130,6 +130,11 @@ public class GT_MetaTileEntity_ElectricBlastFurnace extends GT_MetaTileEntity_Ab
     }
 
     @Override
+    public int getPollutionPerTick(ItemStack aStack){
+        return getPollutionPerSecond(aStack)/20;
+    }
+
+    @Override
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
         return GT_Recipe.GT_Recipe_Map.sBlastRecipes;
     }

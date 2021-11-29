@@ -407,9 +407,8 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mPollutionHighPressureLavaBoilerPerSecond = tMainConfig.get("Pollution", "PollutionHighPressureLavaBoiler", gregtechproxy.mPollutionHighPressureLavaBoilerPerSecond).getInt(gregtechproxy.mPollutionHighPressureLavaBoilerPerSecond);
         gregtechproxy.mPollutionHighPressureCoalBoilerPerSecond = tMainConfig.get("Pollution", "PollutionHighPressureCoalBoiler", gregtechproxy.mPollutionHighPressureCoalBoilerPerSecond).getInt(gregtechproxy.mPollutionHighPressureCoalBoilerPerSecond);
         gregtechproxy.mPollutionBaseDieselGeneratorPerSecond = tMainConfig.get("Pollution", "PollutionBaseDieselGenerator",gregtechproxy.mPollutionBaseDieselGeneratorPerSecond).getInt(gregtechproxy.mPollutionBaseDieselGeneratorPerSecond);
-        gregtechproxy.mPollutionDieselGeneratorReleasedByTier = tMainConfig.get("Pollution", "PollutionReleasedByTierDieselGenerator", gregtechproxy.mPollutionDieselGeneratorReleasedByTier).getDoubleList();
-        gregtechproxy.mPollutionBaseGasTurbinePerSecond = tMainConfig.get("Pollution", "PollutionBaseGasTurbineGenerator", gregtechproxy.mPollutionBaseGasTurbinePerSecond).getInt(gregtechproxy.mPollutionBaseGasTurbinePerSecond);
-        gregtechproxy.mPollutionGasTurbineReleasedByTier = tMainConfig.get("Pollution", "PollutionReleasedByTierGasTurbineGenerator", gregtechproxy.mPollutionGasTurbineReleasedByTier).getDoubleList();
+        gregtechproxy.mPollutionDieselGeneratorReleasedByTier = tMainConfig.get("Pollution", "PollutionReleasedByTier", gregtechproxy.mPollutionDieselGeneratorReleasedByTier).getDoubleList();
+        gregtechproxy.mPollutionBaseGasTurbinePerSecond = tMainConfig.get("Pollution", "PollutionBaseDieselGenerator", gregtechproxy.mPollutionBaseGasTurbinePerSecond).getInt(gregtechproxy.mPollutionBaseGasTurbinePerSecond);
 
         gregtechproxy.mUndergroundOil.getConfig(tMainConfig, "undergroundfluid");
         gregtechproxy.mEnableCleanroom = tMainConfig.get("general", "EnableCleanroom", true).getBoolean(true);

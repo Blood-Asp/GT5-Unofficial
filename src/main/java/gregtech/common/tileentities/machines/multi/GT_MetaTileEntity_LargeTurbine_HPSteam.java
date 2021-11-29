@@ -83,6 +83,11 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
     }
 
     @Override
+    public int getPollutionPerTick(ItemStack aStack) {
+        return 0;
+    }
+
+    @Override
     int fluidIntoPower(ArrayList<FluidStack> aFluids, int aOptFlow, int aBaseEff) {
         if (looseFit) {
             aOptFlow *= 4;

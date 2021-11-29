@@ -352,6 +352,11 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
     }
 
     @Override
+    public int getPollutionPerTick(ItemStack aStack) {
+        return 0;
+    }
+
+    @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
     }
