@@ -431,11 +431,6 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
     }
 
     @Override
-    public int getPollutionPerTick(ItemStack aStack) {
-        return 0;
-    }
-
-    @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
     }

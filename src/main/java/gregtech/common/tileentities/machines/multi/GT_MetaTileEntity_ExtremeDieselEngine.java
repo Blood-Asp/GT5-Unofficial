@@ -164,11 +164,6 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
     }
 
     @Override
-    public int getPollutionPerTick(ItemStack aStack){
-        return getPollutionPerSecond(aStack)/20;
-    }
-
-    @Override
     public String[] getInfoData() {
         int mPollutionReduction=0;
         for (GT_MetaTileEntity_Hatch_Muffler tHatch : mMufflerHatches) {

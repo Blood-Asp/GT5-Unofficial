@@ -143,11 +143,6 @@ public class GT_MetaTileEntity_VacuumFreezer extends GT_MetaTileEntity_CubicMult
     }
 
     @Override
-    public int getPollutionPerTick(ItemStack aStack) {
-        return 0;
-    }
-
-    @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
     }

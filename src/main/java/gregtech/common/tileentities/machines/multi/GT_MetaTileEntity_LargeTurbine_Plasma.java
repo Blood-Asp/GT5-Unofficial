@@ -89,11 +89,6 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
     }
 
     @Override
-    public int getPollutionPerTick(ItemStack aStack) {
-        return 0;
-    }
-
-    @Override
     int fluidIntoPower(ArrayList<FluidStack> aFluids, int aOptFlow, int aBaseEff) {
         if (aFluids.size() >= 1) {
             aOptFlow *= 800;//CHANGED THINGS HERE, check recipe runs once per 20 ticks
