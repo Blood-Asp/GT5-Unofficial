@@ -2,6 +2,7 @@ package gregtech.api.util;
 
 import static gregtech.GT_Mod.GT_FML_LOGGER;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -14,7 +15,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraftforge.fluids.FluidStack;
-import scala.actors.threadpool.Arrays;
 
 public class GT_AssemblyLineUtils {
 
@@ -159,7 +159,7 @@ public class GT_AssemblyLineUtils {
 		for (GT_Recipe_AssemblyLine aRecipe : GT_Recipe.GT_Recipe_AssemblyLine.sAssemblylineRecipes) {
 			if (aRecipe.mEUt == aEU && aRecipe.mDuration == aTime) {
 				if (GT_Utility.areStacksEqual(aOutputs[0], aRecipe.mOutput, true)) {
-					if (Arrays.equals(aRecipe.mInputs, aInputs) && Arrays.equals(aRecipe.mFluidInputs, aFluidInputs)) {							
+					if (Arrays.equals(aRecipe.mInputs, aInputs) && Arrays.equals(aRecipe.mFluidInputs, aFluidInputs)) {
 						// Cache it
 						String aRecipeHash = generateRecipeHash(aRecipe);
 						sRecipeCacheByRecipeHash.put(aRecipeHash, aRecipe);
