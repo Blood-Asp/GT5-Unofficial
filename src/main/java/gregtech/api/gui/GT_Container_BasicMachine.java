@@ -203,7 +203,6 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
         GT_MetaTileEntity_BasicMachine machine = (GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity();
         if (machine == null) return null;
         ItemStack tResultStack;
-        System.out.printf("shift %d, index %d, mouse %d, client? %b\n", aShifthold, aSlotIndex, aMouseclick, mTileEntity.isClientSide());
         switch (aSlotIndex) {
             case 0:
                 machine.mFluidTransfer = !machine.mFluidTransfer;
