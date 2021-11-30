@@ -28,6 +28,10 @@ public class GT_Container_BasicTank extends GT_ContainerMetaTile_Machine {
         super(aInventoryPlayer, aTileEntity);
     }
 
+    /**
+     * Subclasses must ensure third slot (aSlotIndex==2) is drainable fluid display item slot.
+     * Otherwise, subclasses must intercept the appropriate the slotClick event and call super.slotClick(2, xxx) if necessary
+     */
     @Override
     public void addSlots(InventoryPlayer aInventoryPlayer) {
         addSlotToContainer(new Slot(mTileEntity, 0, 80, 17));
