@@ -5,6 +5,8 @@ dependencies {
     compile("com.github.GTNewHorizons:NotEnoughItems:master-SNAPSHOT:dev")
     compile("com.github.GTNewHorizons:EnderCore:master-SNAPSHOT:dev")
 
+    compile("net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev")
+
     compileOnly("com.github.GTNewHorizons:ForestryMC:master-SNAPSHOT:dev") {
         transitive = false
     }
@@ -21,8 +23,6 @@ dependencies {
         transitive = false
     }
 
-    compile("net.industrial-craft:industrialcraft-2:2.2.790-experimental:dev")
-
     compileOnly("appeng:appliedenergistics2:rv3-beta-22:dev") {  // TODO: use in-house version
         transitive = false
     }
@@ -32,13 +32,13 @@ dependencies {
     compileOnly("com.mod-buildcraft:buildcraft:7.1.23:dev") {
         transitive = false
     }
-    compileOnly("commons-io:commons-io:2.4"){
+    compileOnly("commons-io:commons-io:2.4") {
         transitive = false
     }
-    compileOnly("codechicken:Translocator:1.7.10-1.1.2.16:dev"){  // TODO: use in-house version (?)
+    compileOnly("codechicken:Translocator:1.7.10-1.1.2.16:dev") {  // TODO: use in-house version (?)
         transitive = false
     }
-    compileOnly("curse.maven:cofh-lib-220333:2388749"){
+    compileOnly("curse.maven:cofh-lib-220333:2388749") {
         transitive = false
     }
     compileOnly("curse.maven:nuclear-control-2-236813:2464681") {  // TODO: use in-house version

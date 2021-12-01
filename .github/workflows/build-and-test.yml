@@ -1,16 +1,16 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle
+name: Build and test
 
 on:
-  push:
-    branches: [ master, main ]
   pull_request:
+    branches: [ master, main ]
+  push:
     branches: [ master, main ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -32,12 +32,14 @@ jobs:
     
     - name: Build the mod
       run: ./gradlew build
-        
-    - uses: "marvinpinto/action-automatic-releases@latest"
-      with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "latest"
-        prerelease: true
-        title: "Latest Development Build"
-        files: build/libs/*.jar
-            
+
+    - name: Run server for 1 minute
+      run: |
+        mkdir run
+        echo "eula=true" > run/eula.txt  
+        timeout 10 ./gradlew runServer || true
+
+    - name: Test no crashes happend
+      run: |
+        chmod +x .github/scripts/test-no-crash-reports.sh
+        .github/scripts/test-no-crash-reports.sh
