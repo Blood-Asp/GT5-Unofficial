@@ -77,7 +77,7 @@ import static gregtech.api.enums.GT_Values.MOD_ID_AE;
 import static gregtech.api.enums.GT_Values.MOD_ID_FR;
 
 @SuppressWarnings("ALL")
-@Mod(modid = "gregtech", name = "GregTech", version = "MC1710", useMetadata = false,
+@Mod(modid = "gregtech", name = "GregTech5-Unofficial", version = "GRADLETOKEN_VERSION", useMetadata = false,
         dependencies = " required-after:IC2;" +
                 " required-after:structurelib;" +
                 " after:dreamcraft;" +
@@ -115,6 +115,8 @@ import static gregtech.api.enums.GT_Values.MOD_ID_FR;
                 " after:TConstruct;" +
                 " after:Translocator;")
 public class GT_Mod implements IGT_Mod {
+
+    @Deprecated // Keep for use in BaseMetaTileEntity
     public static final int VERSION = 509, SUBVERSION = 40;
     public static final int TOTAL_VERSION = calculateTotalGTVersion(VERSION, SUBVERSION);
     public static final int REQUIRED_IC2 = 624;
