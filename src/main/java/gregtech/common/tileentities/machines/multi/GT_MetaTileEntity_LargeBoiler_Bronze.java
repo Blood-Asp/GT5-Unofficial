@@ -1,24 +1,29 @@
 package gregtech.common.tileentities.machines.multi;
 
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 
 public class GT_MetaTileEntity_LargeBoiler_Bronze extends GT_MetaTileEntity_LargeBoiler {
+
     public GT_MetaTileEntity_LargeBoiler_Bronze(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        pollutionPerSecond = GT_Mod.gregtechproxy.mPollutionLargeBronzeBoilerPerSecond;
     }
 
     public GT_MetaTileEntity_LargeBoiler_Bronze(String aName) {
         super(aName);
+        pollutionPerSecond = GT_Mod.gregtechproxy.mPollutionLargeBronzeBoilerPerSecond;
     }
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_LargeBoiler_Bronze(this.mName);
     }
-    
+
     @Override
     public String getCasingMaterial(){
     	return "Bronze";

@@ -9,6 +9,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.net.GT_Packet_Pollution;
 import gregtech.api.util.GT_ChunkAssociatedData;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.render.GT_PollutionRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
@@ -27,12 +28,16 @@ import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Consumer;
 
 import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 import static gregtech.common.GT_Proxy.dimensionWisePollution;
@@ -73,11 +78,12 @@ public class GT_Pollution {
 	 * Muffler Hatch Pollution reduction:  ** inaccurate **
 	 * LV (0%), MV (30%), HV (52%), EV (66%), IV (76%), LuV (84%), ZPM (89%), UV (92%), MAX (95%)
 	 */
-	private List<ChunkCoordIntPair> pollutionList = new ArrayList<>();//chunks left to process
-	private final List<ChunkCoordIntPair> chunkData = new ArrayList<>();//link to chunk data that is saved/loaded
+	private List<ChunkCoordIntPair> pollutionList = new ArrayList<>();//chunks left to process in this cycle
+	private final Set<ChunkCoordIntPair> pollutedChunks = new HashSet<>();// a global list of all chunks with positive pollution
 	private int operationsPerTick = 0;//how much chunks should be processed in each cycle
 	private static final short cycleLen = 1200;
 	private final World world;
+	private boolean blank = true;
 	public static int mPlayerPollution;
 
 	private static int POLLUTIONPACKET_MINVALUE = 1000;
@@ -96,6 +102,7 @@ public class GT_Pollution {
 	public static void onWorldTick(TickEvent.WorldTickEvent aEvent) {//called from proxy
 		//return if pollution disabled
 		if (!GT_Mod.gregtechproxy.mPollution) return;
+		if (aEvent.phase == TickEvent.Phase.START) return;
 		final GT_Pollution pollutionInstance = dimensionWisePollution.get(aEvent.world.provider.dimensionId);
 		if (pollutionInstance == null) return;
 		pollutionInstance.tickPollutionInWorld((int) (aEvent.world.getTotalWorldTime() % cycleLen));
@@ -103,16 +110,18 @@ public class GT_Pollution {
 
 	private void tickPollutionInWorld(int aTickID) {//called from method above
 		//gen data set
-		if (aTickID == 0) {
+		if (aTickID == 0 || blank) {
 			// make a snapshot of what to work on
-			// counterintuitive as it seems, but this is the fastest way java collections framework offers us.
-			pollutionList = new ArrayList<>(chunkData);
+			pollutionList = new ArrayList<>(pollutedChunks);
 			//set operations per tick
-			if (pollutionList.size() > 0) operationsPerTick = (pollutionList.size() / cycleLen);
-			else operationsPerTick = 0;//SANity
+			if (pollutionList.size() > 0)
+				operationsPerTick = Math.max(1, pollutionList.size() / cycleLen);
+			else
+				operationsPerTick = 0; //SANity
+			blank = false;
 		}
 
-		for (int chunksProcessed = 0; chunksProcessed <= operationsPerTick; chunksProcessed++) {
+		for (int chunksProcessed = 0; chunksProcessed < operationsPerTick; chunksProcessed++) {
 			if (pollutionList.size() == 0) break;//no more stuff to do
 			ChunkCoordIntPair actualPos = pollutionList.remove(pollutionList.size() - 1);//faster
 			//get pollution
@@ -120,10 +129,8 @@ public class GT_Pollution {
 			int tPollution = currentData.getAmount();
 			//remove some
 			tPollution = (int) (0.9945f * tPollution);
-			//tPollution -= 2000;//This does not really matter...
 
-			if (tPollution <= 0) tPollution = 0;//SANity check
-			else if (tPollution > 400000) {//Spread Pollution
+			if (tPollution > 400000) {//Spread Pollution
 
 				ChunkCoordIntPair[] tNeighbors = new ChunkCoordIntPair[4];//array is faster
 				tNeighbors[0] = (new ChunkCoordIntPair(actualPos.chunkXPos + 1, actualPos.chunkZPos));
@@ -138,7 +145,7 @@ public class GT_Pollution {
 						tDiff = tDiff / 20;
 						neighborPollution = GT_Utility.safeInt((long) neighborPollution + tDiff);//tNPol += tDiff;
 						tPollution -= tDiff;
-						neighbor.setAmount(neighborPollution);
+						setChunkPollution(neighborPosition, neighborPollution);
 					}
 				}
 
@@ -200,7 +207,7 @@ public class GT_Pollution {
 				}
 			}
 			//Write new pollution to Hashmap !!!
-			currentData.setAmount(tPollution);
+			setChunkPollution(actualPos, tPollution);
 
 			//Send new value to players nearby
 			if (tPollution > POLLUTIONPACKET_MINVALUE) {
@@ -208,6 +215,10 @@ public class GT_Pollution {
 				GT_Values.NW.sendToAllAround(new GT_Packet_Pollution(actualPos, tPollution), point);
 			}
 		}
+	}
+
+	private void setChunkPollution(ChunkCoordIntPair coord, int pollution) {
+		mutatePollution(world, coord.chunkXPos, coord.chunkZPos, c -> c.setAmount(pollution), pollutedChunks);
 	}
 
 	private static void damageBlock(World world, int x, int y, int z, boolean sourRain) {
@@ -265,35 +276,87 @@ public class GT_Pollution {
 		}
 	}
 
+	private static GT_Pollution getPollutionManager(World world) {
+		return dimensionWisePollution.computeIfAbsent(world.provider.dimensionId, i -> new GT_Pollution(world));
+	}
+
+	/** @see #addPollution(World, int, int, int) */
 	public static void addPollution(IGregTechTileEntity te, int aPollution) {
-		addPollution(te.getWorld().getChunkFromBlockCoords(te.getXCoord(), te.getZCoord()), aPollution);
+		if (!GT_Mod.gregtechproxy.mPollution || aPollution == 0 || te.isClientSide()) return;
+		mutatePollution(te.getWorld(), te.getXCoord() >> 4, te.getZCoord() >> 4, d -> d.changeAmount(aPollution), null);
 	}
 
+	/** @see #addPollution(World, int, int, int) */
 	public static void addPollution(Chunk ch, int aPollution) {
-		if (!GT_Mod.gregtechproxy.mPollution || aPollution == 0) return;
-		STORAGE.get(ch).changeAmount(aPollution);
+		if (!GT_Mod.gregtechproxy.mPollution || aPollution == 0 || ch.worldObj.isRemote) return;
+		mutatePollution(ch.worldObj, ch.xPosition, ch.zPosition, d -> d.changeAmount(aPollution), null);
 	}
 
+	/**
+	 * Add some pollution to given chunk. Can pass in negative to remove pollution.
+	 * Will clamp the final pollution number to 0 if it would be changed into negative.
+	 *
+	 * @param w world to modify. do nothing if it's a client world
+	 * @param chunkX chunk coordinate X, i.e. blockX >> 4
+	 * @param chunkZ chunk coordinate Z, i.e. blockZ >> 4
+	 * @param aPollution desired delta. Positive means the pollution in chunk would go higher.
+	 */
+	public static void addPollution(World w, int chunkX, int chunkZ, int aPollution) {
+		if (!GT_Mod.gregtechproxy.mPollution || aPollution == 0 || w.isRemote) return;
+		mutatePollution(w, chunkX, chunkZ, d -> d.changeAmount(aPollution), null);
+	}
+
+	private static void mutatePollution(World world, int x, int z, Consumer<ChunkData> mutator, @Nullable Set<ChunkCoordIntPair> chunks) {
+		ChunkData data = STORAGE.get(world, x, z);
+		boolean hadPollution = data.getAmount() > 0;
+		mutator.accept(data);
+		boolean hasPollution = data.getAmount() > 0;
+		if (hasPollution != hadPollution) {
+			if (chunks == null)
+				chunks = getPollutionManager(world).pollutedChunks;
+			if (hasPollution)
+				chunks.add(new ChunkCoordIntPair(x, z));
+			else
+				chunks.remove(new ChunkCoordIntPair(x, z));
+		}
+	}
+
+	/** @see #getPollution(World, int, int)  */
 	public static int getPollution(IGregTechTileEntity te) {
-		return getPollution(te.getWorld().getChunkFromBlockCoords(te.getXCoord(), te.getZCoord()));
+		return getPollution(te.getWorld(), te.getXCoord() >> 4, te.getZCoord() >> 4);
 	}
 
+	/** @see #getPollution(World, int, int)  */
 	public static int getPollution(Chunk ch) {
+		return getPollution(ch.worldObj, ch.xPosition, ch.zPosition);
+	}
+
+	/**
+	 * Get the pollution in specified chunk
+	 * @param w world to look in. can be a client world, but that limits the knowledge to what server side send us
+	 * @param chunkX chunk coordinate X, i.e. blockX >> 4
+	 * @param chunkZ chunk coordinate Z, i.e. blockZ >> 4
+	 * @return pollution amount. may be 0 if pollution is disabled, or if it's a client world and server did not send
+	 * us info about this chunk
+	 */
+	public static int getPollution(World w, int chunkX, int chunkZ) {
 		if (!GT_Mod.gregtechproxy.mPollution)
 			return 0;
-		return STORAGE.get(ch).getAmount();
+		if (w.isRemote)
+			// it really should be querying the client side stuff instead
+			return GT_PollutionRenderer.getKnownPollution(chunkX << 4, chunkZ << 4);
+		return STORAGE.get(w, chunkX, chunkZ).getAmount();
+	}
+
+	@Deprecated
+	public static int getPollution(ChunkCoordIntPair aCh, int aDim) {
+		return getPollution(DimensionManager.getWorld(aDim), aCh.chunkXPos, aCh.chunkZPos);
 	}
 
 	public static boolean hasPollution(Chunk ch) {
 		if (!GT_Mod.gregtechproxy.mPollution)
 			return false;
 		return STORAGE.isCreated(ch.worldObj, ch.getChunkCoordIntPair()) && STORAGE.get(ch).getAmount() > 0;
-	}
-
-	public static int getPollution(ChunkCoordIntPair aCh, int aDim) {
-		if (!GT_Mod.gregtechproxy.mPollution)
-			return 0;
-		return STORAGE.get(DimensionManager.getWorld(aDim), aCh.chunkXPos, aCh.chunkZPos).getAmount();
 	}
 
 	//Add compatibility with old code
@@ -323,7 +386,8 @@ public class GT_Pollution {
 		@SubscribeEvent
 		public void onWorldLoad(WorldEvent.Load e) {
 			// super class loads everything lazily. We force it to load them all.
-			STORAGE.loadAll(e.world);
+			if (!e.world.isRemote)
+				STORAGE.loadAll(e.world);
 		}
 	}
 
@@ -340,13 +404,12 @@ public class GT_Pollution {
 
 		@Override
 		protected ChunkData readElement(DataInput input, int version, World world, int chunkX, int chunkZ) throws IOException {
+			if (version != 0)
+				throw new IOException("Region file corrupted");
 			ChunkData data = new ChunkData(input.readInt());
-			getChunkData(world).add(new ChunkCoordIntPair(chunkX, chunkZ));
+			if (data.getAmount() > 0)
+				getPollutionManager(world).pollutedChunks.add(new ChunkCoordIntPair(chunkX, chunkZ));
 			return data;
-		}
-
-		private List<ChunkCoordIntPair> getChunkData(World world) {
-			return dimensionWisePollution.computeIfAbsent(world.provider.dimensionId, i -> new GT_Pollution(world)).chunkData;
 		}
 
 		@Override
@@ -357,11 +420,6 @@ public class GT_Pollution {
 		@Override
 		public void loadAll(World w) {
 			super.loadAll(w);
-		}
-
-		public void set(World world, ChunkCoordIntPair coord, ChunkData data) {
-			set(world, coord.chunkXPos, coord.chunkZPos, data);
-			getChunkData(world).add(coord);
 		}
 
 		public boolean isCreated(World world, ChunkCoordIntPair coord) {
@@ -377,7 +435,7 @@ public class GT_Pollution {
 		}
 
 		private ChunkData(int amount) {
-			this.amount = amount;
+			this.amount = Math.max(0, amount);
 		}
 
 		/**

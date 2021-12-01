@@ -270,7 +270,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                 for (int i = 0; i < tItemList.tagCount(); i++) {
                     NBTTagCompound tTag = tItemList.getCompoundTagAt(i);
                     int tSlot = tTag.getInteger("IntSlot");
-                    tSlot = shiftInventoryIndex(tSlot, nbtVersion);
+                    tSlot = migrateInventoryIndex(tSlot, nbtVersion);
                     if (tSlot >= 0 && tSlot < mMetaTileEntity.getRealInventory().length) {
                         mMetaTileEntity.getRealInventory()[tSlot] = GT_Utility.loadItem(tTag);
                     }
@@ -481,7 +481,8 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
 
 
                             if (mMetaTileEntity.isEnetOutput() && oOutput > 0) {
-                                long tOutputVoltage = Math.max(oOutput, oOutput + (1 << GT_Utility.getTier(oOutput))), tUsableAmperage = Math.min(getOutputAmperage(), (getStoredEU() - mMetaTileEntity.getMinimumStoredEU()) / tOutputVoltage);
+                                long tOutputVoltage = Math.max(oOutput, oOutput + (1L << Math.max(0, GT_Utility.getTier(oOutput) - 1))),
+                                        tUsableAmperage = Math.min(getOutputAmperage(), (getStoredEU() - mMetaTileEntity.getMinimumStoredEU()) / tOutputVoltage);
                                 if (tUsableAmperage > 0) {
                                     long tEU = tOutputVoltage * IEnergyConnected.Util.emitEnergyToNetwork(oOutput, tUsableAmperage, this);
                                     mAverageEUOutput[mAverageEUOutputIndex] += tEU;
@@ -1403,7 +1404,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                 }
             }
 
-            GT_Pollution.addPollution(this, 100000);
+            GT_Pollution.addPollution(this, GT_Mod.gregtechproxy.mPollutionOnExplosion);
             mMetaTileEntity.doExplosion(aAmount);
         }
     }
@@ -2308,9 +2309,13 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
       * @param nbtVersion The GregTech version in which the original Inventory Index was saved.
       * @return The corrected Inventory index
       */
-     private int shiftInventoryIndex(int slotIndex, int nbtVersion){
+     private int migrateInventoryIndex(int slotIndex, int nbtVersion){
          int oldInputSize, newInputSize, oldOutputSize, newOutputSize;
          int chemistryUpdateVersion = GT_Mod.calculateTotalGTVersion(509, 31);
+         int configCircuitAdditionVersion = GT_Mod.calculateTotalGTVersion(509, 40);
+         // 4 is old GT_MetaTileEntity_BasicMachine.OTHER_SLOT_COUNT
+         if (nbtVersion < configCircuitAdditionVersion && getMetaTileEntity() instanceof GT_MetaTileEntity_BasicMachine && slotIndex >= 4)
+             slotIndex += 1;
          if (mID >= 211 && mID <= 218) {//Assembler
              if (nbtVersion < chemistryUpdateVersion) {
                  oldInputSize = 2;

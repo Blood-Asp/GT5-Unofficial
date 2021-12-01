@@ -398,7 +398,17 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     /**
      * Gets the pollution this Device outputs to a Muffler per tick (10000 = one Pullution Block)
      */
-    public abstract int getPollutionPerTick(ItemStack aStack);
+    public int getPollutionPerTick(ItemStack aStack){
+        return getPollutionPerSecond(aStack)/20;
+    }
+
+    /**
+     * Gets the pollution produced per second by this multiblock, default to 0. Override this with
+     * its actual value in the code of the multiblock.
+     */
+    public int getPollutionPerSecond(ItemStack aStack){
+        return 0;
+    }
 
     /**
      * Gets the damage to the ItemStack, usually 0 or 1.
@@ -539,7 +549,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
 
         GT_Log.exp.println("MultiBlockExplosion at: " +this.getBaseMetaTileEntity().getXCoord()+" | "+this.getBaseMetaTileEntity().getYCoord()+" | "+this.getBaseMetaTileEntity().getZCoord()+" DIMID: "+ this.getBaseMetaTileEntity().getWorld().provider.dimensionId+".");
 
-        GT_Pollution.addPollution(getBaseMetaTileEntity(), 300000);
+        GT_Pollution.addPollution(getBaseMetaTileEntity(), GT_Mod.gregtechproxy.mPollutionOnExplosion);
         mInventory[1] = null;
         for (MetaTileEntity tTileEntity : mInputBusses) tTileEntity.getBaseMetaTileEntity().doExplosion(V[8]);
         for (MetaTileEntity tTileEntity : mOutputBusses) tTileEntity.getBaseMetaTileEntity().doExplosion(V[8]);

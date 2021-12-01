@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.boilers;
 
+import gregtech.GT_Mod;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.ITexture;
@@ -28,13 +29,12 @@ public class GT_MetaTileEntity_Boiler_Lava extends GT_MetaTileEntity_Boiler {
     public static final int ENERGY_PER_LAVA = 1;
     public static final int CONSUMPTION_PER_HEATUP = 3;
     public static final int PRODUCTION_PER_SECOND = 600;
-    public static final int POLLUTION_PER_SECOND = 20;
 
     public GT_MetaTileEntity_Boiler_Lava(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, new String[]{
                 "A Boiler running off Lava",
                 "Produces " + PRODUCTION_PER_SECOND + "L of Steam per second",
-                "Causes " + POLLUTION_PER_SECOND + " Pollution per second",
+                "Causes " + Integer.toString(GT_Mod.gregtechproxy.mPollutionHighPressureLavaBoilerPerSecond) + " Pollution per second",
                 "Consumes " + ((double) CONSUMPTION_PER_HEATUP / ENERGY_PER_LAVA) + "L of Lava every " + COOLDOWN_INTERVAL + " ticks when fully heat up"});
     }
 
@@ -98,7 +98,7 @@ public class GT_MetaTileEntity_Boiler_Lava extends GT_MetaTileEntity_Boiler {
 
     @Override
     protected int getPollution() {
-        return POLLUTION_PER_SECOND;
+        return GT_Mod.gregtechproxy.mPollutionHighPressureLavaBoilerPerSecond;
     }
 
     @Override

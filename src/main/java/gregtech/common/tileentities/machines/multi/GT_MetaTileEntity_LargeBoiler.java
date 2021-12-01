@@ -73,6 +73,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_En
     private int excessProjectedEU = 0; //Eliminate rounding errors from throttling the boiler
     private int mCasingAmount;
     private int mFireboxAmount;
+    protected int pollutionPerSecond = 1; //placeholder for the child classes
 
     public GT_MetaTileEntity_LargeBoiler(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -90,7 +91,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_En
                 .addInfo("Produces " + (getEUt() * 40) * (runtimeBoost(20) / 20f) + "L of Steam with 1 Coal at " + getEUt() * 40 + "L/s")//?
                 .addInfo("A programmed circuit in the main block throttles the boiler (-1000L/s per config)")
                 .addInfo(String.format("Diesel fuels have 1/4 efficiency - Takes %.2f seconds to heat up", 500.0 / getEfficiencyIncrease()))//? check semifluid again
-                .addPollutionAmount(20 * getPollutionPerTick(null))
+                .addPollutionAmount(getPollutionPerSecond(null))
                 .addSeparator()
                 .beginStructureBlock(3, 5, 3, false)
                 .addController("Front bottom")
@@ -131,6 +132,16 @@ public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_En
     public abstract int getEUt();
 
     public abstract int getEfficiencyIncrease();
+
+    public int getIntegratedCircuitConfig(){
+        return integratedCircuitConfig;
+    }
+
+    @Override
+    public int getPollutionPerSecond(ItemStack aStack) {
+        //allows for 0 pollution if circuit throttle is too high
+        return Math.max(0, (int) (pollutionPerSecond * (1-GT_Mod.gregtechproxy.mPollutionReleasedByThrottle*getIntegratedCircuitConfig())));
+    }
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -298,12 +309,6 @@ public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_En
     @Override
     public int getMaxEfficiency(ItemStack aStack) {
         return 10000;
-    }
-
-    @Override
-    public int getPollutionPerTick(ItemStack aStack) {
-        int adjustedEUOutput = Math.max(25, getEUt() - 25 * integratedCircuitConfig);
-        return Math.max(1, 12 * adjustedEUOutput / getEUt());
     }
 
     @Override
