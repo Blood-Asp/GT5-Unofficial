@@ -11,7 +11,7 @@ dependencies {
     compileOnly("com.github.GTNewHorizons:Railcraft:master-SNAPSHOT:dev") {
         transitive = false
     }
-    compileOnly("com.github.GTNewHorizons:Galacticraft:rewrite-core-mod-SNAPSHOT:dev") {  // TODO: change to master
+    compileOnly("com.github.GTNewHorizons:Galacticraft:master-SNAPSHOT:dev") {
         transitive = false
     }
     compileOnly("com.github.GTNewHorizons:AppleCore:master-SNAPSHOT:dev") {
