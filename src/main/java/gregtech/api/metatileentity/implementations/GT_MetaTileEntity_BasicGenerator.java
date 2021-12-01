@@ -332,7 +332,7 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
 
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        return super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack) && (getFuelValue(aStack) > 0 || getFuelValue(aStack, true) > 0) || (getFuelValue(GT_Utility.getFluidForFilledItem(aStack, true)) > 0 || getFuelValue(GT_Utility.getFluidForFilledItem(aStack, true), true) > 0);
+        return super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack) && (getFuelValue(aStack) > 0 || getFuelValue(aStack, true) > 0 || getFuelValue(GT_Utility.getFluidForFilledItem(aStack, true)) > 0 || getFuelValue(GT_Utility.getFluidForFilledItem(aStack, true), true) > 0);
     }
 
     @Override
