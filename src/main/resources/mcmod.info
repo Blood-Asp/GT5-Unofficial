@@ -1,10 +1,10 @@
 [
   {
-    "modid": "gregtech_addon",
-    "name": "GregTech-Addon",
+    "modid": "${modId}",
+    "name": "${modName}",
     "description": "This Mod adds the awesome Technology of GregTech-Intergalactical to your World!",
-    "mcversion": "1.7.10",
-    "version": "5.09",
+    "mcversion": "${minecraftVersion}",
+    "version": "${modVersion}",
     "logoFile": "/assets/gregtech_addon/textures/LogoGTI_Long.png",
     "url": "http://forum.industrial-craft.net/index.php?page=Thread&threadID=11488",
     "updateUrl": "",
