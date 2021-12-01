@@ -29,19 +29,26 @@ dependencies {
     compileOnly("com.enderio:EnderIO:1.7.10-2.3.0.417_beta:dev") {  // TODO: use in-house version
         transitive = false
     }
+    compileOnly("com.mod-buildcraft:buildcraft:7.1.23:dev") {
+        transitive = false
+    }
     compileOnly("commons-io:commons-io:2.4"){
         transitive = false
     }
-    compileOnly("eu.usrv:YAMCore:1.7.10-0.5.80:deobf"){
-        transitive = false
-    }
-    compileOnly("codechicken:Translocator:1.7.10-1.1.2.16:dev"){
+    compileOnly("codechicken:Translocator:1.7.10-1.1.2.16:dev"){  // TODO: use in-house version (?)
         transitive = false
     }
     compileOnly("curse.maven:cofh-lib-220333:2388749"){
         transitive = false
     }
-    compileOnly("curse.maven:nuclear-control-2-236813:236813") {  // TODO: use in-house version
+    compileOnly("curse.maven:nuclear-control-2-236813:2464681") {  // TODO: use in-house version
         transitive = false
     }
+    compileOnly("thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev") {
+        transitive = false
+    }
+    compileOnly("com.google.auto.value:auto-value-annotations:1.8.2") {
+        transitive = false
+    }
+    annotationProcessor("com.google.auto.value:auto-value:1.8.2")
 }
