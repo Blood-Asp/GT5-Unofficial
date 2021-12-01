@@ -110,7 +110,7 @@ public class GT_UndergroundOil {
         int dimensionId = world.provider.dimensionId;
         GT_UO_Dimension dimension = GT_Mod.gregtechproxy.mUndergroundOil.GetDimension(dimensionId);
         if (dimension == null) return null;
-        // prepare RNG 🙏 🙏 🙏
+        // prepare RNG
         final XSTR tVeinRNG = new XSTR(world.getSeed() + dimensionId * 2L + (chunkX >> 3) + 8267L * (chunkZ >> 3));
         final XSTR tChunkRNG = new XSTR(world.getSeed() + dimensionId * 2L + chunkX + 8267L * chunkZ);
         GT_UO_Fluid uoFluid = dimension.getRandomFluid(tVeinRNG);
