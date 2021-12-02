@@ -245,6 +245,7 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         ItemList.Shape_Extruder_Rotor.set(addItem(tLastID = 374, "Extruder Shape (Rotor)", "Extruder Shape for a Rotor"));
         ItemList.Shape_Extruder_Small_Gear.set(addItem(tLastID = 375, "Extruder Shape (Small Gear)", "Extruder Shape for a Small Gear"));
         ItemList.Shape_Extruder_Turbine_Blade.set(addItem(tLastID = 376, "Extruder Shape (Turbine Blade)", "Extruder Shape for a Turbine Blade"));
+        ItemList.Shape_Extruder_Shaft.set(addItem(tLastID = 377,"Extruder Shape (Shaft)","Extruder Shape for making a shaft"));
 
         ItemList.Shape_Slicer_Flat.set(addItem(tLastID = 398, "Slicer Blade (Flat)", "Slicer Blade for cutting Flat"));
         ItemList.Shape_Slicer_Stripes.set(addItem(tLastID = 399, "Slicer Blade (Stripes)", "Slicer Blade for cutting Stripes"));
