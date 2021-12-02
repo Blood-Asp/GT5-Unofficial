@@ -33,6 +33,9 @@ public class GT_IntegratedCircuit_Item extends GT_Generic_Item {
 
         ItemList.Circuit_Integrated.set(this);
 
+        for (int i = 1; i <= 24; i++) {
+            GregTech_API.registerConfigurationCircuit(new ItemStack(this, 0, i));
+        }
 
         GT_ModHandler.addShapelessCraftingRecipe(ItemList.Circuit_Integrated.getWithDamage(1L, 0L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{OrePrefixes.circuit.get(Materials.Basic)});
         long bits = GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE;

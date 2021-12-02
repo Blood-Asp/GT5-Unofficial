@@ -91,7 +91,7 @@ public class GT_ModHandler {
     public static volatile int VERSION = 509;
     public static Collection<String> sNativeRecipeClasses = new HashSet<>(), sSpecialRecipeClasses = new HashSet<>();
     public static GT_HashSet<GT_ItemStack> sNonReplaceableItems = new GT_HashSet<>();
-    public static Object sBoxableWrapper = GT_Utility.callConstructor("gregtechmod.api.util.GT_IBoxableWrapper", 0, null, false);
+    public static Object sBoxableWrapper = new GT_IBoxableWrapper();
     private static final Map<IRecipeInput, RecipeOutput> sExtractorRecipes = new HashMap<>();
     private static final Map<IRecipeInput, RecipeOutput> sMaceratorRecipes = new HashMap<>();
     private static final Map<IRecipeInput, RecipeOutput> sCompressorRecipes = new HashMap<>();
@@ -797,6 +797,13 @@ public class GT_ModHandler {
     /**
      * IC2-ThermalCentrifuge Recipe. Overloads old Recipes automatically
      */
+    public static boolean addThermalCentrifugeRecipe(ItemStack aInput, int[] aChances, int aHeat, Object... aOutput) {
+        if (aInput == null || aOutput == null || aOutput.length <= 0 || aOutput[0] == null) return false;
+        if (!GregTech_API.sRecipeFile.get(ConfigCategories.Machines.thermalcentrifuge, aInput, true)) return false;
+        RA.addThermalCentrifugeRecipe(aInput, aOutput.length >= 1 ? (ItemStack)aOutput[0] : null, aOutput.length >= 2 ? (ItemStack)aOutput[1] : null, aOutput.length >= 3 ? (ItemStack)aOutput[2] : null, aChances, 500, 48);
+        return true;
+    }
+
     public static boolean addThermalCentrifugeRecipe(ItemStack aInput, int aHeat, Object... aOutput) {
         if (aInput == null || aOutput == null || aOutput.length <= 0 || aOutput[0] == null) return false;
         if (!GregTech_API.sRecipeFile.get(ConfigCategories.Machines.thermalcentrifuge, aInput, true)) return false;
@@ -807,11 +814,19 @@ public class GT_ModHandler {
     /**
      * IC2-OreWasher Recipe. Overloads old Recipes automatically
      */
+    public static boolean addOreWasherRecipe(ItemStack aInput, int[] aChances, int aWaterAmount, Object... aOutput) {
+        if (aInput == null || aOutput == null || aOutput.length <= 0 || aOutput[0] == null) return false;
+        if (!GregTech_API.sRecipeFile.get(ConfigCategories.Machines.orewashing, aInput, true)) return false;
+        RA.addOreWasherRecipe(aInput, (ItemStack)aOutput[0], (ItemStack)aOutput[1], (ItemStack)aOutput[2], GT_ModHandler.getWater(aWaterAmount), aChances, 500, 16);
+        RA.addOreWasherRecipe(aInput, (ItemStack)aOutput[0], (ItemStack)aOutput[1], (ItemStack)aOutput[2], GT_ModHandler.getDistilledWater(aWaterAmount / 5), aChances, 300, 16);
+        return true;
+    }
+
     public static boolean addOreWasherRecipe(ItemStack aInput, int aWaterAmount, Object... aOutput) {
         if (aInput == null || aOutput == null || aOutput.length <= 0 || aOutput[0] == null) return false;
         if (!GregTech_API.sRecipeFile.get(ConfigCategories.Machines.orewashing, aInput, true)) return false;
-        RA.addOreWasherRecipe(aInput, (ItemStack)aOutput[0], (ItemStack)aOutput[1], (ItemStack)aOutput[2], GT_ModHandler.getWater(1000L), 500, 16);
-        RA.addOreWasherRecipe(aInput, (ItemStack)aOutput[0], (ItemStack)aOutput[1], (ItemStack)aOutput[2], GT_ModHandler.getDistilledWater(200L), 300, 16);
+        RA.addOreWasherRecipe(aInput, (ItemStack)aOutput[0], (ItemStack)aOutput[1], (ItemStack)aOutput[2], GT_ModHandler.getWater(aWaterAmount), 500, 16);
+        RA.addOreWasherRecipe(aInput, (ItemStack)aOutput[0], (ItemStack)aOutput[1], (ItemStack)aOutput[2], GT_ModHandler.getDistilledWater(aWaterAmount / 5), 300, 16);
         return true;
     }
 

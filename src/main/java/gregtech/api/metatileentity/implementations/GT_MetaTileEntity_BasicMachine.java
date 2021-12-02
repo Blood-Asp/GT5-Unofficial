@@ -10,6 +10,7 @@ import gregtech.api.interfaces.metatileentity.IMachineCallback;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GT_CoverBehaviorBase;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
@@ -30,6 +31,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static gregtech.api.enums.GT_Values.V;
 import static gregtech.api.enums.GT_Values.debugCleanroom;
@@ -52,7 +54,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
             DID_NOT_FIND_RECIPE = 0,
             FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS = 1,
             FOUND_AND_SUCCESSFULLY_USED_RECIPE = 2;
-    public static final int OTHER_SLOT_COUNT = 4;
+    public static final int OTHER_SLOT_COUNT = 5;
     public final ItemStack[] mOutputItems;
     public final int mInputSlotCount, mAmperage;
     public boolean mAllowInputFromOutputSide = false, mFluidTransfer = false, mItemTransfer = false, mHasBeenUpdated = false, mStuttering = false, mCharge = false, mDecharge = false;
@@ -693,8 +695,11 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     }
 
     protected ItemStack[] getAllInputs() {
-        ItemStack[] rInputs = new ItemStack[mInputSlotCount];
+        int tRealInputSlotCount = this.mInputSlotCount + (allowSelectCircuit() ? 1 : 0);
+        ItemStack[] rInputs = new ItemStack[tRealInputSlotCount];
         for (int i = 0; i < mInputSlotCount; i++) rInputs[i] = getInputAt(i);
+        if (allowSelectCircuit())
+            rInputs[mInputSlotCount] = getStackInSlot(getCircuitSlot());
         return rInputs;
     }
 
@@ -823,8 +828,9 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
 
     @Override
     public boolean allowCoverOnSide(byte aSide, GT_ItemStack aCoverID) {
-        return (aSide != mMainFacing || GregTech_API.getCoverBehavior(aCoverID.toStack()).isGUIClickable(aSide, GT_Utility.stackToInt(aCoverID.toStack()), 0, getBaseMetaTileEntity()));
-    }
+        if (aSide != mMainFacing) return true;
+        GT_CoverBehaviorBase<?> tBehavior = GregTech_API.getCoverBehaviorNew(aCoverID.toStack());
+        return tBehavior.isGUIClickable(aSide, GT_Utility.stackToInt(aCoverID.toStack()), tBehavior.createDataObject(), getBaseMetaTileEntity());}
 
     @Override
     public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
@@ -846,6 +852,26 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
      */
     protected boolean allowPutStackValidated(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         return mInventory[aIndex] == null;
+    }
+
+    public boolean allowSelectCircuit() {
+        return false;
+    }
+
+    /**
+     * This might be non-final in the future, but for now, no, don't change this.
+     */
+    public final int getCircuitSlot() {
+        return 4;
+    }
+
+    /**
+     * Return a list of possible configuration circuit this machine expects.
+     *
+     * This list is unmodifiable. Its elements are not supposed to be modified in any way!
+     */
+    public List<ItemStack> getConfigurationCircuits() {
+        return GregTech_API.getConfigurationCircuitList();
     }
 
     /**

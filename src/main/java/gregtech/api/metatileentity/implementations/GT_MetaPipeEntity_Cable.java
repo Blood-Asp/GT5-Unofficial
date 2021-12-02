@@ -1,7 +1,6 @@
 package gregtech.api.metatileentity.implementations;
 
 import cofh.api.energy.IEnergyReceiver;
-import com.google.common.collect.Sets;
 import cpw.mods.fml.common.Loader;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
@@ -159,7 +158,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     public long injectEnergyUnits(byte aSide, long aVoltage, long aAmperage) {
     	if (!isConnectedAtSide(aSide) && aSide != 6)
     		return 0;
-        if (!getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsEnergyIn(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), getBaseMetaTileEntity()))
+        if (!getBaseMetaTileEntity().getCoverBehaviorAtSideNew(aSide).letsEnergyIn(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getComplexCoverDataAtSide(aSide), getBaseMetaTileEntity()))
             return 0;
         HashSet<TileEntity> nul = null;
         return transferElectricity(aSide, aVoltage, aAmperage,nul);
@@ -254,11 +253,21 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
         return coverBehavior.letsEnergyOut(aSide, aCoverID, aCoverVariable, aTileEntity);
     }
 
+    @Override
+    public boolean letsIn(GT_CoverBehaviorBase<?> coverBehavior, byte aSide, int aCoverID, ISerializableObject aCoverVariable, ICoverable aTileEntity) {
+        return coverBehavior.letsEnergyIn(aSide, aCoverID, aCoverVariable, aTileEntity);
+    }
+
+    @Override
+    public boolean letsOut(GT_CoverBehaviorBase<?> coverBehavior, byte aSide, int aCoverID, ISerializableObject aCoverVariable, ICoverable aTileEntity) {
+        return coverBehavior.letsEnergyOut(aSide, aCoverID, aCoverVariable, aTileEntity);
+    }
+
 
     @Override
     public boolean canConnect(byte aSide, TileEntity tTileEntity) {
         final IGregTechTileEntity baseMetaTile = getBaseMetaTileEntity();
-        final GT_CoverBehavior coverBehavior = baseMetaTile.getCoverBehaviorAtSide(aSide);
+        final GT_CoverBehaviorBase<?> coverBehavior = baseMetaTile.getCoverBehaviorAtSideNew(aSide);
         final byte tSide = GT_Utility.getOppositeSide(aSide);
         final ForgeDirection tDir = ForgeDirection.getOrientation(tSide);
 

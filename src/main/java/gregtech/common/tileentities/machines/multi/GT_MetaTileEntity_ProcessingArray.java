@@ -19,6 +19,7 @@ import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_ProcessingArray_Manager;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
+import gregtech.api.util.GT_Single_Recipe_Check_Processing_Array;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -145,7 +146,16 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_CubicMu
     }
 
     @Override
+    public boolean supportsSingleRecipeLocking() {
+        return true;
+    }
+
+    @Override
     public boolean checkRecipe(ItemStack aStack) {
+        if (mLockedToSingleRecipe && mSingleRecipeCheck != null) {
+            return processLockedRecipe();
+        }
+
         if (!isCorrectMachinePart(mInventory[1])) {
             return false;
         }
@@ -228,6 +238,15 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_CubicMu
         return false;
     }
 
+    public boolean processLockedRecipe() {
+        GT_Single_Recipe_Check_Processing_Array tSingleRecipeCheck = (GT_Single_Recipe_Check_Processing_Array) mSingleRecipeCheck;
+
+        int machines = Math.min(64, mInventory[1].stackSize << mMult); //Upped max Cap to 64
+        int parallel = tSingleRecipeCheck.checkRecipeInputs(true, machines);
+
+        return processRecipeOutputs(tSingleRecipeCheck.getRecipe(), tSingleRecipeCheck.getRecipeAmperage(), parallel);
+    }
+
     public boolean processRecipe(ItemStack[] tInputs, FluidStack[] tFluids, GT_Recipe.GT_Recipe_Map map) {
         if (tInputs.length <= 0 && tFluids.length <= 0) return false;
         GT_Recipe tRecipe = map.findRecipe(getBaseMetaTileEntity(), mLastRecipe, false, gregtech.api.enums.GT_Values.V[tTier], tFluids, tInputs);
@@ -236,54 +255,77 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_CubicMu
                 !isValidForLowGravity(tRecipe, getBaseMetaTileEntity().getWorld().provider.dimensionId))
             return false;
 
+        GT_Single_Recipe_Check_Processing_Array.Builder tSingleRecipeCheckBuilder = null;
+        if (mLockedToSingleRecipe) {
+            // We're locked to a single recipe, but haven't built the recipe checker yet.
+            // Build the checker on next successful recipe.
+            tSingleRecipeCheckBuilder = GT_Single_Recipe_Check_Processing_Array.processingArrayBuilder(this).setBefore();
+        }
+
+        boolean recipeLocked = false;
         mLastRecipe = tRecipe;
-        this.mEUt = 0;
-        this.mOutputItems = null;
-        this.mOutputFluids = null;
         int machines = Math.min(64, mInventory[1].stackSize << mMult); //Upped max Cap to 64
         int i = 0;
         for (; i < machines; i++) {
             if (!tRecipe.isRecipeInputEqual(true, tFluids, tInputs)) {
-                if (i == 0) {
-                    return false;
-                }
                 break;
+            } else if (mLockedToSingleRecipe && !recipeLocked) {
+                // We want to lock to a single run of the recipe.
+                mSingleRecipeCheck =
+                        tSingleRecipeCheckBuilder
+                                .setAfter()
+                                .setRecipe(tRecipe)
+                                .setRecipeAmperage(map.mAmperage)
+                                .build();
+                recipeLocked = true;
             }
         }
-        this.mMaxProgresstime = tRecipe.mDuration;
+
+        return processRecipeOutputs(tRecipe, map.mAmperage, i);
+    }
+
+    public boolean processRecipeOutputs(GT_Recipe aRecipe, int aAmperage, int parallel) {
+        this.mEUt = 0;
+        this.mOutputItems = null;
+        this.mOutputFluids = null;
+        if (parallel == 0) {
+            return false;
+        }
+
+        this.mMaxProgresstime = aRecipe.mDuration;
         this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
-        calculateOverclockedNessMulti(tRecipe.mEUt, tRecipe.mDuration, map.mAmperage, GT_Values.V[tTier]);
+        calculateOverclockedNessMulti(aRecipe.mEUt, aRecipe.mDuration, aAmperage, GT_Values.V[tTier]);
         //In case recipe is too OP for that machine
         if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
             return false;
-        this.mEUt = GT_Utility.safeInt(((long) this.mEUt * i) >> mMult, 1);
+        this.mEUt = GT_Utility.safeInt(((long) this.mEUt * parallel) >> mMult, 1);
         if (mEUt == Integer.MAX_VALUE - 1)
             return false;
 
         if (this.mEUt > 0) {
             this.mEUt = (-this.mEUt);
         }
-        ItemStack[] tOut = new ItemStack[tRecipe.mOutputs.length];
-        for (int h = 0; h < tRecipe.mOutputs.length; h++) {
-            if (tRecipe.getOutput(h) != null) {
-                tOut[h] = tRecipe.getOutput(h).copy();
+        ItemStack[] tOut = new ItemStack[aRecipe.mOutputs.length];
+        for (int h = 0; h < aRecipe.mOutputs.length; h++) {
+            if (aRecipe.getOutput(h) != null) {
+                tOut[h] = aRecipe.getOutput(h).copy();
                 tOut[h].stackSize = 0;
             }
         }
         FluidStack tFOut = null;
-        if (tRecipe.getFluidOutput(0) != null) tFOut = tRecipe.getFluidOutput(0).copy();
+        if (aRecipe.getFluidOutput(0) != null) tFOut = aRecipe.getFluidOutput(0).copy();
         for (int f = 0; f < tOut.length; f++) {
-            if (tRecipe.mOutputs[f] != null && tOut[f] != null) {
-                for (int g = 0; g < i; g++) {
-                    if (getBaseMetaTileEntity().getRandomNumber(10000) < tRecipe.getOutputChance(f))
-                        tOut[f].stackSize += tRecipe.mOutputs[f].stackSize;
+            if (aRecipe.mOutputs[f] != null && tOut[f] != null) {
+                for (int g = 0; g < parallel; g++) {
+                    if (getBaseMetaTileEntity().getRandomNumber(10000) < aRecipe.getOutputChance(f))
+                        tOut[f].stackSize += aRecipe.mOutputs[f].stackSize;
                 }
             }
         }
         if (tFOut != null) {
             int tSize = tFOut.amount;
-            tFOut.amount = tSize * i;
+            tFOut.amount = tSize * parallel;
         }
         this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
         this.mOutputItems = Arrays.stream(tOut)
@@ -353,18 +395,18 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_CubicMu
 
     @Override
     public final void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        mSeparate = !mSeparate;
-        GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("GT5U.machines.separatebus") + " " + mSeparate);
+        if (aPlayer.isSneaking()) {
+            // Lock to single recipe
+            super.onScrewdriverRightClick(aSide, aPlayer, aX, aY, aZ);
+        } else {
+            mSeparate = !mSeparate;
+            GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("GT5U.machines.separatebus") + " " + mSeparate);
+        }
     }
 
     @Override
     public int getMaxEfficiency(ItemStack aStack) {
         return 10000;
-    }
-
-    @Override
-    public int getPollutionPerTick(ItemStack aStack) {
-        return 0;
     }
 
     @Override

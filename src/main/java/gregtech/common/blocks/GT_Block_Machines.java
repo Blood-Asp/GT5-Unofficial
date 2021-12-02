@@ -16,6 +16,8 @@ import gregtech.api.util.GT_BaseCrop;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.render.GT_Renderer_Block;
+import gregtech.common.tileentities.storage.GT_MetaTileEntity_QuantumChest;
+import gregtech.common.tileentities.storage.GT_MetaTileEntity_SuperChest;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -396,23 +398,25 @@ public class GT_Block_Machines extends GT_Generic_Block implements IDebugableBlo
         if (tTileEntity instanceof IGregTechTileEntity) {
             IGregTechTileEntity tGregTechTileEntity = (IGregTechTileEntity) tTileEntity;
             mTemporaryTileEntity.set(tGregTechTileEntity);
-            for (int i = 0; i < tGregTechTileEntity.getSizeInventory(); i++) {
-                ItemStack tItem = tGregTechTileEntity.getStackInSlot(i);
-                if ((tItem != null) && (tItem.stackSize > 0) && (tGregTechTileEntity.isValidSlot(i))) {
-                    EntityItem tItemEntity = new EntityItem(aWorld,
-                            aX + XSTR_INSTANCE.nextFloat() * 0.8F + 0.1F,
-                            aY + XSTR_INSTANCE.nextFloat() * 0.8F + 0.1F,
-                            aZ + XSTR_INSTANCE.nextFloat() * 0.8F + 0.1F,
-                            new ItemStack(tItem.getItem(), tItem.stackSize, tItem.getItemDamage()));
-                    if (tItem.hasTagCompound()) {
-                        tItemEntity.getEntityItem().setTagCompound((NBTTagCompound) tItem.getTagCompound().copy());
+            if (!(tGregTechTileEntity.getMetaTileEntity() instanceof GT_MetaTileEntity_SuperChest || tGregTechTileEntity.getMetaTileEntity() instanceof GT_MetaTileEntity_QuantumChest)) {
+                for (int i = 0; i < tGregTechTileEntity.getSizeInventory(); i++) {
+                    ItemStack tItem = tGregTechTileEntity.getStackInSlot(i);
+                    if ((tItem != null) && (tItem.stackSize > 0) && (tGregTechTileEntity.isValidSlot(i))) {
+                        EntityItem tItemEntity = new EntityItem(aWorld,
+                                aX + XSTR_INSTANCE.nextFloat() * 0.8F + 0.1F,
+                                aY + XSTR_INSTANCE.nextFloat() * 0.8F + 0.1F,
+                                aZ + XSTR_INSTANCE.nextFloat() * 0.8F + 0.1F,
+                                new ItemStack(tItem.getItem(), tItem.stackSize, tItem.getItemDamage()));
+                        if (tItem.hasTagCompound()) {
+                            tItemEntity.getEntityItem().setTagCompound((NBTTagCompound) tItem.getTagCompound().copy());
+                        }
+                        tItemEntity.motionX = (XSTR_INSTANCE.nextGaussian() * 0.05D);
+                        tItemEntity.motionY = (XSTR_INSTANCE.nextGaussian() * 0.25D);
+                        tItemEntity.motionZ = (XSTR_INSTANCE.nextGaussian() * 0.05D);
+                        aWorld.spawnEntityInWorld(tItemEntity);
+                        tItem.stackSize = 0;
+                        tGregTechTileEntity.setInventorySlotContents(i, null);
                     }
-                    tItemEntity.motionX = (XSTR_INSTANCE.nextGaussian() * 0.05D);
-                    tItemEntity.motionY = (XSTR_INSTANCE.nextGaussian() * 0.25D);
-                    tItemEntity.motionZ = (XSTR_INSTANCE.nextGaussian() * 0.05D);
-                    aWorld.spawnEntityInWorld(tItemEntity);
-                    tItem.stackSize = 0;
-                    tGregTechTileEntity.setInventorySlotContents(i, null);
                 }
             }
         }

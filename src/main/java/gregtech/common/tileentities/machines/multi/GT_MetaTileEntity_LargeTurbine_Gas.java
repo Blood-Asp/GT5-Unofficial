@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.machines.multi;
 
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -41,7 +42,7 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
         tt.addMachineType("Gas Turbine")
                 .addInfo("Controller block for the Large Gas Turbine")
                 .addInfo("Needs a Turbine, place inside controller")
-                .addPollutionAmount(20 * getPollutionPerTick(null))
+                .addPollutionAmount(getPollutionPerSecond(null))
                 .addSeparator()
                 .beginStructureBlock(3, 3, 4, true)
                 .addController("Front center")
@@ -82,8 +83,8 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
     }
 
     @Override
-    public int getPollutionPerTick(ItemStack aStack) {
-        return 15;
+    public int getPollutionPerSecond(ItemStack aStack) {
+        return GT_Mod.gregtechproxy.mPollutionLargeGasTurbinePerSecond;
     }
 
     @Override

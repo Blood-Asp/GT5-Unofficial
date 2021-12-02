@@ -376,115 +376,131 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         return isRecipeInputEqual(aDecreaseStacksizeBySuccess, false, aFluidInputs, aInputs);
     }
 
+    /**
+     * Okay, did some code archeology to figure out what's going on here.
+     *
+     * <p>This variable was added in
+     * <a href=https://github.com/GTNewHorizons/GT5-Unofficial/commit/9959ab7443982a19ad329bca424ab515493432e9>this commit,</a>
+     * in order to fix the issues mentioned in
+     * <a href=https://github.com/GTNewHorizons/GT5-Unofficial/pull/183>the PR</a>.
+     *
+     * <p>It looks like it controls checking NBT. At this point, since we are still using universal
+     * fluid cells which store their fluids in NBT, it probably will not be safe to disable the NBT
+     * checks in the near future. Data sticks may be another case. Anyway, we probably can't get rid
+     * of this without some significant changes to clean up recipe inputs.
+     */
     public static boolean GTppRecipeHelper;
 
+    /**
+     * WARNING: Do not call this method with both {@code aDecreaseStacksizeBySuccess} and {@code aDontCheckStackSizes} set to {@code true}!
+     * You'll get weird behavior.
+     */
     public boolean isRecipeInputEqual(boolean aDecreaseStacksizeBySuccess, boolean aDontCheckStackSizes, FluidStack[] aFluidInputs, ItemStack... aInputs) {
-
         if (mInputs.length > 0 && aInputs == null) return false;
         if (mFluidInputs.length > 0 && aFluidInputs == null) return false;
-        int amt;
-        for (FluidStack tFluid : mFluidInputs)
-            if (tFluid != null) {
-                boolean temp = true;
-                amt = tFluid.amount;
-                for (FluidStack aFluid : aFluidInputs)
-                    if (aFluid != null && aFluid.isFluidEqual(tFluid)) {
-                        if (aDontCheckStackSizes) {
-                            temp = false;
-                            break;
-                        }
-                        amt -= aFluid.amount;
-                        if (amt < 1) {
-                            temp = false;
-                            break;
-                        }
-                    }
-                if (temp) return false;
-            }
 
-        HashSet<Integer> isVisited = new HashSet<>();
-        
-        for (ItemStack tStack : mInputs) {
-            ItemStack unified_tStack = GT_OreDictUnificator.get_nocopy(true, tStack);
-            if (unified_tStack != null) {
-                amt = tStack.stackSize;
-                boolean temp = true;
-                int it = 0;
-                for (ItemStack aStack : aInputs) {
-                    it ++;
-                    if (GT_OreDictUnificator.isInputStackEqual(aStack, unified_tStack) && !isVisited.contains(it)) {
-                        isVisited.add(it);
-                        if (GTppRecipeHelper) {//remove once the fix is out
-                            if (GT_Utility.areStacksEqual(aStack, Ic2Items.FluidCell.copy(), true) || GT_Utility.areStacksEqual(aStack, ItemList.Tool_DataStick.get(1L), true) || GT_Utility.areStacksEqual(aStack, ItemList.Tool_DataOrb.get(1L), true)) {
-                                if (!GT_Utility.areStacksEqual(aStack, tStack, false))
-                                    continue;
+        // We need to handle 0-size recipe inputs. These are for inputs that don't get consumed.
+        boolean inputFound;
+        int remainingCost;
+
+        // Array tracking modified fluid amounts. For efficiency, we will lazily initialize this array.
+        // We use Integer so that we can have null as the default value, meaning unchanged.
+        Integer[] newFluidAmounts = null;
+        if (aFluidInputs != null) {
+            newFluidAmounts = new Integer[aFluidInputs.length];
+
+            for (FluidStack recipeFluidCost : mFluidInputs) {
+                if (recipeFluidCost != null) {
+                    inputFound = false;
+                    remainingCost = recipeFluidCost.amount;
+
+                    for (int i = 0; i < aFluidInputs.length; i++) {
+                        FluidStack providedFluid = aFluidInputs[i];
+                        if (providedFluid != null && providedFluid.isFluidEqual(recipeFluidCost)) {
+                            inputFound = true;
+                            if (newFluidAmounts[i] == null) {
+                                newFluidAmounts[i] = providedFluid.amount;
+                            }
+
+                            if (aDontCheckStackSizes || newFluidAmounts[i] >= remainingCost) {
+                                newFluidAmounts[i] -= remainingCost;
+                                remainingCost = 0;
+                                break;
+                            } else {
+                                remainingCost -= newFluidAmounts[i];
+                                newFluidAmounts[i] = 0;
                             }
                         }
-                        if (aDontCheckStackSizes) {
-                            temp = false;
-                            break;
-                        }
-                        amt -= aStack.stackSize;
-                        if (amt < 1) {
-                            temp = false;
-                            break;
-                        }
+                    }
+
+                    if (remainingCost > 0 || !inputFound) {
+                        // Cost not satisfied, or for non-consumed inputs, input not found.
+                        return false;
                     }
                 }
-                if (temp) return false;
             }
         }
-        if (aDecreaseStacksizeBySuccess) {
-            if (aFluidInputs != null) {
-                for (FluidStack tFluid : mFluidInputs) {
-                    if (tFluid != null) {
-                        amt = tFluid.amount;
-                        for (FluidStack aFluid : aFluidInputs) {
-                            if (aFluid != null && aFluid.isFluidEqual(tFluid)) {
-                                if (aDontCheckStackSizes) {
-                                    aFluid.amount -= amt;
-                                    break;
-                                }
-                                if (aFluid.amount < amt) {
-                                    amt -= aFluid.amount;
-                                    aFluid.amount = 0;
-                                } else {
-                                    aFluid.amount -= amt;
-                                    amt = 0;
-                                    break;
+
+        // Array tracking modified item stack sizes. For efficiency, we will lazily initialize this array.
+        // We use Integer so that we can have null as the default value, meaning unchanged.
+        Integer[] newItemAmounts = null;
+        if (aInputs != null) {
+            newItemAmounts = new Integer[aInputs.length];
+
+            for (ItemStack recipeItemCost : mInputs) {
+                ItemStack unifiedItemCost = GT_OreDictUnificator.get_nocopy(true, recipeItemCost);
+                if (unifiedItemCost != null) {
+                    inputFound = false;
+                    remainingCost = recipeItemCost.stackSize;
+
+                    for (int i = 0; i < aInputs.length; i++) {
+                        ItemStack providedItem = aInputs[i];
+                        if (GT_OreDictUnificator.isInputStackEqual(providedItem, unifiedItemCost)) {
+                            if (GTppRecipeHelper) { // Please see JavaDoc on GTppRecipeHelper for why this is here.
+                                if (GT_Utility.areStacksEqual(providedItem, Ic2Items.FluidCell.copy(), true) || GT_Utility.areStacksEqual(providedItem, ItemList.Tool_DataStick.get(1L), true) || GT_Utility.areStacksEqual(providedItem, ItemList.Tool_DataOrb.get(1L), true)) {
+                                    if (!GT_Utility.areStacksEqual(providedItem, recipeItemCost, false))
+                                        continue;
                                 }
                             }
+
+                            inputFound = true;
+                            if (newItemAmounts[i] == null) {
+                                newItemAmounts[i] = providedItem.stackSize;
+                            }
+
+                            if (aDontCheckStackSizes || newItemAmounts[i] >= remainingCost) {
+                                newItemAmounts[i] -= remainingCost;
+                                remainingCost = 0;
+                                break;
+                            } else {
+                                remainingCost -= newItemAmounts[i];
+                                newItemAmounts[i] = 0;
+                            }
                         }
+                    }
+
+                    if (remainingCost > 0 || !inputFound) {
+                        // Cost not satisfied, or for non-consumed inputs, input not found.
+                        return false;
+                    }
+                }
+            }
+        }
+
+        if (aDecreaseStacksizeBySuccess) {
+            // Copy modified amounts into the input stacks.
+            if (aFluidInputs != null) {
+                for (int i = 0; i < aFluidInputs.length; i++) {
+                    if (newFluidAmounts[i] != null) {
+                        aFluidInputs[i].amount = newFluidAmounts[i];
                     }
                 }
             }
 
             if (aInputs != null) {
-                for (ItemStack tStack : mInputs) {
-                    if (tStack != null) {
-                        amt = tStack.stackSize;
-                        for (ItemStack aStack : aInputs) {
-                            if ((GT_Utility.areUnificationsEqual(aStack, tStack, true) || GT_Utility.areUnificationsEqual(GT_OreDictUnificator.get(false, aStack), tStack, true))) {
-                                if (GTppRecipeHelper) {
-                                    if (GT_Utility.areStacksEqual(aStack, Ic2Items.FluidCell.copy(), true) || GT_Utility.areStacksEqual(aStack, ItemList.Tool_DataStick.get(1L), true) || GT_Utility.areStacksEqual(aStack, ItemList.Tool_DataOrb.get(1L), true)) {
-                                        if (!GT_Utility.areStacksEqual(aStack, tStack, false))
-                                            continue;
-                                    }
-                                }
-                                if (aDontCheckStackSizes){
-                                    aStack.stackSize -= amt;
-                                    break;
-                                }
-                                if (aStack.stackSize < amt){
-                                    amt -= aStack.stackSize;
-                                    aStack.stackSize = 0;
-                                }else{
-                                    aStack.stackSize -= amt;
-                                    amt = 0;
-                                    break;
-                                }
-                            }
-                        }
+                for (int i = 0; i < aInputs.length; i++) {
+                    if (newItemAmounts[i] != null) {
+                        aInputs[i].stackSize = newItemAmounts[i];
                     }
                 }
             }
@@ -564,6 +580,84 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         	mEUt = aEUt;
         	mOreDictAlt = aAlt;
         }
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;			
+			GT_ItemStack[] thisInputs = new GT_ItemStack[this.mInputs.length];
+			int totalInputStackSize = 0;
+			for (int i=0;i<this.mInputs.length;i++) {
+				thisInputs[i] = new GT_ItemStack(this.mInputs[i]);
+				totalInputStackSize += thisInputs[i].mStackSize;
+			}
+			int inputHash = Arrays.deepHashCode(thisInputs);
+			int inputFluidHash = Arrays.deepHashCode(this.mFluidInputs);
+			GT_ItemStack thisOutput = new GT_ItemStack(mOutput);
+			GT_ItemStack thisResearch = new GT_ItemStack(mResearchItem);
+			int miscRecipeDataHash = Arrays.deepHashCode(new Object[] {
+					totalInputStackSize,
+					mDuration, mEUt, 
+					thisOutput,
+					thisResearch,
+					mResearchTime
+					});
+			result = prime * result + inputFluidHash;			
+			result = prime * result + inputHash;			
+			result = prime * result + miscRecipeDataHash;
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (!(obj instanceof GT_Recipe_AssemblyLine)) {
+				return false;
+			}
+			GT_Recipe_AssemblyLine other = (GT_Recipe_AssemblyLine) obj;
+			if (this.mInputs.length != other.mInputs.length) {
+				return false;
+			}
+			if (this.mFluidInputs.length != other.mFluidInputs.length) {
+				return false;
+			}
+			// Check Outputs Match
+			GT_ItemStack output1 = new GT_ItemStack(this.mOutput);
+			GT_ItemStack output2 = new GT_ItemStack(other.mOutput);
+			if (!output1.equals(output2)) {
+				return false;
+			}
+			// Check Scanned Item Match
+			GT_ItemStack scan1 = new GT_ItemStack(this.mResearchItem);
+			GT_ItemStack scan2 = new GT_ItemStack(other.mResearchItem);
+			if (!scan1.equals(scan2)) {
+				return false;
+			}
+			// Check Items Match
+			GT_ItemStack[] thisInputs = new GT_ItemStack[this.mInputs.length];
+			GT_ItemStack[] otherInputs = new GT_ItemStack[other.mInputs.length];
+			for (int i=0;i<thisInputs.length;i++) {
+				thisInputs[i] = new GT_ItemStack(this.mInputs[i]);
+				otherInputs[i] = new GT_ItemStack(other.mInputs[i]);
+			}
+			for (int i=0;i<thisInputs.length;i++) {
+				if (!thisInputs[i].equals(otherInputs[i]) || thisInputs[i].mStackSize != otherInputs[i].mStackSize) {
+					return false;
+				}
+			}
+			// Check Fluids Match
+			for (int i=0;i<this.mFluidInputs.length;i++) {
+				if (!this.mFluidInputs[i].isFluidStackIdentical(other.mFluidInputs[i])) {
+					return false;
+				}
+			}
+			
+			return this.mDuration == other.mDuration
+					&& this.mEUt == other.mEUt
+					&& this.mResearchTime == other.mResearchTime;
+		}
         
     }
 
@@ -1045,6 +1139,10 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                     tFluid.amount = 0;
                     mRecipesByFluidInput.put(tFluid.getUnlocalizedName(), aRecipe);
                 }
+            } else if ((aRecipe.mInputs == null || GT_Utility.getNonnullElementCount(aRecipe.mInputs) == 0) &&
+                    aRecipe.mFluidInputs != null && GT_Utility.getNonnullElementCount(aRecipe.mFluidInputs) == 1 &&
+                    aRecipe.mFluidInputs[0] != null) {
+                mRecipesByFluidInput.put(aRecipe.mFluidInputs[0].getUnlocalizedName(), aRecipe);
             }
             return aRecipe;
         }
@@ -1487,23 +1585,8 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
             GT_Recipe rRecipe = super.findRecipe(aTileEntity, aRecipe, aNotUnificated, aVoltage, aFluids, aSpecialSlot, aInputs);
             if (aInputs == null || aInputs.length < 2 || aInputs[0] == null || aInputs[1] == null || !GregTech_API.sPostloadFinished)
                 return rRecipe;
-            if (rRecipe == null) {
-                if (ItemList.Shape_Mold_Name.isStackEqual(aInputs[0], false, true)) {
-                    ItemStack tOutput = GT_Utility.copyAmount(1, aInputs[1]);
-                    tOutput.setStackDisplayName(aInputs[0].getDisplayName());
-                    rRecipe = new GT_Recipe(false, new ItemStack[]{ItemList.Shape_Mold_Name.get(0), GT_Utility.copyAmount(1, aInputs[1])}, new ItemStack[]{tOutput}, null, null, null, null, 128, 8, 0);
-                    rRecipe.mCanBeBuffered = false;
-                    return rRecipe;
-                }
-                if (ItemList.Shape_Mold_Name.isStackEqual(aInputs[1], false, true)) {
-                    ItemStack tOutput = GT_Utility.copyAmount(1, aInputs[0]);
-                    tOutput.setStackDisplayName(aInputs[1].getDisplayName());
-                    rRecipe = new GT_Recipe(false, new ItemStack[]{ItemList.Shape_Mold_Name.get(0), GT_Utility.copyAmount(1, aInputs[0])}, new ItemStack[]{tOutput}, null, null, null, null, 128, 8, 0);
-                    rRecipe.mCanBeBuffered = false;
-                    return rRecipe;
-                }
-                return null;
-            }
+            if (rRecipe == null)
+                return findRenamingRecipe(aInputs);
             for (ItemStack aMold : aInputs) {
                 if (ItemList.Shape_Mold_Credit.isStackEqual(aMold, false, true)) {
                     NBTTagCompound tNBT = aMold.getTagCompound();
@@ -1518,6 +1601,40 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                 }
             }
             return rRecipe;
+        }
+
+        private ItemStack findNameMoldIndex(ItemStack[] inputs) {
+            for (ItemStack stack: inputs) {
+                if (ItemList.Shape_Mold_Name.isStackEqual(stack, false, true))
+                    return stack;
+            }
+            return null;
+        }
+
+        private ItemStack findStackToRename(ItemStack[] inputs, ItemStack mold) {
+            for (ItemStack stack: inputs) {
+                if (stack == mold || stack == null)
+                    continue;
+                return stack;
+            }
+            return null;
+        }
+
+        private GT_Recipe findRenamingRecipe(ItemStack[] inputs) {
+            ItemStack mold = findNameMoldIndex(inputs);
+            if (mold == null)
+                return null;
+            ItemStack input = findStackToRename(inputs, mold);
+            if (input == null)
+                return null;
+            ItemStack output = GT_Utility.copyAmount(1, input);
+            output.setStackDisplayName(mold.getDisplayName());
+            GT_Recipe recipe = new GT_Recipe(false,
+                new ItemStack[]{ ItemList.Shape_Mold_Name.get(0), GT_Utility.copyAmount(1, input) },
+                new ItemStack[]{ output },
+                null, null, null, null, 128, 8, 0);
+            recipe.mCanBeBuffered = false;
+            return recipe;
         }
     }
 

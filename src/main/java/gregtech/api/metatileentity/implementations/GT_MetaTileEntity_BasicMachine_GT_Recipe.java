@@ -813,6 +813,10 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
         }
     }
 
+    @Override
+    public boolean allowSelectCircuit() {
+        return true;
+    }
 
     @Override
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {

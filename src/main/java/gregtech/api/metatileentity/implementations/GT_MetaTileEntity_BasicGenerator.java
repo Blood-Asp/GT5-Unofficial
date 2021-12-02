@@ -117,7 +117,7 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
 
     @Override
     public boolean isFacingValid(byte aSide) {
-        return aSide > 1;
+        return true;
     }
 
     @Override
@@ -214,7 +214,8 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
                     long tFluidAmountToUse = Math.min(mFluid.amount / tConsumed, (maxEUStore() - aBaseMetaTileEntity.getUniversalEnergyStored()) / tFuelValue);
 					//long tFluidAmountToUse = Math.min(mFluid.amount / tConsumed, (maxEUOutput() * 20 + getMinimumStoredEU() - aBaseMetaTileEntity.getUniversalEnergyStored()) / tFuelValue);//TODO CHECK
                     if (tFluidAmountToUse > 0 && aBaseMetaTileEntity.increaseStoredEnergyUnits(tFluidAmountToUse * tFuelValue, true)) {
-                        GT_Pollution.addPollution(getBaseMetaTileEntity(),10 * getPollution());
+                        // divided by two because this is called every 10 ticks, not 20
+                        GT_Pollution.addPollution(getBaseMetaTileEntity(),getPollution()/2);
                         mFluid.amount -= tFluidAmountToUse * tConsumed;
                     }
                 }
@@ -229,7 +230,8 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
                     if (aBaseMetaTileEntity.addStackToSlot(getOutputSlot(), tEmptyContainer)) {
                         aBaseMetaTileEntity.increaseStoredEnergyUnits(tFuelValue, true);
                         aBaseMetaTileEntity.decrStackSize(getInputSlot(), 1);
-                        GT_Pollution.addPollution(getBaseMetaTileEntity(),10 * getPollution());
+                        // divided by two because this is called every 10 ticks, not 20
+                        GT_Pollution.addPollution(getBaseMetaTileEntity(),getPollution()/2);
                     }
                 }
             }
@@ -330,7 +332,7 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
 
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        return super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack) && (getFuelValue(aStack) > 0 || getFuelValue(aStack, true) > 0) || (getFuelValue(GT_Utility.getFluidForFilledItem(aStack, true)) > 0 || getFuelValue(GT_Utility.getFluidForFilledItem(aStack, true), true) > 0);
+        return super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack) && (getFuelValue(aStack) > 0 || getFuelValue(aStack, true) > 0 || getFuelValue(GT_Utility.getFluidForFilledItem(aStack, true)) > 0 || getFuelValue(GT_Utility.getFluidForFilledItem(aStack, true), true) > 0);
     }
 
     @Override

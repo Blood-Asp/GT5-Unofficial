@@ -114,7 +114,7 @@ public abstract class GT_MetaTileEntity_PrimitiveBlastFurnace extends MetaTileEn
 
     @Override
     public boolean allowCoverOnSide(byte aSide, GT_ItemStack aCoverID) {
-        return (GregTech_API.getCoverBehavior(aCoverID.toStack()).isSimpleCover()) && (super.allowCoverOnSide(aSide, aCoverID));
+        return (GregTech_API.getCoverBehaviorNew(aCoverID.toStack()).isSimpleCover()) && (super.allowCoverOnSide(aSide, aCoverID));
     }
 
 	@Override
@@ -234,7 +234,7 @@ public abstract class GT_MetaTileEntity_PrimitiveBlastFurnace extends MetaTileEn
                 GT_Pollution.addPollution(this.getBaseMetaTileEntity().getWorld(),
                         new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(),
                                 this.getBaseMetaTileEntity().getZCoord()),
-                        200);
+                        GT_Mod.gregtechproxy.mPollutionPrimitveBlastFurnacePerSecond);
             }
 
             aBaseMetaTileEntity.setActive((this.mMaxProgresstime > 0) && (this.mMachine));

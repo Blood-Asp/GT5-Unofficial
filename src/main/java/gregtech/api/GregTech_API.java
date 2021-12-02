@@ -19,7 +19,15 @@ import gregtech.api.objects.GT_HashSet;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.threads.GT_Runnable_Cable_Update;
 import gregtech.api.threads.GT_Runnable_MachineBlockUpdate;
-import gregtech.api.util.*;
+import gregtech.api.util.GT_CircuitryBehavior;
+import gregtech.api.util.GT_Config;
+import gregtech.api.util.GT_CoverBehavior;
+import gregtech.api.util.GT_CoverBehaviorBase;
+import gregtech.api.util.GT_CreativeTab;
+import gregtech.api.util.GT_Log;
+import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Utility;
 import gregtech.api.world.GT_Worldgen;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -30,10 +38,19 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static gregtech.api.enums.GT_Values.*;
+import static gregtech.api.enums.GT_Values.B;
+import static gregtech.api.enums.GT_Values.L;
+import static gregtech.api.enums.GT_Values.M;
+import static gregtech.api.enums.GT_Values.MOD_ID_IC2;
 
 /**
  * Please do not include this File in your Mod-download as it ruins compatiblity, like with the IC2-API
@@ -113,7 +130,7 @@ public class GregTech_API {
     /**
      * The List of Cover Behaviors for the Covers
      */
-    public static final Map<GT_ItemStack, GT_CoverBehavior> sCoverBehaviors = new ConcurrentHashMap<>();
+    public static final Map<GT_ItemStack, GT_CoverBehaviorBase<?>> sCoverBehaviors = new ConcurrentHashMap<>();
     /**
      * The List of Circuit Behaviors for the Redstone Circuit Block
      */
@@ -161,6 +178,8 @@ public class GregTech_API {
             sHeatHazmatList = new GT_HashSet<>(),
             sRadioHazmatList = new GT_HashSet<>(),
             sElectroHazmatList = new GT_HashSet<>();
+    private static final List<ItemStack> sRealConfigurationList = new ArrayList<>();
+    private static final List<ItemStack> sConfigurationList = Collections.unmodifiableList(sRealConfigurationList);
     /**
      * The List of Dimensions, which are Whitelisted for the Teleporter. This list should not contain other Planets.
      * Mystcraft Dimensions and other Dimensional Things should be allowed.
@@ -614,7 +633,36 @@ public class GregTech_API {
         }
     }
 
+    /**
+     * Register a new ItemStack as configuration circuits.
+     * Duplicates or invalid stacks will be silently ignored.
+     */
+    public static void registerConfigurationCircuit(ItemStack aStack) {
+        if (GT_Utility.isStackInvalid(aStack))
+            return;
+        for (ItemStack tRegistered : sRealConfigurationList)
+            if (GT_Utility.areStacksEqual(tRegistered, aStack))
+                return;
+        sRealConfigurationList.add(GT_Utility.copyAmount(0, aStack));
+    }
+
+    /**
+     * Get a list of Configuration circuits. All of these stacks will have a stack size of 0.
+     * Use {@link #registerConfigurationCircuit(ItemStack)} to add to this list.
+     *
+     * @return An unmodifiable view of actual list.
+     * It will reflect the changes to the underlying list as new circuits are registered.
+     * DO NOT MODIFY THE ItemStacks!
+     */
+    public static List<ItemStack> getConfigurationCircuitList() {
+        return sConfigurationList;
+    }
+
     public static void registerCover(ItemStack aStack, ITexture aCover, GT_CoverBehavior aBehavior) {
+        registerCover(aStack, aCover, (GT_CoverBehaviorBase<?>) aBehavior);
+    }
+
+    public static void registerCover(ItemStack aStack, ITexture aCover, GT_CoverBehaviorBase<?> aBehavior) {
         if (!sCovers.containsKey(new GT_ItemStack(aStack)))
             sCovers.put(new GT_ItemStack(aStack), aCover == null || !aCover.isValidTexture() ? Textures.BlockIcons.ERROR_RENDERING[0] : aCover);
         if (aBehavior != null)
@@ -622,6 +670,10 @@ public class GregTech_API {
     }
 
     public static void registerCoverBehavior(ItemStack aStack, GT_CoverBehavior aBehavior) {
+        registerCoverBehavior(aStack, (GT_CoverBehaviorBase<?>) aBehavior);
+    }
+
+    public static void registerCoverBehavior(ItemStack aStack, GT_CoverBehaviorBase<?> aBehavior) {
         sCoverBehaviors.put(new GT_ItemStack(aStack), aBehavior == null ? sDefaultBehavior : aBehavior);
     }
 
@@ -631,6 +683,15 @@ public class GregTech_API {
      * @param aBehavior can be null
      */
     public static void registerCover(Collection<ItemStack> aStackList, ITexture aCover, GT_CoverBehavior aBehavior) {
+        registerCover(aStackList, aCover, aBehavior);
+    }
+
+    /**
+     * Registers multiple Cover Items. I use that for the OreDict Functionality.
+     *
+     * @param aBehavior can be null
+     */
+    public static void registerCover(Collection<ItemStack> aStackList, ITexture aCover, GT_CoverBehaviorBase<?> aBehavior) {
         if (aCover.isValidTexture())
             aStackList.forEach(tStack -> GregTech_API.registerCover(tStack, aCover, aBehavior));
     }
@@ -638,10 +699,24 @@ public class GregTech_API {
     /**
      * returns a Cover behavior, guaranteed to not return null after preload
      */
+    @Deprecated
     public static GT_CoverBehavior getCoverBehavior(ItemStack aStack) {
         if (aStack == null || aStack.getItem() == null)
             return sNoBehavior;
-        GT_CoverBehavior rCover = sCoverBehaviors.get(new GT_ItemStack(aStack));
+        GT_CoverBehaviorBase<?> rCover = sCoverBehaviors.get(new GT_ItemStack(aStack));
+        if (!(rCover instanceof GT_CoverBehavior) || rCover == null)
+            return sDefaultBehavior;
+        return (GT_CoverBehavior) rCover;
+    }
+
+    /**
+     * returns a Cover behavior, guaranteed to not return null after preload
+     * @return
+     */
+    public static GT_CoverBehaviorBase<?> getCoverBehaviorNew(ItemStack aStack) {
+        if (aStack == null || aStack.getItem() == null)
+            return sNoBehavior;
+        GT_CoverBehaviorBase<?> rCover = sCoverBehaviors.get(new GT_ItemStack(aStack));
         if (rCover == null)
             return sDefaultBehavior;
         return rCover;
@@ -650,10 +725,20 @@ public class GregTech_API {
     /**
      * returns a Cover behavior, guaranteed to not return null
      */
+    @Deprecated
     public static GT_CoverBehavior getCoverBehavior(int aStack) {
         if (aStack == 0)
             return sNoBehavior;
         return getCoverBehavior(GT_Utility.intToStack(aStack));
+    }
+
+    /**
+     * returns a Cover behavior, guaranteed to not return null
+     */
+    public static GT_CoverBehaviorBase<?> getCoverBehaviorNew(int aStack) {
+        if (aStack == 0)
+            return sNoBehavior;
+        return getCoverBehaviorNew(GT_Utility.intToStack(aStack));
     }
 
     /**
@@ -771,5 +856,4 @@ public class GregTech_API {
     public static void setItemIconRegister(IIconRegister aIconRegister) {
         GregTech_API.sItemIcons = aIconRegister;
     }
-
 }

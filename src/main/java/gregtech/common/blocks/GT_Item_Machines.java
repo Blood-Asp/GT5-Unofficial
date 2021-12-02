@@ -15,17 +15,27 @@ import gregtech.api.util.GT_ItsNotMyFaultException;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.tileentities.storage.GT_MetaTileEntity_QuantumChest;
+import gregtech.common.tileentities.storage.GT_MetaTileEntity_QuantumTank;
+import gregtech.common.tileentities.storage.GT_MetaTileEntity_SuperChest;
+import gregtech.common.tileentities.storage.GT_MetaTileEntity_SuperTank;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidContainerItem;
 
 import java.util.List;
 
-public class GT_Item_Machines extends ItemBlock {
+public class GT_Item_Machines extends ItemBlock implements IFluidContainerItem {
 
     private static final String[] directionNames = {"Bottom", "Top", "North", "South", "West", "East"};
 
@@ -80,6 +90,15 @@ public class GT_Item_Machines extends ItemBlock {
                         aList.add(GT_LanguageManager.addStringLocalization("TileEntity_EUp_AMOUNT", "Amperage: ", !GregTech_API.sPostloadFinished ) + EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(tTileEntity.getOutputAmperage()) + EnumChatFormatting.GRAY);
                     }
                     aList.add(GT_LanguageManager.addStringLocalization("TileEntity_EUp_STORE", "Capacity: ", !GregTech_API.sPostloadFinished ) + EnumChatFormatting.BLUE + GT_Utility.formatNumbers(tTileEntity.getEUCapacity()) + EnumChatFormatting.GRAY);
+                }
+                if (GregTech_API.METATILEENTITIES[tDamage] instanceof GT_MetaTileEntity_QuantumTank || GregTech_API.METATILEENTITIES[tDamage] instanceof GT_MetaTileEntity_SuperTank) {
+                    if (aStack.hasTagCompound() && aStack.stackTagCompound.hasKey("mFluid")) {
+                        FluidStack tContents = FluidStack.loadFluidStackFromNBT(aStack.stackTagCompound.getCompoundTag("mFluid"));
+                        if (tContents != null && tContents.amount > 0) {
+                            aList.add(GT_LanguageManager.addStringLocalization("TileEntity_TANK_INFO", "Contains Fluid: ", !GregTech_API.sPostloadFinished ) + EnumChatFormatting.YELLOW + tContents.getLocalizedName() + EnumChatFormatting.GRAY);
+                            aList.add(GT_LanguageManager.addStringLocalization("TileEntity_TANK_AMOUNT", "Fluid Amount: ", !GregTech_API.sPostloadFinished ) + EnumChatFormatting.GREEN + GT_Utility.formatNumbers(tContents.amount) + " L" + EnumChatFormatting.GRAY);
+                        }
+                    }
                 }
             }
             NBTTagCompound aNBT = aStack.getTagCompound();
@@ -210,5 +229,104 @@ public class GT_Item_Machines extends ItemBlock {
             this.field_150939_a.onPostBlockPlaced(aWorld, aX, aY, aZ, tDamage);
         }
         return true;
+    }
+
+    @Override
+    public void onUpdate(ItemStack aStack, World aWorld, Entity aPlayer, int aTimer, boolean aIsInHand) {
+        super.onUpdate(aStack, aWorld, aPlayer, aTimer, aIsInHand);
+        short tDamage = (short) getDamage(aStack);
+        EntityLivingBase tPlayer = (EntityPlayer) aPlayer;
+        if (GregTech_API.METATILEENTITIES[tDamage] instanceof GT_MetaTileEntity_SuperChest ||
+                GregTech_API.METATILEENTITIES[tDamage] instanceof GT_MetaTileEntity_QuantumChest ||
+                GregTech_API.METATILEENTITIES[tDamage] instanceof GT_MetaTileEntity_SuperTank ||
+                GregTech_API.METATILEENTITIES[tDamage] instanceof GT_MetaTileEntity_QuantumTank) {
+            NBTTagCompound tNBT = aStack.stackTagCompound;
+            if (tNBT == null) return;
+            if ((tNBT.hasKey("mItemCount") && tNBT.getInteger("mItemCount") > 0) ||
+                    tNBT.hasKey("mFluid")) {
+                tPlayer.addPotionEffect(new PotionEffect(Potion.hunger.id, 12000, 4));
+                tPlayer.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 12000, 4));
+                tPlayer.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, 12000, 4));
+                tPlayer.addPotionEffect(new PotionEffect(Potion.weakness.id, 12000, 4));
+            }
+        }
+    }
+
+    @Override
+    public FluidStack getFluid(ItemStack container) {
+        if (container != null) {
+            NBTTagCompound tNBT = container.stackTagCompound;
+            if (tNBT != null && tNBT.hasKey("mFluid", 10)) {
+                return FluidStack.loadFluidStackFromNBT(tNBT.getCompoundTag("mFluid"));
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public int getCapacity(ItemStack container) {
+        if (container != null) {
+            int tDamage = container.getItemDamage();
+            IMetaTileEntity tMetaTile = GregTech_API.METATILEENTITIES[tDamage];
+            if (tMetaTile != null)
+                return tMetaTile.getCapacity();
+        }
+        return 0;
+    }
+
+    @Override
+    public int fill(ItemStack container, FluidStack resource, boolean doFill) {
+        if (container != null && resource != null) {
+            int tDamage = container.getItemDamage();
+            IMetaTileEntity tMetaTile = GregTech_API.METATILEENTITIES[tDamage];
+            if (!(tMetaTile instanceof GT_MetaTileEntity_QuantumTank || tMetaTile instanceof GT_MetaTileEntity_SuperTank)) {
+                return 0;
+            }
+            if (container.stackTagCompound == null) container.stackTagCompound = new NBTTagCompound();
+            FluidStack tStoredFluid = getFluid(container);
+            int tCapacity = getCapacity(container);
+            if (tCapacity <= 0) return 0;
+            if (tStoredFluid != null && tStoredFluid.isFluidEqual(resource)) {
+                int tAmount = Math.min(tCapacity - tStoredFluid.amount, resource.amount);
+                if (doFill) {
+                    FluidStack tNewFluid = new FluidStack(tStoredFluid, tAmount + tStoredFluid.amount);
+                    container.stackTagCompound.setTag("mFluid", tNewFluid.writeToNBT(new NBTTagCompound()));
+                }
+                return tAmount;
+            }
+            if (tStoredFluid == null) {
+                int tAmount = Math.min(tCapacity, resource.amount);
+                if (doFill) {
+                    FluidStack tNewFluid = new FluidStack(resource, tAmount);
+                    container.stackTagCompound.setTag("mFluid", tNewFluid.writeToNBT(new NBTTagCompound()));
+                }
+                return tAmount;
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public FluidStack drain(ItemStack container, int maxDrain, boolean doDrain) {
+        if (container != null) {
+            int tDamage = container.getItemDamage();
+            IMetaTileEntity tMetaTile = GregTech_API.METATILEENTITIES[tDamage];
+            if (!(tMetaTile instanceof GT_MetaTileEntity_QuantumTank || tMetaTile instanceof GT_MetaTileEntity_SuperTank)) {
+                return null;
+            }
+            if (container.stackTagCompound == null) container.stackTagCompound = new NBTTagCompound();
+            FluidStack tStoredFluid = getFluid(container);
+            if (tStoredFluid != null) {
+                int tAmount = Math.min(maxDrain, tStoredFluid.amount);
+                FluidStack tNewFluid = new FluidStack(tStoredFluid, tStoredFluid.amount - tAmount);
+                FluidStack tOutputFluid = new FluidStack(tStoredFluid, tAmount);
+                if (doDrain) {
+                    if (tNewFluid.amount <= 0) container.stackTagCompound.removeTag("mFluid");
+                    else container.stackTagCompound.setTag("mFluid", tNewFluid.writeToNBT(new NBTTagCompound()));
+                }
+                return tOutputFluid;
+            }
+        }
+        return null;
     }
 }
