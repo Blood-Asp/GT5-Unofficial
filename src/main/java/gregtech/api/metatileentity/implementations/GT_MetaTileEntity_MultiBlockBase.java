@@ -13,7 +13,6 @@ import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
-import gregtech.api.util.GT_Single_Recipe_Check;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Pollution;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
@@ -43,9 +42,6 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     public String mNEI;
     public int damageFactorLow = 5;
     public float damageFactorHigh = 0.6f;
-
-    public boolean mLockedToSingleRecipe = false;
-    public GT_Single_Recipe_Check mSingleRecipeCheck = null;
 
     public ArrayList<GT_MetaTileEntity_Hatch_Input> mInputHatches = new ArrayList<>();
     public ArrayList<GT_MetaTileEntity_Hatch_Output> mOutputHatches = new ArrayList<>();
@@ -83,24 +79,6 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     @Override
     public boolean allowCoverOnSide(byte aSide, GT_ItemStack aCoverID) {
         return aSide != getBaseMetaTileEntity().getFrontFacing();
-    }
-
-    /** Override this if you are a multi-block that has added support for single recipe locking. */
-    public boolean supportsSingleRecipeLocking() {
-        return false;
-    }
-
-    @Override
-    public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (supportsSingleRecipeLocking()) {
-            mLockedToSingleRecipe = !mLockedToSingleRecipe;
-            if (mLockedToSingleRecipe) {
-                GT_Utility.sendChatToPlayer(aPlayer, trans("219","Single recipe locking enabled. Will lock to next recipe."));
-            } else {
-                GT_Utility.sendChatToPlayer(aPlayer, trans("220","Single recipe locking disabled."));
-                mSingleRecipeCheck = null;
-            }
-        }
     }
 
     @Override
@@ -147,7 +125,6 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         aNBT.setInteger("mEfficiency", mEfficiency);
         aNBT.setInteger("mPollution", mPollution);
         aNBT.setInteger("mRuntime", mRuntime);
-        aNBT.setBoolean("mLockedToSingleRecipe", mLockedToSingleRecipe);
 
         if (mOutputItems != null) {
             aNBT.setInteger("mOutputItemsLength", mOutputItems.length);
@@ -185,7 +162,6 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         mEfficiency = aNBT.getInteger("mEfficiency");
         mPollution = aNBT.getInteger("mPollution");
         mRuntime = aNBT.getInteger("mRuntime");
-        mLockedToSingleRecipe = aNBT.getBoolean("mLockedToSingleRecipe");
 
         int aOutputItemsLength = aNBT.getInteger("mOutputItemsLength");
         if (aOutputItemsLength > 0) {
