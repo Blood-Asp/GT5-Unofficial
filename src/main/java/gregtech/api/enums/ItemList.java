@@ -189,6 +189,7 @@ public enum ItemList implements IItemContainer {
     Shape_Extruder_Rotor,
     Shape_Extruder_Turbine_Blade,
     Shape_Extruder_Small_Gear,
+    Shape_Extruder_Shaft,
     Crate_Empty,
     Credit_Copper,
     Credit_Iron,
