@@ -62,13 +62,8 @@ public class ProcessingShaping implements gregtech.api.interfaces.IOreRecipeRegi
                         GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Pipe_Large.get(0L), aMaterial.getMolten(864L), GT_OreDictUnificator.get(OrePrefixes.pipeLarge, aMaterial, 1L), 160, 8 * tVoltageMultiplier);
                         GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Pipe_Huge.get(0L), aMaterial.getMolten(1728L), GT_OreDictUnificator.get(OrePrefixes.pipeHuge, aMaterial, 1L), 320, 8 * tVoltageMultiplier);
                 }
-                if (tAmount * 2 <= 64) {
-                    if (!(aMaterial == Materials.Aluminium)) {
-                        GT_Values.RA.addExtruderRecipe(GT_Utility.copyAmount(1L, aStack), ItemList.Shape_Extruder_Rod.get(0L), GT_OreDictUnificator.get(OrePrefixes.stick, aMaterial.mSmeltInto, tAmount * 2), (int) Math.max(aMaterialMass * 2L * tAmount, tAmount), 6 * tVoltageMultiplier);
-                    } else {
-                        GT_Values.RA.addExtruderRecipe(GT_Utility.copyAmount(1L, aStack), ItemList.Shape_Extruder_Rod.get(0L), GT_OreDictUnificator.get(OrePrefixes.stick, aMaterial.mSmeltInto, tAmount * 2), 200, 2 * tVoltageMultiplier);
-                        }
-                    }
+                if (tAmount * 2 <= 64)
+                    GT_Values.RA.addExtruderRecipe(GT_Utility.copyAmount(1L, aStack), ItemList.Shape_Extruder_Rod.get(0L), GT_OreDictUnificator.get(OrePrefixes.stick, aMaterial.mSmeltInto, tAmount * 2), (int) Math.max(aMaterialMass * 2L * tAmount, tAmount), 6 * tVoltageMultiplier);
                 if (tAmount * 2 <= 64)
                     GT_Values.RA.addExtruderRecipe(GT_Utility.copyAmount(1L, aStack), ItemList.Shape_Extruder_Wire.get(0L), GT_OreDictUnificator.get(OrePrefixes.wireGt01, aMaterial.mSmeltInto, tAmount * 2), (int) Math.max(aMaterialMass * 2L * tAmount, tAmount), 6 * tVoltageMultiplier);
                 if (tAmount * 8 <= 64)
