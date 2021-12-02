@@ -20,8 +20,16 @@ import gregtech.api.enums.SubTag;
 import gregtech.api.enums.Textures;
 import gregtech.api.enums.ToolDictNames;
 import gregtech.api.events.BlockScanningEvent;
-import gregtech.api.interfaces.*;
-import gregtech.api.interfaces.tileentity.*;
+import gregtech.api.interfaces.IBlockContainer;
+import gregtech.api.interfaces.IDebugableBlock;
+import gregtech.api.interfaces.IProjectileItem;
+import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.tileentity.IBasicEnergyContainer;
+import gregtech.api.interfaces.tileentity.ICoverable;
+import gregtech.api.interfaces.tileentity.IGregTechDeviceInformation;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.tileentity.IMachineProgress;
+import gregtech.api.interfaces.tileentity.IUpgradableMachine;
 import gregtech.api.items.GT_EnergyArmor_Item;
 import gregtech.api.items.GT_Generic_Item;
 import gregtech.api.items.GT_MetaGenerated_Tool;
@@ -62,21 +70,15 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.play.server.S07PacketRespawn;
 import net.minecraft.network.play.server.S1DPacketEntityEffect;
 import net.minecraft.network.play.server.S1FPacketSetExperience;
-import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.FakePlayer;
@@ -125,8 +127,9 @@ import static gregtech.common.GT_UndergroundOil.undergroundOilReadInformation;
  * Just a few Utility Functions I use.
  */
 public class GT_Utility {
-
-    /** Formats a number with group separator and at most 2 fraction digits. */
+    /**
+     * Formats a number with group separator and at most 2 fraction digits.
+     */
     private static final NumberFormat numberFormat = NumberFormat.getInstance();
 
     /**
@@ -136,7 +139,9 @@ public class GT_Utility {
     private static final Map<GT_ItemStack, FluidContainerData> sFilledContainerToData = new /*Concurrent*/HashMap<>();
     private static final Map<GT_ItemStack, Map<Fluid, FluidContainerData>> sEmptyContainerToFluidToData = new /*Concurrent*/HashMap<>();
     private static final Map<Fluid, List<ItemStack>> sFluidToContainers = new HashMap<>();
-    /** Must use {@code Supplier} here because the ore prefixes have not yet been registered at class load time. */
+    /**
+     * Must use {@code Supplier} here because the ore prefixes have not yet been registered at class load time.
+     */
     private static final Map<OrePrefixes, Supplier<ItemStack>> sOreToCobble = new HashMap<>();
     public static volatile int VERSION = 509;
     public static boolean TE_CHECK = false, BC_CHECK = false, CHECK_ALL = true, RF_CHECK = false;
@@ -986,8 +991,9 @@ public class GT_Utility {
                 tContainers = new ArrayList<>();
                 tContainers.add(tData.filledContainer);
                 sFluidToContainers.put(tData.fluid.getFluid(), tContainers);
+            } else {
+                tContainers.add(tData.filledContainer);
             }
-            else tContainers.add(tData.filledContainer);
         }
     }
 
@@ -1005,8 +1011,7 @@ public class GT_Utility {
             tContainers = new ArrayList<>();
             tContainers.add(aData.filledContainer);
             sFluidToContainers.put(aData.fluid.getFluid(), tContainers);
-        }
-        else tContainers.add(aData.filledContainer);
+        } else tContainers.add(aData.filledContainer);
     }
 
     public static List<ItemStack> getContainersFromFluid(FluidStack tFluidStack) {
@@ -2227,9 +2232,6 @@ public class GT_Utility {
         Chunk currentChunk = aWorld.getChunkFromBlockCoords(aX, aZ);
         if (aPlayer.capabilities.isCreativeMode) {
             FluidStack tFluid = undergroundOilReadInformation(currentChunk);//-# to only read
-            if (tFluid!=null)
-            	tList.add(EnumChatFormatting.GOLD + tFluid.getLocalizedName() + EnumChatFormatting.RESET + ": " + EnumChatFormatting.YELLOW + formatNumbers(tFluid.amount) + EnumChatFormatting.RESET + " L");
-            FluidStack tFluid = undergroundOilReadInformation(aWorld.getChunkFromBlockCoords(aX, aZ));//-# to only read
             if (tFluid != null)
                 tList.add(EnumChatFormatting.GOLD + tFluid.getLocalizedName() + EnumChatFormatting.RESET + ": " + EnumChatFormatting.YELLOW + formatNumbers(tFluid.amount) + EnumChatFormatting.RESET + " L");
             else
@@ -2238,15 +2240,6 @@ public class GT_Utility {
 //      if(aPlayer.capabilities.isCreativeMode){
         if (GT_Pollution.hasPollution(currentChunk)) {
             tList.add(trans("202", "Pollution in Chunk: ") + EnumChatFormatting.RED + formatNumbers(GT_Pollution.getPollution(currentChunk)) + EnumChatFormatting.RESET + trans("203", " gibbl"));
-        } else {
-            tList.add(EnumChatFormatting.GREEN + trans("204", "No Pollution in Chunk! HAYO!") + EnumChatFormatting.RESET);
-        int[] chunkData = GT_Proxy.dimensionWiseChunkData.get(aWorld.provider.dimensionId).get(aWorld.getChunkFromBlockCoords(aX, aZ).getChunkCoordIntPair());
-        if (chunkData != null) {
-            if (chunkData[GTPOLLUTION] > 0) {
-                tList.add(trans("202", "Pollution in Chunk: ") + EnumChatFormatting.RED + formatNumbers(chunkData[GTPOLLUTION]) + EnumChatFormatting.RESET + trans("203", " gibbl"));
-            } else {
-                tList.add(EnumChatFormatting.GREEN + trans("204", "No Pollution in Chunk! HAYO!") + EnumChatFormatting.RESET);
-            }
         } else {
             tList.add(EnumChatFormatting.GREEN + trans("204", "No Pollution in Chunk! HAYO!") + EnumChatFormatting.RESET);
         }
