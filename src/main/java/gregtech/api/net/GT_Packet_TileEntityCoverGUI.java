@@ -1,9 +1,11 @@
 package gregtech.api.net;
 
 import com.google.common.io.ByteArrayDataInput;
+import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.util.ISerializableObject;
 import gregtech.common.GT_Proxy;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -16,14 +18,14 @@ import net.minecraft.world.World;
 /**
  * Server -> Client: Show GUI
  */
-
 public class GT_Packet_TileEntityCoverGUI extends GT_Packet_New {
     protected int mX;
     protected short mY;
     protected int mZ;
 
     protected byte side;
-    protected int coverID, coverData, dimID, playerID;
+    protected int coverID, dimID, playerID;
+    protected ISerializableObject coverData;
 
     public GT_Packet_TileEntityCoverGUI() {
         super(true);
@@ -37,8 +39,21 @@ public class GT_Packet_TileEntityCoverGUI extends GT_Packet_New {
 
         this.side = coverSide;
         this.coverID = coverID;
-        this.coverData = coverData;
+        this.coverData = new ISerializableObject.LegacyCoverData(coverData);
 
+        this.dimID = dimID;
+        this.playerID = playerID;
+    }
+
+    public GT_Packet_TileEntityCoverGUI(int mX, short mY, int mZ, byte coverSide, int coverID, ISerializableObject coverData, int dimID, int playerID) {
+        super(false);
+        this.mX = mX;
+        this.mY = mY;
+        this.mZ = mZ;
+
+        this.side = coverSide;
+        this.coverID = coverID;
+        this.coverData = coverData;
         this.dimID = dimID;
         this.playerID = playerID;
     }
@@ -53,7 +68,7 @@ public class GT_Packet_TileEntityCoverGUI extends GT_Packet_New {
 
         this.side = side;
         this.coverID = coverID;
-        this.coverData = coverData;
+        this.coverData = new ISerializableObject.LegacyCoverData(coverData);
 
         this.dimID = tile.getWorld().provider.dimensionId;
         this.playerID = aPlayer.getEntityId();
@@ -67,9 +82,23 @@ public class GT_Packet_TileEntityCoverGUI extends GT_Packet_New {
 
         this.side = coverSide;
         this.coverID = coverID;
-        this.coverData = coverData;
+        this.coverData = new ISerializableObject.LegacyCoverData(coverData);
 
         this.dimID = tile.getWorld().provider.dimensionId;
+    }
+
+    public GT_Packet_TileEntityCoverGUI(byte side, int coverID, ISerializableObject coverData, ICoverable tile, EntityPlayerMP aPlayer) {
+        super(false);
+        this.mX = tile.getXCoord();
+        this.mY = tile.getYCoord();
+        this.mZ = tile.getZCoord();
+
+        this.side = side;
+        this.coverID = coverID;
+        this.coverData = coverData.copy(); // make a copy so we don't get a race condition
+
+        this.dimID = tile.getWorld().provider.dimensionId;
+        this.playerID = aPlayer.getEntityId();
     }
 
     @Override
@@ -85,7 +114,7 @@ public class GT_Packet_TileEntityCoverGUI extends GT_Packet_New {
 
         aOut.writeByte(side);
         aOut.writeInt(coverID);
-        aOut.writeInt(coverData);
+        coverData.writeToByteBuf(aOut);
 
         aOut.writeInt(dimID);
         aOut.writeInt(playerID);
@@ -93,14 +122,15 @@ public class GT_Packet_TileEntityCoverGUI extends GT_Packet_New {
 
     @Override
     public GT_Packet_New decode(ByteArrayDataInput aData) {
+        int coverID;
         return new GT_Packet_TileEntityCoverGUI(
                 aData.readInt(),
                 aData.readShort(),
                 aData.readInt(),
 
                 aData.readByte(),
-                aData.readInt(),
-                aData.readInt(),
+                coverID = aData.readInt(),
+                GregTech_API.getCoverBehaviorNew(coverID).createDataObject().readFromPacket(aData, null),
 
                 aData.readInt(),
                 aData.readInt());

@@ -1,3 +1,14 @@
+# Creative ItemGroup Tab
+itemGroup.GregTech.GTPP_BLOCKS=GT++ Blocks
+itemGroup.GregTech.GTPP_MACHINES=GT++ Machines
+itemGroup.GregTech.GTPP_MISC=GT++ Misc
+itemGroup.GregTech.GTPP_OTHER=GT++ Other
+itemGroup.GregTech.GTPP_OTHER_2=GT++ Other II
+itemGroup.GregTech.GTPP_TOOLS=GT++ Tools
+itemGroup.GregTech.Main=Main
+itemGroup.GregTech.Materials=Materials
+itemGroup.GregTech.Ores=Ores
+
 # Multiblock Tooltip Builder Keywords
 # Context can be found in the class gregtech.api.util.GT_Multiblock_Tooltip_Builder
 GT5U.MBTT.MachineType=Machine Type

@@ -116,7 +116,7 @@ public class GT_Container_OutputHatch extends GT_Container_BasicTank {
         }
         byte mode = buffer.get(Integer.BYTES);
         FluidStack tFluid = FluidRegistry.getFluidStack(sb.toString().replace("fluid.", "")
-                .replace(".name", "").replace("ic2.fluid", "ic2").toLowerCase(), 1);
+            .replace("tile.", "").replace(".name", "").replace("ic2.fluid", "ic2").toLowerCase(), 1);
         if (tFluid == null || mode < 8) return "Empty";
         else return tFluid.getLocalizedName().replace("fluid.", "");
     }

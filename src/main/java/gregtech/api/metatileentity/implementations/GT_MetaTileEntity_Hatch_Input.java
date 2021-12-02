@@ -19,7 +19,7 @@ public class GT_MetaTileEntity_Hatch_Input extends GT_MetaTileEntity_Hatch {
     public GT_MetaTileEntity_Hatch_Input(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 3, new String[]{
                 "Fluid Input for Multiblocks",
-                "Capacity: " + GT_Utility.formatNumbers(8000+8000*(aTier*(aTier+1)>>1)) + "L"});
+                "Capacity: " + GT_Utility.formatNumbers(8000*(1<<aTier)) + "L"});
     }
 
     public GT_MetaTileEntity_Hatch_Input(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
@@ -133,7 +133,7 @@ public class GT_MetaTileEntity_Hatch_Input extends GT_MetaTileEntity_Hatch {
 
     @Override
     public int getCapacity() {
-        return 8000+8000*(mTier*(mTier+1)>>1);
+        return 8000*(1<<mTier);
     }
 
     @Override

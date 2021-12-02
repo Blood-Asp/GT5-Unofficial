@@ -408,8 +408,8 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         ItemList.Battery_Hull_MV.set(addItem(501, "Medium Battery Hull", "An empty MV Battery Hull", new ItemData(Materials.BatteryAlloy, OrePrefixes.plate.mMaterialAmount * 3L), new TC_Aspects.TC_AspectStack(TC_Aspects.ELECTRUM, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.VACUOS, 1L)));
         ItemList.Battery_Hull_HV.set(addItem(502, "Large Battery Hull", "An empty HV Battery Hull", new ItemData(Materials.BatteryAlloy, OrePrefixes.plate.mMaterialAmount * 9L), new TC_Aspects.TC_AspectStack(TC_Aspects.ELECTRUM, 4L), new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 4L), new TC_Aspects.TC_AspectStack(TC_Aspects.VACUOS, 1L)));
 
-        GT_ModHandler.addCraftingRecipe(ItemList.Battery_Hull_LV.get(1L), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"C", "P", "P", 'P', OrePrefixes.plate.get(Materials.BatteryAlloy), 'C', OreDictNames.craftingWireTin});
-        GT_ModHandler.addCraftingRecipe(ItemList.Battery_Hull_MV.get(1L), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"C C", "PPP", "PPP", 'P', OrePrefixes.plate.get(Materials.BatteryAlloy), 'C', OreDictNames.craftingWireCopper});
+        GT_ModHandler.addCraftingRecipe(ItemList.Battery_Hull_LV.get(1L), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"Cf ", "Ph ", "Ps ", 'P', OrePrefixes.plate.get(Materials.BatteryAlloy), 'C', OreDictNames.craftingWireTin});
+        //GT_ModHandler.addCraftingRecipe(ItemList.Battery_Hull_MV.get(1L), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"C C", "PPP", "PPP", 'P', OrePrefixes.plate.get(Materials.BatteryAlloy), 'C', OreDictNames.craftingWireCopper});
 
         ItemList.Battery_RE_ULV_Tantalum.set(addItem(tLastID = 499, "Tantalum Capacitor", "Reusable", new TC_Aspects.TC_AspectStack(TC_Aspects.ELECTRUM, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.POTENTIA, 1L)));
         setElectricStats(32000 + tLastID, 1000L, GT_Values.V[0], 0L, -3L, false);

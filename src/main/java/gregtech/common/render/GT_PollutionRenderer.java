@@ -100,6 +100,10 @@ public class GT_PollutionRenderer {
         return color(oColor, pollutionMap.getPollution(x, z)/1000, 300, 500, foliageColor);
     }
 
+    public static int getKnownPollution(int x, int z) {
+        return pollutionMap.getPollution(x, z);
+    }
+
     @SubscribeEvent(priority = EventPriority.LOW)
     public void manipulateColor(EntityViewRenderEvent.FogColors event) {
         if (!DEBUG && Minecraft.getMinecraft().thePlayer.capabilities.isCreativeMode)

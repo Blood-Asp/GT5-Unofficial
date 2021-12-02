@@ -595,6 +595,20 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
     }
 
     @Override
+    public boolean addOreWasherRecipe(ItemStack aInput, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, FluidStack aFluidInput, int[] aChances, int aDuration, int aEUt) {
+        if ((aInput == null) || (aFluidInput == null) || ((aOutput1 == null) || (aOutput2 == null) || (aOutput3 == null))) {
+            return false;
+        }
+        if ((aDuration = GregTech_API.sRecipeFile.get("orewasher", aInput, aDuration)) <= 0) {
+            return false;
+        }
+        GT_Recipe.GT_Recipe_Map.sOreWasherRecipes.addRecipe(true, new ItemStack[]{aInput}, new ItemStack[]{aOutput1, aOutput2, aOutput3}, null, aChances, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, 0);
+        return true;
+    }
+
+
+
+    @Override
     public boolean addImplosionRecipe(ItemStack aInput1, int aInput2, ItemStack aOutput1, ItemStack aOutput2) {
         if ((aInput1 == null) || (aOutput1 == null)) {
             return false;
@@ -766,6 +780,18 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
             return false;
         }
         GT_Recipe.GT_Recipe_Map.sThermalCentrifugeRecipes.addRecipe(true, new ItemStack[]{aInput}, new ItemStack[]{aOutput1, aOutput2, aOutput3}, null, null, null, aDuration, aEUt, 0);
+        return true;
+    }
+
+    @Override
+    public boolean addThermalCentrifugeRecipe(ItemStack aInput, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, int[] aChances, int aDuration, int aEUt) {
+        if ((aInput == null) || (aOutput1 == null)) {
+            return false;
+        }
+        if (!GregTech_API.sRecipeFile.get("thermalcentrifuge", aInput, true)) {
+            return false;
+        }
+        GT_Recipe.GT_Recipe_Map.sThermalCentrifugeRecipes.addRecipe(true, new ItemStack[]{aInput}, new ItemStack[]{aOutput1, aOutput2, aOutput3}, null, aChances, null, null, aDuration, aEUt, 0);
         return true;
     }
 
@@ -1115,6 +1141,21 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
             return false;
         }
         GT_Recipe.GT_Recipe_Map.sMixerRecipes.addRecipe(true, new ItemStack[]{aInput1, aInput2, aInput3, aInput4, aInput5, aInput6, aInput7, aInput8, aInput9}, new ItemStack[]{aOutput}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUt, 0);
+        return true;
+    }
+
+    @Override
+    public boolean addMixerRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aInput3, ItemStack aInput4, ItemStack aInput5, ItemStack aInput6, ItemStack aInput7, ItemStack aInput8, ItemStack aInput9, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, ItemStack aOutput4, int aDuration, int aEUt) {
+        if (((aInput1 == null) && (aFluidInput == null)) || ((aOutput1 == null) && (aFluidOutput == null))) {
+            return false;
+        }
+        if ((aOutput1 != null) && ((aDuration = GregTech_API.sRecipeFile.get("mixer", aOutput1, aDuration)) <= 0)) {
+            return false;
+        }
+        if ((aFluidOutput != null) && ((aDuration = GregTech_API.sRecipeFile.get("mixer", aFluidOutput.getFluid().getName(), aDuration)) <= 0)) {
+            return false;
+        }
+        GT_Recipe.GT_Recipe_Map.sMixerRecipes.addRecipe(true, new ItemStack[]{aInput1, aInput2, aInput3, aInput4, aInput5, aInput6, aInput7, aInput8, aInput9}, new ItemStack[]{aOutput1, aOutput2, aOutput3, aOutput4}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUt, 0);
         return true;
     }
 

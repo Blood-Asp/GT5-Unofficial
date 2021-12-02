@@ -12,10 +12,24 @@ import gregtech.api.GregTech_API;
 import gregtech.api.damagesources.GT_DamageSources;
 import gregtech.api.damagesources.GT_DamageSources.DamageSourceHotItem;
 import gregtech.api.enchants.Enchantment_Radioactivity;
-import gregtech.api.enums.*;
+import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.SubTag;
+import gregtech.api.enums.Textures;
+import gregtech.api.enums.ToolDictNames;
 import gregtech.api.events.BlockScanningEvent;
-import gregtech.api.interfaces.*;
-import gregtech.api.interfaces.tileentity.*;
+import gregtech.api.interfaces.IBlockContainer;
+import gregtech.api.interfaces.IDebugableBlock;
+import gregtech.api.interfaces.IProjectileItem;
+import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.tileentity.IBasicEnergyContainer;
+import gregtech.api.interfaces.tileentity.ICoverable;
+import gregtech.api.interfaces.tileentity.IGregTechDeviceInformation;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.tileentity.IMachineProgress;
+import gregtech.api.interfaces.tileentity.IUpgradableMachine;
 import gregtech.api.items.GT_EnergyArmor_Item;
 import gregtech.api.items.GT_Generic_Item;
 import gregtech.api.items.GT_MetaGenerated_Tool;
@@ -25,7 +39,7 @@ import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
 import gregtech.api.threads.GT_Runnable_Sound;
 import gregtech.api.util.extensions.ArrayExt;
-import gregtech.common.GT_Proxy;
+import gregtech.common.GT_Pollution;
 import gregtech.common.blocks.GT_Block_Ores_Abstract;
 import ic2.api.recipe.IRecipeInput;
 import ic2.api.recipe.RecipeInputItemStack;
@@ -34,7 +48,11 @@ import ic2.api.recipe.RecipeOutput;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -52,7 +70,6 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.play.server.S07PacketRespawn;
 import net.minecraft.network.play.server.S1DPacketEntityEffect;
 import net.minecraft.network.play.server.S1FPacketSetExperience;
-import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
@@ -60,8 +77,8 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.FakePlayer;
@@ -69,8 +86,13 @@ import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidContainerItem;
+import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
@@ -78,16 +100,25 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.NumberFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Supplier;
 
 import static gregtech.GT_Mod.GT_FML_LOGGER;
-import static gregtech.api.enums.GT_Values.*;
-import static gregtech.common.GT_Proxy.GTPOLLUTION;
+import static gregtech.api.enums.GT_Values.D1;
+import static gregtech.api.enums.GT_Values.DW;
+import static gregtech.api.enums.GT_Values.E;
+import static gregtech.api.enums.GT_Values.GT;
+import static gregtech.api.enums.GT_Values.L;
+import static gregtech.api.enums.GT_Values.M;
+import static gregtech.api.enums.GT_Values.NW;
+import static gregtech.api.enums.GT_Values.V;
+import static gregtech.api.enums.GT_Values.W;
 import static gregtech.common.GT_UndergroundOil.undergroundOilReadInformation;
 
 /**
@@ -96,8 +127,9 @@ import static gregtech.common.GT_UndergroundOil.undergroundOilReadInformation;
  * Just a few Utility Functions I use.
  */
 public class GT_Utility {
-
-    /** Formats a number with group separator and at most 2 fraction digits. */
+    /**
+     * Formats a number with group separator and at most 2 fraction digits.
+     */
     private static final NumberFormat numberFormat = NumberFormat.getInstance();
 
     /**
@@ -107,7 +139,9 @@ public class GT_Utility {
     private static final Map<GT_ItemStack, FluidContainerData> sFilledContainerToData = new /*Concurrent*/HashMap<>();
     private static final Map<GT_ItemStack, Map<Fluid, FluidContainerData>> sEmptyContainerToFluidToData = new /*Concurrent*/HashMap<>();
     private static final Map<Fluid, List<ItemStack>> sFluidToContainers = new HashMap<>();
-    /** Must use {@code Supplier} here because the ore prefixes have not yet been registered at class load time. */
+    /**
+     * Must use {@code Supplier} here because the ore prefixes have not yet been registered at class load time.
+     */
     private static final Map<OrePrefixes, Supplier<ItemStack>> sOreToCobble = new HashMap<>();
     public static volatile int VERSION = 509;
     public static boolean TE_CHECK = false, BC_CHECK = false, CHECK_ALL = true, RF_CHECK = false;
@@ -957,8 +991,9 @@ public class GT_Utility {
                 tContainers = new ArrayList<>();
                 tContainers.add(tData.filledContainer);
                 sFluidToContainers.put(tData.fluid.getFluid(), tContainers);
+            } else {
+                tContainers.add(tData.filledContainer);
             }
-            else tContainers.add(tData.filledContainer);
         }
     }
 
@@ -976,8 +1011,7 @@ public class GT_Utility {
             tContainers = new ArrayList<>();
             tContainers.add(aData.filledContainer);
             sFluidToContainers.put(aData.fluid.getFluid(), tContainers);
-        }
-        else tContainers.add(aData.filledContainer);
+        } else tContainers.add(aData.filledContainer);
     }
 
     public static List<ItemStack> getContainersFromFluid(FluidStack tFluidStack) {
@@ -2123,7 +2157,7 @@ public class GT_Utility {
             try {
                 if (tTileEntity instanceof ICoverable) {
                     rEUAmount += 300;
-                    String tString = ((ICoverable) tTileEntity).getCoverBehaviorAtSide((byte) aSide).getDescription((byte) aSide, ((ICoverable) tTileEntity).getCoverIDAtSide((byte) aSide), ((ICoverable) tTileEntity).getCoverDataAtSide((byte) aSide), (ICoverable) tTileEntity);
+                    String tString = ((ICoverable) tTileEntity).getCoverBehaviorAtSideNew((byte) aSide).getDescription((byte) aSide, ((ICoverable) tTileEntity).getCoverIDAtSide((byte) aSide), ((ICoverable) tTileEntity).getComplexCoverDataAtSide((byte) aSide), (ICoverable) tTileEntity);
                     if (tString != null && !tString.equals(E)) tList.add(tString);
                 }
             } catch (Throwable e) {
@@ -2195,21 +2229,17 @@ public class GT_Utility {
             }
         }
 
+        Chunk currentChunk = aWorld.getChunkFromBlockCoords(aX, aZ);
         if (aPlayer.capabilities.isCreativeMode) {
-            FluidStack tFluid = undergroundOilReadInformation(aWorld.getChunkFromBlockCoords(aX, aZ));//-# to only read
+            FluidStack tFluid = undergroundOilReadInformation(currentChunk);//-# to only read
             if (tFluid != null)
                 tList.add(EnumChatFormatting.GOLD + tFluid.getLocalizedName() + EnumChatFormatting.RESET + ": " + EnumChatFormatting.YELLOW + formatNumbers(tFluid.amount) + EnumChatFormatting.RESET + " L");
             else
                 tList.add(EnumChatFormatting.GOLD + trans("201", "Nothing") + EnumChatFormatting.RESET + ": " + EnumChatFormatting.YELLOW + '0' + EnumChatFormatting.RESET + " L");
         }
 //      if(aPlayer.capabilities.isCreativeMode){
-        int[] chunkData = GT_Proxy.dimensionWiseChunkData.get(aWorld.provider.dimensionId).get(aWorld.getChunkFromBlockCoords(aX, aZ).getChunkCoordIntPair());
-        if (chunkData != null) {
-            if (chunkData[GTPOLLUTION] > 0) {
-                tList.add(trans("202", "Pollution in Chunk: ") + EnumChatFormatting.RED + formatNumbers(chunkData[GTPOLLUTION]) + EnumChatFormatting.RESET + trans("203", " gibbl"));
-            } else {
-                tList.add(EnumChatFormatting.GREEN + trans("204", "No Pollution in Chunk! HAYO!") + EnumChatFormatting.RESET);
-            }
+        if (GT_Pollution.hasPollution(currentChunk)) {
+            tList.add(trans("202", "Pollution in Chunk: ") + EnumChatFormatting.RED + formatNumbers(GT_Pollution.getPollution(currentChunk)) + EnumChatFormatting.RESET + trans("203", " gibbl"));
         } else {
             tList.add(EnumChatFormatting.GREEN + trans("204", "No Pollution in Chunk! HAYO!") + EnumChatFormatting.RESET);
         }
