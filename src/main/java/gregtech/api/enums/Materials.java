@@ -792,7 +792,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials ShadowSteel             = new Materials( 337, TextureSet.SET_METALLIC          ,   6.0F,    768,  4, 1|2          |64          ,  90,  90,  90,   0,   "ShadowSteel"             ,   "Shadow Steel"                  ,    0,       0,         -1, 1700,  true, false,   4,   4,   3, Dyes.dyeBlack       , 2, Arrays.asList(new MaterialStack(Steel, 1), new MaterialStack(Thaumium, 3)));
     public static Materials AstralSilver            = new Materials( 333, TextureSet.SET_SHINY             ,  10.0F,     64,  2, 1|2          |64          , 230, 230, 255,   0,   "AstralSilver"            ,   "Astral Silver"                 ,    0,       0,         -1,    0, false, false,   4,   3,   2, Dyes.dyeWhite       , 2, Arrays.asList(new MaterialStack(Silver, 2), new MaterialStack(Thaumium, 1)));
 
-       /**
+    /**
      * Op materials (draconic evolution above)
      */
     //TODO: add other op materials? maybe some new ores or new only fusion made op materials from op materials??? like neutronium bedrockium alloy etc.

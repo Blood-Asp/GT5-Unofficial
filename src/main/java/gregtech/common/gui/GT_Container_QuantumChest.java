@@ -50,10 +50,10 @@ public class GT_Container_QuantumChest extends GT_ContainerMetaTile_Machine {
         super.updateProgressBar(par1, par2);
         switch (par1) {
             case 100:
-                mContent = mContent & -65536 | par2;
+                mContent = mContent & 0xffff0000 | par2 & 0x0000ffff;
                 break;
             case 101:
-                mContent = mContent & 65535 | par2 << 16;
+                mContent = mContent & 0x0000ffff | par2 << 16;
                 break;
         }
     }

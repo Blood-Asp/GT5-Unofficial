@@ -78,7 +78,7 @@ import static org.lwjgl.opengl.GL11.GL_LINE_LOOP;
 public class GT_Client extends GT_Proxy
         implements Runnable {
 
-    public static final String GTNH_CAPE_LIST_URL = "https://raw.githubusercontent.com/GTNewHorizons/CustomGTCapeHook-Cape-List/master/capes.txt";
+    public static final String GTMEGA_CAPE_LIST_URL = "https://raw.githubusercontent.com/GTMEGA/CustomGTCapeHook-Cape-List/master/capes.txt";
     public static final String GT_CAPE_LIST_URL = "http://gregtech.overminddl1.com/com/gregoriust/gregtech/supporterlist.txt";
     private static final List<Block> ROTATABLE_VANILLA_BLOCKS;
 
@@ -152,6 +152,7 @@ public class GT_Client extends GT_Proxy
     private GT_ClientPreference mPreference;
     private boolean mFirstTick = false;
     public static final int ROTATION_MARKER_RESOLUTION = 120;
+    private int mReloadCount;
 
     public GT_Client() {
         mCapeRenderer = new GT_CapeRenderer(mCapeList);
@@ -470,7 +471,7 @@ public class GT_Client extends GT_Proxy
 //                for (; i < GregTech_API.METATILEENTITIES.length; i++) if (GregTech_API.METATILEENTITIES[i] != null) GregTech_API.METATILEENTITIES[i].getStackForm(1L).getTooltip(null, true);
 //              } catch (Throwable e) {
 //                e.printStackTrace(GT_Log.err);
-//              }
+//              }   //weak lmao
 //            }
     }
 
@@ -485,7 +486,7 @@ public class GT_Client extends GT_Proxy
             e.printStackTrace(GT_Log.err);
         }
         GT_Log.out.println("GT New Horizons: Downloading Cape List.");
-        try (Scanner tScanner = new Scanner(new URL(GTNH_CAPE_LIST_URL).openStream())) {
+        try (Scanner tScanner = new Scanner(new URL(GTMEGA_CAPE_LIST_URL).openStream())) {
             while (tScanner.hasNextLine()) {
                 String tName = tScanner.nextLine().toLowerCase();
                 if (tName.contains(":")) {
@@ -505,6 +506,12 @@ public class GT_Client extends GT_Proxy
     @SubscribeEvent
     public void onClientConnectedToServerEvent(FMLNetworkEvent.ClientConnectedToServerEvent aEvent) {
         mFirstTick = true;
+        mReloadCount++;
+    }
+
+    @Override
+    public int getReloadCount() {
+        return mReloadCount;
     }
 
     @SubscribeEvent

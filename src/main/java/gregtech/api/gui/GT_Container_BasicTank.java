@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.IFluidContainerItem;
 public class GT_Container_BasicTank extends GT_ContainerMetaTile_Machine {
 
     public int mContent = 0;
+    private int oContent = 0;
 
     public GT_Container_BasicTank(InventoryPlayer aInventoryPlayer, IGregTechTileEntity aTileEntity) {
         super(aInventoryPlayer, aTileEntity);
@@ -212,9 +213,13 @@ public class GT_Container_BasicTank extends GT_ContainerMetaTile_Machine {
             mContent = 0;
         for (Object crafter : this.crafters) {
             ICrafting var1 = (ICrafting) crafter;
-            var1.sendProgressBarUpdate(this, 100, mContent & 65535);
-            var1.sendProgressBarUpdate(this, 101, mContent >>> 16);
+            if (mTimer % 500 == 0 || oContent != mContent) {
+                var1.sendProgressBarUpdate(this, 100, mContent & 65535);
+                var1.sendProgressBarUpdate(this, 101, mContent >>> 16);
+            }
         }
+
+        oContent = mContent;
     }
 
     @Override
@@ -223,10 +228,10 @@ public class GT_Container_BasicTank extends GT_ContainerMetaTile_Machine {
         super.updateProgressBar(par1, par2);
         switch (par1) {
             case 100:
-                mContent = mContent & -65536 | par2;
+                mContent = mContent & 0xffff0000 | par2 & 0x0000ffff;
                 break;
             case 101:
-                mContent = mContent & 65535 | par2 << 16;
+                mContent = mContent & 0xffff | par2 << 16;
                 break;
         }
     }

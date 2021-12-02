@@ -58,11 +58,7 @@ public abstract class GT_MetaBase_Item extends GT_Generic_Item implements ISpeci
      */
     public final GT_MetaBase_Item addItemBehavior(int aMetaValue, IItemBehaviour<GT_MetaBase_Item> aBehavior) {
         if (aMetaValue < 0 || aMetaValue >= 32766 || aBehavior == null) return this;
-        ArrayList<IItemBehaviour<GT_MetaBase_Item>> tList = mItemBehaviors.get((short) aMetaValue);
-        if (tList == null) {
-            tList = new ArrayList<IItemBehaviour<GT_MetaBase_Item>>(1);
-            mItemBehaviors.put((short) aMetaValue, tList);
-        }
+        ArrayList<IItemBehaviour<GT_MetaBase_Item>> tList = mItemBehaviors.computeIfAbsent((short) aMetaValue, k -> new ArrayList<>(1));
         tList.add(aBehavior);
         return this;
     }
