@@ -11,8 +11,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-
-import java.util.List;
+import net.minecraftforge.fluids.FluidStack;
 
 import static gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine.OTHER_SLOT_COUNT;
 
@@ -37,13 +36,10 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
         addSlotToContainer(new GT_Slot_Holo(mTileEntity, 0, 8, 63, false, true, 1));
         addSlotToContainer(new GT_Slot_Holo(mTileEntity, 0, 26, 63, false, true, 1));
         addSlotToContainer(new GT_Slot_Render(mTileEntity, 2, 107, 63));
-        GT_MetaTileEntity_BasicMachine machine = (GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity();
-        if (machine.allowSelectCircuit())
-            addSlotToContainer(new GT_Slot_Render(mTileEntity, machine.getCircuitSlot(), 153, 63));
 
-        int tStartIndex = machine.getInputSlot();
+        int tStartIndex = ((GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity()).getInputSlot();
 
-        switch (machine.mInputSlotCount) {
+        switch (((GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity()).mInputSlotCount) {
             case 0:
                 break;
             case 1:
@@ -111,9 +107,9 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
                 break;
         }
 
-        tStartIndex = machine.getOutputSlot();
+        tStartIndex = ((GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity()).getOutputSlot();
 
-        switch (machine.mOutputItems.length) {
+        switch (((GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity()).mOutputItems.length) {
             case 0:
                 break;
             case 1:
@@ -186,20 +182,8 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
         addSlotToContainer(new GT_Slot_Render(mTileEntity, tStartIndex++, 53, 63));
     }
 
-    private static int find(List<ItemStack> aStacks, ItemStack aStack) {
-        if (GT_Utility.isStackInvalid(aStack))
-            return -1;
-        for (int i = 0, aStacksSize = aStacks.size(); i < aStacksSize; i++) {
-            ItemStack tStack = aStacks.get(i);
-            if (GT_Utility.areStacksEqual(aStack, tStack))
-                return i;
-        }
-        return -1;
-    }
-
     @Override
     public ItemStack slotClick(int aSlotIndex, int aMouseclick, int aShifthold, EntityPlayer aPlayer) {
-        if (mTileEntity.getMetaTileEntity() == null) return null;
         GT_MetaTileEntity_BasicMachine machine = (GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity();
         if (machine == null) return null;
         ItemStack tResultStack;
@@ -208,35 +192,8 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
                 machine.mFluidTransfer = !machine.mFluidTransfer;
                 return null;
             case 1:
+                if (mTileEntity.getMetaTileEntity() == null) return null;
                 machine.mItemTransfer = !machine.mItemTransfer;
-                return null;
-            case 3:
-                if (machine.allowSelectCircuit() && aMouseclick < 2) {
-                    ItemStack newCircuit;
-                    if (aMouseclick == 1 && aShifthold == 1) {
-                        // clear
-                        newCircuit = null;
-                    } else {
-                        ItemStack cursorStack = aPlayer.inventory.getItemStack();
-                        List<ItemStack> tCircuits = machine.getConfigurationCircuits();
-                        int index = find(tCircuits, cursorStack);
-                        if (index < 0) {
-                            int curIndex = find(tCircuits, machine.getStackInSlot(machine.getCircuitSlot())) + 1;
-                            if (aMouseclick == 0) {
-                                curIndex += 1;
-                            } else {
-                                curIndex -= 1;
-                            }
-                            curIndex = Math.floorMod(curIndex, tCircuits.size() + 1) - 1;
-                            newCircuit = curIndex < 0 ? null : tCircuits.get(curIndex);
-                        } else {
-                            // set to whatever it is
-                            newCircuit = tCircuits.get(index);
-                        }
-                    }
-                    mTileEntity.setInventorySlotContents(machine.getCircuitSlot(), newCircuit);
-                    return newCircuit;
-                }
                 return null;
             default:
                 if (aSlotIndex == OTHER_SLOT_COUNT + 1 + machine.mInputSlotCount + machine.mOutputItems.length && aMouseclick < 2) {
@@ -298,12 +255,12 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
 
     @Override
     public int getSlotStartIndex() {
-        return 4;
+        return 3;
     }
 
     @Override
     public int getShiftClickStartIndex() {
-        return 4;
+        return 3;
     }
 
     @Override
