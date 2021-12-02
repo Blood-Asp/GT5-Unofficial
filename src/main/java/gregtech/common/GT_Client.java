@@ -152,6 +152,7 @@ public class GT_Client extends GT_Proxy
     private GT_ClientPreference mPreference;
     private boolean mFirstTick = false;
     public static final int ROTATION_MARKER_RESOLUTION = 120;
+    private int mReloadCount;
 
     public GT_Client() {
         mCapeRenderer = new GT_CapeRenderer(mCapeList);
@@ -505,6 +506,12 @@ public class GT_Client extends GT_Proxy
     @SubscribeEvent
     public void onClientConnectedToServerEvent(FMLNetworkEvent.ClientConnectedToServerEvent aEvent) {
         mFirstTick = true;
+        mReloadCount++;
+    }
+
+    @Override
+    public int getReloadCount() {
+        return mReloadCount;
     }
 
     @SubscribeEvent

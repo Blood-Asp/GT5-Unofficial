@@ -1,5 +1,6 @@
 package gregtech.api.objects;
 
+import gregtech.api.enums.GT_Values;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -17,7 +18,11 @@ public class GT_ItemStack {
     }
 
     public GT_ItemStack(ItemStack aStack) {
-        this(aStack == null ? null : aStack.getItem(), aStack == null ? 0 : aStack.stackSize, aStack == null ? 0 : Items.feather.getDamage(aStack));
+        this(aStack, false);
+    }
+
+    public GT_ItemStack(ItemStack aStack, boolean wildcard) {
+        this(aStack == null ? null : aStack.getItem(), aStack == null ? 0 : aStack.stackSize, aStack == null ? 0 : wildcard ? GT_Values.W : Items.feather.getDamage(aStack));
     }
 
     public GT_ItemStack(int aHashCode) {

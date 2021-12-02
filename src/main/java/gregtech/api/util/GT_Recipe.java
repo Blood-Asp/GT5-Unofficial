@@ -572,6 +572,10 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
          * Contains all Recipe Maps
          */
         public static final Collection<GT_Recipe_Map> sMappings = new ArrayList<>();
+        /**
+         * All recipe maps indexed by their {@link #mUniqueIdentifier}.
+         */
+        public static final Map<String, GT_Recipe_Map> sIndexedMappings = new HashMap<>();
 
         public static final GT_Recipe_Map sOreWasherRecipes = new GT_Recipe_Map(new HashSet<>(500), "gt.recipe.orewasher", "Ore Washing Plant", null, RES_PATH_GUI + "basicmachines/OreWasher", 1, 3, 1, 1, 1, E, 1, E, true, true);
         public static final GT_Recipe_Map sThermalCentrifugeRecipes = new GT_Recipe_Map(new HashSet<>(1000), "gt.recipe.thermalcentrifuge", "Thermal Centrifuge", null, RES_PATH_GUI + "basicmachines/ThermalCentrifuge", 1, 3, 1, 0, 2, E, 1, E, true, true);
@@ -653,7 +657,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         public static final GT_Recipe_Map_Fuel sHugeNaquadahReactorFuels = new GT_Recipe_Map_Fuel(new HashSet<>(1), "gt.recipe.fluidnaquadahreactor", "Naquadah Reactor MkIII", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 0, 0, 1, "Fuel Value: ", 1000, " EU", true, true);
         public static final GT_Recipe_Map_Fuel sExtremeNaquadahReactorFuels = new GT_Recipe_Map_Fuel(new HashSet<>(1), "gt.recipe.hugenaquadahreactor", "Naquadah Reactor MkIV", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 0, 0, 1, "Fuel Value: ", 1000, " EU", true, true);
         public static final GT_Recipe_Map_Fuel sUltraHugeNaquadahReactorFuels = new GT_Recipe_Map_Fuel(new HashSet<>(1), "gt.recipe.extrahugenaquadahreactor", "Naquadah Reactor MkV", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 0, 0, 1, "Fuel Value: ", 1000, " EU", true, true);
-        public static final GT_Recipe_Map_Fuel sFluidNaquadahReactorFuels = new GT_Recipe_Map_Fuel(new HashSet<>(1), "gt.recipe.fluidnaquadahreactor", "Fluid Naquadah Reactor", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 0, 0, 1, "Fuel Value: ", 1000, " EU", true, true);
+        public static final GT_Recipe_Map_Fuel sFluidNaquadahReactorFuels = new GT_Recipe_Map_Fuel(new HashSet<>(1), "gt.recipe.fluidfuelnaquadahreactor", "Fluid Naquadah Reactor", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 0, 0, 1, "Fuel Value: ", 1000, " EU", true, true);
         public static final GT_Recipe_Map_LargeBoilerFakeFuels sLargeBoilerFakeFuels = new GT_Recipe_Map_LargeBoilerFakeFuels();
 
         /**
@@ -684,6 +688,12 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         public final String mNEISpecialValuePre, mNEISpecialValuePost;
         public final int mUsualInputCount, mUsualOutputCount, mNEISpecialValueMultiplier, mMinimalInputItems, mMinimalInputFluids, mAmperage;
         public final boolean mNEIAllowed, mShowVoltageAmperageInNEI;
+
+        /**
+         * Unique identifier for this recipe map. Generated from aUnlocalizedName and a few other parameters.
+         * See constructor for details.
+         */
+        public final String mUniqueIdentifier;
 
         /**
          * Initialises a new type of Recipe Handler.
@@ -717,6 +727,9 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
             GregTech_API.sFluidMappings.add(mRecipeFluidMap);
             GregTech_API.sItemStackMappings.add(mRecipeItemMap);
             GT_LanguageManager.addStringLocalization(mUnlocalizedName = aUnlocalizedName, aLocalName);
+            mUniqueIdentifier = String.format("%s_%d_%d_%d_%d_%d", aUnlocalizedName, aAmperage, aUsualInputCount, aUsualOutputCount, aMinimalInputFluids, aMinimalInputItems);
+            if (sIndexedMappings.put(mUniqueIdentifier, this) != null)
+                throw new IllegalArgumentException("Duplicate recipe map registered: " + mUniqueIdentifier);
         }
 
         public GT_Recipe addRecipe(boolean aOptimize, ItemStack[] aInputs, ItemStack[] aOutputs, Object aSpecial, int[] aOutputChances, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue) {
@@ -800,7 +813,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
          * @return if this Item is a valid Input for any for the Recipes
          */
         public boolean containsInput(ItemStack aStack) {
-            return aStack != null && (mRecipeItemMap.containsKey(new GT_ItemStack(aStack)) || mRecipeItemMap.containsKey(new GT_ItemStack(GT_Utility.copyMetaData(W, aStack))));
+            return aStack != null && (mRecipeItemMap.containsKey(new GT_ItemStack(aStack)) || mRecipeItemMap.containsKey(new GT_ItemStack(aStack, true)));
         }
 
         /**
@@ -886,7 +899,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                     if (tRecipes != null) for (GT_Recipe tRecipe : tRecipes)
                         if (!tRecipe.mFakeRecipe && tRecipe.isRecipeInputEqual(false, aDontCheckStackSizes, aFluids, aInputs))
                             return tRecipe.mEnabled && aVoltage * mAmperage >= tRecipe.mEUt ? tRecipe : null;
-                    tRecipes = mRecipeItemMap.get(new GT_ItemStack(GT_Utility.copyMetaData(W, tStack)));
+                    tRecipes = mRecipeItemMap.get(new GT_ItemStack(tStack, true));
                     if (tRecipes != null) for (GT_Recipe tRecipe : tRecipes)
                         if (!tRecipe.mFakeRecipe && tRecipe.isRecipeInputEqual(false, aDontCheckStackSizes, aFluids, aInputs))
                             return tRecipe.mEnabled && aVoltage * mAmperage >= tRecipe.mEUt ? tRecipe : null;

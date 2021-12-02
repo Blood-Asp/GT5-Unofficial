@@ -165,6 +165,8 @@ public class GT_MetaTileEntity_Hatch_InputBus extends GT_MetaTileEntity_Hatch {
         aNBT.setBoolean("disableSort", disableSort);
         aNBT.setBoolean("disableFilter", disableFilter);
         aNBT.setBoolean("disableLimited", disableLimited);
+        if (mRecipeMap != null)
+            aNBT.setString("recipeMap", mRecipeMap.mUniqueIdentifier);
     }
 
     @Override
@@ -174,6 +176,7 @@ public class GT_MetaTileEntity_Hatch_InputBus extends GT_MetaTileEntity_Hatch {
         disableFilter = aNBT.getBoolean("disableFilter");
         if(aNBT.hasKey("disableLimited"))
             disableLimited = aNBT.getBoolean("disableLimited");
+        mRecipeMap = GT_Recipe_Map.sIndexedMappings.getOrDefault(aNBT.getString("recipeMap"), null);
     }
 
     @Override

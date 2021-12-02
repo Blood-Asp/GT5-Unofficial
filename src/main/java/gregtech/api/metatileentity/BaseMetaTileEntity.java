@@ -802,8 +802,8 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                     // Uncomment this line to print out tick-by-tick times.
                     //tList.add("tTime " + tTime);
                 }
-                tList.add("Average CPU load of ~" + (tAverageTime / mTimeStatistics.length) + "ns over " + mTimeStatistics.length + " ticks with worst time of " + tWorstTime + "ns.");
-                tList.add("Recorded " + mMetaTileEntity.mSoundRequests + " sound requests in " + (mTickTimer - mLastCheckTick) + " ticks." );
+                tList.add("Average CPU load of ~" + GT_Utility.formatNumbers(tAverageTime / mTimeStatistics.length) + "ns over " + GT_Utility.formatNumbers(mTimeStatistics.length) + " ticks with worst time of " + GT_Utility.formatNumbers(tWorstTime) + "ns.");
+                tList.add("Recorded " + GT_Utility.formatNumbers(mMetaTileEntity.mSoundRequests) + " sound requests in " + GT_Utility.formatNumbers(mTickTimer - mLastCheckTick) + " ticks." );
                 mLastCheckTick = mTickTimer;
                 mMetaTileEntity.mSoundRequests = 0;
             }
@@ -814,7 +814,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         }
         if (aLogLevel > 0) {
             if (getSteamCapacity() > 0 && hasSteamEngineUpgrade())
-                tList.add(getStoredSteam() + " of " + getSteamCapacity() + " Steam");
+                tList.add(GT_Utility.formatNumbers(getStoredSteam()) + " of " + GT_Utility.formatNumbers(getSteamCapacity()) + " Steam");
             tList.add("Machine is " + (mActive ? EnumChatFormatting.GREEN+"active"+EnumChatFormatting.RESET : EnumChatFormatting.RED+"inactive"+EnumChatFormatting.RESET));
             if (!mHasEnoughEnergy)
                 tList.add(EnumChatFormatting.RED+"ATTENTION: This Device needs more power."+EnumChatFormatting.RESET);
@@ -1746,6 +1746,11 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     @Override
     public boolean hasInventoryBeenModified() {
         return mInventoryChanged;
+    }
+
+    @Override
+    public void markInventoryBeenModified() {
+        mInventoryChanged = true;
     }
 
     @Override

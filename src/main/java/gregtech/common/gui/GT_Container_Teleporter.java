@@ -141,25 +141,25 @@ public class GT_Container_Teleporter extends GT_ContainerMetaTile_Machine {
         super.updateProgressBar(par1, par2);
         switch (par1) {
             case 100:
-                this.mTargetX = (this.mTargetX & 0xFFFF0000 | par2);
+                this.mTargetX = (this.mTargetX & 0xFFFF0000 | par2 & 0xFFFF);
                 break;
             case 101:
                 this.mTargetX = (this.mTargetX & 0xFFFF | par2 << 16);
                 break;
             case 102:
-                this.mTargetY = (this.mTargetY & 0xFFFF0000 | par2);
+                this.mTargetY = (this.mTargetY & 0xFFFF0000 | par2 & 0xFFFF);
                 break;
             case 103:
                 this.mTargetY = (this.mTargetY & 0xFFFF | par2 << 16);
                 break;
             case 104:
-                this.mTargetZ = (this.mTargetZ & 0xFFFF0000 | par2);
+                this.mTargetZ = (this.mTargetZ & 0xFFFF0000 | par2 & 0xFFFF);
                 break;
             case 105:
                 this.mTargetZ = (this.mTargetZ & 0xFFFF | par2 << 16);
                 break;
             case 106:
-                this.mTargetD = (this.mTargetD & 0xFFFF0000 | par2);
+                this.mTargetD = (this.mTargetD & 0xFFFF0000 | par2 & 0xFFFF);
                 break;
             case 107:
                 this.mTargetD = (this.mTargetD & 0xFFFF | par2 << 16);

@@ -12,6 +12,7 @@ import gregtech.api.items.GT_Generic_Block;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Utility;
 import gregtech.common.render.GT_Renderer_Block;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -20,6 +21,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -132,6 +134,22 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
 
     public String getLocalizedName(Materials aMaterial) {
         return aMaterial.getDefaultLocalizedNameForItem(getLocalizedNameFormat(aMaterial));
+    }
+
+    @Override
+    public boolean onBlockActivated(World aWorld, int aX, int aY, int aZ, EntityPlayer aPlayer, int aSide, float par1, float par2, float par3) {
+        if (!aPlayer.isSneaking() || !aPlayer.capabilities.isCreativeMode) {
+            return false;
+        }
+
+        TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
+        if (!(tTileEntity instanceof GT_TileEntity_Ores)) {
+            return false;
+        }
+
+        boolean tNatural = (((GT_TileEntity_Ores) tTileEntity).mNatural = !((GT_TileEntity_Ores) tTileEntity).mNatural);
+        GT_Utility.sendChatToPlayer(aPlayer, "Ore \"mNatural\" flag set to: " + tNatural);
+        return true;
     }
 
     @Override
