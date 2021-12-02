@@ -22,6 +22,11 @@ public class GT_MetaTileEntity_SuperChest extends GT_MetaTileEntity_DigitalChest
     }
 
     @Override
+    public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new GT_MetaTileEntity_SuperChest(mName, mTier, mDescriptionArray, mTextures);
+    }
+
+    @Override
     public void setItemNBT(NBTTagCompound aNBT) {
         mInvData = new NBTTagList();
         for (int i = 0; i < 3; i++) {
@@ -46,7 +51,7 @@ public class GT_MetaTileEntity_SuperChest extends GT_MetaTileEntity_DigitalChest
     }
 
     @Override
-    protected ItemStack getItemStack() {
+    public ItemStack getItemStack() {
         return mItemStack;
     }
 
