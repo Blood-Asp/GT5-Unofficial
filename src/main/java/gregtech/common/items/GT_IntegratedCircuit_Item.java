@@ -88,7 +88,8 @@ public class GT_IntegratedCircuit_Item extends GT_Generic_Item {
     @Override
     public void addAdditionalToolTips(List aList, ItemStack aStack, EntityPlayer aPlayer) {
         super.addAdditionalToolTips(aList, aStack, aPlayer);
-        aList.add(GT_LanguageManager.addStringLocalization(new StringBuilder().append(getUnlocalizedName()).append(".configuration").toString(), "Configuration: ") + getConfigurationString(getDamage(aStack)));
+        aList.add(GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".configuration", "Configuration: ") + getConfigurationString(getDamage(aStack)));
+        aList.add(GT_LanguageManager.addStringLocalization("integrated.circuit.tooltip","Right click or SHIFT + scroll to change configuration"));
     }
 
     @Override
