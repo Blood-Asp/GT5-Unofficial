@@ -25,8 +25,11 @@ import gregtech.api.objects.*;
 import gregtech.api.util.*;
 import gregtech.common.entities.GT_Entity_Arrow;
 import gregtech.common.gui.GT_ContainerVolumetricFlask;
+import gregtech.common.gui.GT_Container_IntegratedCircuit;
 import gregtech.common.gui.GT_GUIContainerVolumetricFlask;
 import gregtech.common.items.GT_MetaGenerated_Item_98;
+import gregtech.common.gui.GT_GUIContainer_IntegartedCircuit;
+import gregtech.common.items.GT_IntegratedCircuit_Item;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
@@ -1667,6 +1670,11 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
             int ID = aID-1000;
             if (ID == 10) {
                 return new GT_ContainerVolumetricFlask(aPlayer.inventory);
+            } else if (ID == 11) {
+                ItemStack heldStack = aPlayer.inventory.mainInventory[aPlayer.inventory.currentItem];
+                if (heldStack != null && heldStack.getItem() instanceof GT_IntegratedCircuit_Item) {
+                    return new GT_Container_IntegratedCircuit(heldStack);
+                }
             }
             return null;
         }
@@ -1689,6 +1697,11 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
             int ID = aID-1000;
             if (ID == 10) {
                 return new GT_GUIContainerVolumetricFlask(new GT_ContainerVolumetricFlask(aPlayer.inventory));
+            } else if (ID == 11) {
+                ItemStack heldStack = aPlayer.inventory.mainInventory[aPlayer.inventory.currentItem];
+                if (heldStack != null && heldStack.getItem() instanceof GT_IntegratedCircuit_Item) {
+                    return new GT_GUIContainer_IntegartedCircuit(new GT_Container_IntegratedCircuit(heldStack));
+                }
             }
             return null;
         }
