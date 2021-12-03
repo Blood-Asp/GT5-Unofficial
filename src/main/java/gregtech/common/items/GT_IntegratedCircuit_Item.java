@@ -3,6 +3,7 @@ package gregtech.common.items;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
@@ -17,6 +18,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 
 import java.util.List;
 
@@ -86,7 +88,8 @@ public class GT_IntegratedCircuit_Item extends GT_Generic_Item {
     @Override
     public void addAdditionalToolTips(List aList, ItemStack aStack, EntityPlayer aPlayer) {
         super.addAdditionalToolTips(aList, aStack, aPlayer);
-        aList.add(GT_LanguageManager.addStringLocalization(new StringBuilder().append(getUnlocalizedName()).append(".configuration").toString(), "Configuration: ") + getConfigurationString(getDamage(aStack)));
+        aList.add(GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".configuration", "Configuration: ") + getConfigurationString(getDamage(aStack)));
+        aList.add(GT_LanguageManager.addStringLocalization("integrated.circuit.tooltip","Right click or SHIFT + scroll to change configuration"));
     }
 
     @Override
@@ -125,5 +128,11 @@ public class GT_IntegratedCircuit_Item extends GT_Generic_Item {
     public IIcon getIconFromDamage(int damage) {
         byte circuitMode = ((byte) (damage & 0xFF)); // Mask out the MSB Comparison Mode Bits. See: getModeString
         return mIconDamage[circuitMode < mIconDamage.length ? circuitMode : 0];
+    }
+
+    @Override
+    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+        player.openGui(GT_Values.GT,1011,world,0,0,0);
+        return super.onItemRightClick(stack, world, player);
     }
 }

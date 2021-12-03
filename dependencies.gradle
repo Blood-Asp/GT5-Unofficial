@@ -6,6 +6,10 @@ dependencies {
 
     compile("net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev")
 
+    compile("eu.usrv:YAMCore:1.7.10-0.5.79:deobf") {
+        transitive = false
+    }
+
     compileOnly("com.github.GTNewHorizons:EnderCore:master-SNAPSHOT:dev") {
         transitive = false
     }
