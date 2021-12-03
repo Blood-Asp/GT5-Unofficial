@@ -19,8 +19,12 @@
 
 package gregtech.api.util;
 
+import com.github.basdxz.apparatus.defenition.managed.IParaBlock;
+import com.github.basdxz.apparatus.defenition.managed.IParaTileEntity;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -29,6 +33,8 @@ import net.minecraft.client.renderer.Tessellator;
 @SuppressWarnings("unused")
 @SideOnly(Side.CLIENT)
 public class LightingHelper {
+    public static boolean apparatusLoaded = Loader.isModLoaded("apparatus");
+
     public static final int NORMAL_BRIGHTNESS = 0xff00ff;
     public static final int MAX_BRIGHTNESS = 0xf000f0;
     public static final float NO_Z_FIGHT_OFFSET = 1.0F / 1024.0F;
@@ -320,7 +326,19 @@ public class LightingHelper {
      * @return the ambient occlusion value
      */
     public float getAmbientOcclusionLightValue(int x, int y, int z) {
-        return renderBlocks.blockAccess.getBlock(x, y, z).getAmbientOcclusionLightValue();
+        val block = renderBlocks.blockAccess.getBlock(x, y, z);
+        if (apparatusLoaded)
+            getAmbientOcclusionLightValueParaTileRedirect(block, x, y, z);
+        return block.getAmbientOcclusionLightValue();
+    }
+
+    public float getAmbientOcclusionLightValueParaTileRedirect(Block block, int x, int y, int z) {
+        if (block instanceof IParaBlock) {
+            val tileEntity = renderBlocks.blockAccess.getTileEntity(x, y, z);
+            if (tileEntity instanceof IParaTileEntity)
+                return ((IParaTileEntity) tileEntity).paraTile().getAmbientOcclusionLightValue();
+        }
+        return block.getAmbientOcclusionLightValue();
     }
 
     /**
