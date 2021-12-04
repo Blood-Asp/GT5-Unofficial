@@ -328,7 +328,7 @@ public class LightingHelper {
     public float getAmbientOcclusionLightValue(int x, int y, int z) {
         val block = renderBlocks.blockAccess.getBlock(x, y, z);
         if (apparatusLoaded)
-            getAmbientOcclusionLightValueParaTileRedirect(block, x, y, z);
+            return getAmbientOcclusionLightValueParaTileRedirect(block, x, y, z);
         return block.getAmbientOcclusionLightValue();
     }
 
