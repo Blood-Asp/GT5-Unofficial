@@ -60,7 +60,7 @@ dependencies {
 
     // Dev for better TileEntities
     //implementation("org.reflections:reflections:0.10.2")
-    compileOnly("com.github.basdxz:Apparatus:2.7.5:dev")
+    compileOnly("com.github.basdxz:Apparatus:2.11.1:dev")
     //compile("com.github.GTMEGA:CTMLib:17cd6ebc23:deobf")
     //compile("com.github.GTMEGA:Chisel:2.9.14-GTMEGA:deobf")
 }
