@@ -179,7 +179,7 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_E
 
     @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return true;
+        return false;
     }
 
     @Override
