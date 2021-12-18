@@ -807,20 +807,17 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 
         public GT_Recipe add(GT_Recipe aRecipe) {
             mRecipeList.add(aRecipe);
-            for (FluidStack aFluid : aRecipe.mFluidInputs)
-                if (aFluid != null) {
-                    Collection<GT_Recipe> tList = mRecipeFluidMap.computeIfAbsent(aFluid.getFluid(), k -> new HashSet<>(1));
-                    tList.add(aRecipe);
-                    mRecipeFluidNameMap.add(aFluid.getFluid().getName());
-                }
+            addToFluidMap(aRecipe);
             return addToItemMap(aRecipe);
         }
 
         public void reInit() {
             mRecipeItemMap.clear();
+            mRecipeFluidMap.clear();
             for (GT_Recipe tRecipe : mRecipeList) {
                 GT_OreDictUnificator.setStackArray(true, tRecipe.mInputs);
                 GT_OreDictUnificator.setStackArray(true, tRecipe.mOutputs);
+                addToFluidMap(tRecipe);
                 addToItemMap(tRecipe);
             }
         }
@@ -941,6 +938,16 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                     GT_ItemStack tStack = new GT_ItemStack(aStack);
                     Collection<GT_Recipe> tList = mRecipeItemMap.computeIfAbsent(tStack, k -> new HashSet<>(1));
                     tList.add(aRecipe);
+                }
+            return aRecipe;
+        }
+
+        protected GT_Recipe addToFluidMap(GT_Recipe aRecipe) {
+            for (FluidStack aFluid : aRecipe.mFluidInputs)
+                if (aFluid != null) {
+                    Collection<GT_Recipe> tList = mRecipeFluidMap.computeIfAbsent(aFluid.getFluid(), k -> new HashSet<>(1));
+                    tList.add(aRecipe);
+                    mRecipeFluidNameMap.add(aFluid.getFluid().getName());
                 }
             return aRecipe;
         }
