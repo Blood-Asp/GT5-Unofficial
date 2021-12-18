@@ -563,7 +563,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         }
 
         if (totalOutput < aEU || (aFoundMixedDynamos && !aAllowMixedVoltageDynamos)) {
-            explodeMultiblock();
+            //explodeMultiblock();
             return false;
         }
 
