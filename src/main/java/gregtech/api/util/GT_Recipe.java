@@ -769,7 +769,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
             aRecipe.mFakeRecipe = aFakeRecipe;
             if (aRecipe.mFluidInputs.length < mMinimalInputFluids && aRecipe.mInputs.length < mMinimalInputItems)
                 return null;
-            if (aCheckForCollisions && findRecipe(null, false, Long.MAX_VALUE, aRecipe.mFluidInputs, aRecipe.mInputs) != null)
+            if (aCheckForCollisions && findRecipe(null, false, true, Long.MAX_VALUE, aRecipe.mFluidInputs, aRecipe.mInputs) != null)
                 return null;
             return add(aRecipe);
         }
@@ -860,7 +860,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         }
 
         public GT_Recipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_Recipe aRecipe, boolean aNotUnificated, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
-        	return findRecipe(aTileEntity, aRecipe, aNotUnificated, true, aVoltage, aFluids, aSpecialSlot, aInputs);
+        	return findRecipe(aTileEntity, aRecipe, aNotUnificated, false, aVoltage, aFluids, aSpecialSlot, aInputs);
         }	
         /**
          * finds a Recipe matching the aFluid and ItemStack Inputs.
