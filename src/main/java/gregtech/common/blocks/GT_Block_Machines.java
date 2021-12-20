@@ -421,9 +421,14 @@ public class GT_Block_Machines extends GT_Generic_Block implements IDebugableBlo
 
     @Override
     public ArrayList<ItemStack> getDrops(World aWorld, int aX, int aY, int aZ, int aMeta, int aFortune) {
-        IGregTechTileEntity tGregTechTileEntity = mTemporaryTileEntity.get();
-        mTemporaryTileEntity.remove();
-        return tGregTechTileEntity == null ? new ArrayList<>() : tGregTechTileEntity.getDrops();
+        TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
+        if (tTileEntity instanceof IGregTechTileEntity) {
+            return ((IGregTechTileEntity) tTileEntity).getDrops();
+        } else {
+            IGregTechTileEntity tGregTechTileEntity = mTemporaryTileEntity.get();
+            mTemporaryTileEntity.remove();
+            return tGregTechTileEntity == null ? new ArrayList<>() : tGregTechTileEntity.getDrops();
+        }
     }
 
     @Override
