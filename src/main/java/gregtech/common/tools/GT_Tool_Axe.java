@@ -21,17 +21,17 @@ import java.util.List;
 public class GT_Tool_Axe extends GT_Tool {
     @Override
     public int getToolDamagePerBlockBreak() {
-        return 50;
+        return 20;
     }
 
     @Override
     public int getToolDamagePerDropConversion() {
-        return 100;
+        return 40;
     }
 
     @Override
     public int getToolDamagePerContainerCraft() {
-        return 100;
+        return 40;
     }
 
     @Override
