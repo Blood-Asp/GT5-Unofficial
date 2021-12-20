@@ -25,7 +25,7 @@ public class GT_Tool_Mortar extends GT_Tool {
 
     @Override
     public int getToolDamagePerContainerCraft() {
-        return 400;
+        return 300;
     }
 
     @Override

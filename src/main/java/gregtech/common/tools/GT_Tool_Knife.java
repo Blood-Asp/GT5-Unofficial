@@ -22,7 +22,7 @@ public class GT_Tool_Knife extends GT_Tool_Sword {
 
     @Override
     public int getToolDamagePerContainerCraft() {
-        return 100;
+        return 50;
     }
 
     @Override

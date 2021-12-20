@@ -18,7 +18,7 @@ import net.minecraft.util.IChatComponent;
 public class GT_Tool_Pickaxe extends GT_Tool {
     @Override
     public int getToolDamagePerBlockBreak() {
-        return GT_Mod.gregtechproxy.mHardRock ? 25 : 50;
+        return GT_Mod.gregtechproxy.mHardRock ? 9 : 20;
     }
 
     @Override
