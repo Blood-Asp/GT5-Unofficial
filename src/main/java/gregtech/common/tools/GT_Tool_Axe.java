@@ -154,4 +154,9 @@ public class GT_Tool_Axe extends GT_Tool {
     public IChatComponent getDeathMessage(EntityLivingBase aPlayer, EntityLivingBase aEntity) {
         return new ChatComponentText(EnumChatFormatting.RED + aEntity.getCommandSenderName() + EnumChatFormatting.WHITE + " has been chopped by " + EnumChatFormatting.GREEN + aPlayer.getCommandSenderName() + EnumChatFormatting.WHITE);
     }
+
+    @Override
+    public boolean onItemUse(ItemStack stack, World world, int x, int y, int z, int sidehit, EntityPlayer playerEntity,float hitX, float hitY, float hitZ) {
+        return placeSideBlock(stack,world,x,y,z,sidehit,playerEntity,hitX,hitY,hitZ);
+    }
 }

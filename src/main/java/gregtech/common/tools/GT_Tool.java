@@ -9,8 +9,11 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.AchievementList;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.IChatComponent;
@@ -179,4 +182,59 @@ public abstract class GT_Tool implements IToolStats {
 	public float getMiningSpeed(Block aBlock, byte aMetaData, float aDefault, EntityPlayer aPlayer, World worldObj, int aX, int aY, int aZ) {
 		return aDefault;
 	}
+
+    @Override
+    public boolean onItemUse(ItemStack stack, World world, int x, int y, int z, int sidehit, EntityPlayer playerEntity, float hitX, float hitY, float hitZ) {
+        return false;
+    }
+
+    //taken form tinkers construct
+    public static boolean placeSideBlock(ItemStack stack, World world, int x, int y, int z, int sidehit, EntityPlayer playerEntity,float hitX, float hitY, float hitZ) {
+        boolean used = false;
+        int hotBarSlot = playerEntity.inventory.currentItem;
+        ItemStack nearbyStack = playerEntity.inventory.getStackInSlot(hotBarSlot+1);
+        if (nearbyStack != null && hotBarSlot < 8) {
+            Item item = nearbyStack.getItem();
+            if (item instanceof ItemBlock) {
+                int posX = x;
+                int posY = y;
+                int posZ = z;
+
+                switch (sidehit)
+                {
+                    case 0:
+                        --posY;
+                        break;
+                    case 1:
+                        ++posY;
+                        break;
+                    case 2:
+                        --posZ;
+                        break;
+                    case 3:
+                        ++posZ;
+                        break;
+                    case 4:
+                        --posX;
+                        break;
+                    case 5:
+                        ++posX;
+                        break;
+                }
+                AxisAlignedBB blockBounds = AxisAlignedBB.getBoundingBox(posX, posY, posZ, posX + 1, posY + 1, posZ + 1);
+                AxisAlignedBB playerBounds = playerEntity.boundingBox;
+                Block blockToPlace = ((ItemBlock) item).field_150939_a;
+                if(blockToPlace.getMaterial().blocksMovement())
+                {
+                    if (playerBounds.intersectsWith(blockBounds))
+                        return false;
+                }
+                used = item.onItemUse(nearbyStack,playerEntity,world,x,y,z,sidehit,hitX,hitY,hitZ);
+                if (nearbyStack.stackSize < 1) {
+                    playerEntity.inventory.setInventorySlotContents(hotBarSlot+1, null);
+                }
+            }
+        }
+        return used;
+    }
 }
