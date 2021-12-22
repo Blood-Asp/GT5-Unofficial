@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.Arrays;
@@ -181,5 +182,10 @@ public class GT_Tool_HardHammer extends GT_Tool {
             GT_Mod.instance.achievements.issueAchievement(aPlayer, "tools");
         } catch (Exception ignored) {
         }
+    }
+
+    @Override
+    public boolean onItemUse(ItemStack stack, World world, int x, int y, int z, int sidehit, EntityPlayer playerEntity, float hitX, float hitY, float hitZ) {
+        return placeSideBlock(stack,world,x,y,z,sidehit,playerEntity,hitX,hitY,hitZ);
     }
 }

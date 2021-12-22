@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.world.World;
 
 import java.util.Arrays;
 import java.util.List;
@@ -142,6 +143,11 @@ public class GT_Tool_Wrench extends GT_Tool {
     @Override
     public IChatComponent getDeathMessage(EntityLivingBase aPlayer, EntityLivingBase aEntity) {
         return new ChatComponentText(EnumChatFormatting.GREEN + aPlayer.getCommandSenderName() + EnumChatFormatting.WHITE + " threw a Monkey Wrench into the Plans of " + EnumChatFormatting.RED + aEntity.getCommandSenderName() + EnumChatFormatting.WHITE);
+    }
+
+    @Override
+    public boolean onItemUse(ItemStack stack, World world, int x, int y, int z, int sidehit, EntityPlayer playerEntity, float hitX, float hitY, float hitZ) {
+        return placeSideBlock(stack,world,x,y,z,sidehit,playerEntity,hitX,hitY,hitZ);
     }
 }
 
