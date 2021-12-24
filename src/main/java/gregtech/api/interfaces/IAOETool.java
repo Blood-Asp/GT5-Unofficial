@@ -13,8 +13,6 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 public interface IAOETool {
 
@@ -28,7 +26,7 @@ public interface IAOETool {
 
     float getDigSpeed(float digSpeed, IToolStats stats, ItemStack stack);
 
-    int onBlockDestroyed(ItemStack stack,IToolStats stats ,World world, Block block, int x, int y, int z, EntityLivingBase player);
+    float onBlockDestroyed(ItemStack stack,IToolStats stats ,float damagePerBlock ,World world, Block block, int x, int y, int z, EntityLivingBase player);
 
     default void setAOE(NBTTagCompound statNbt, int value) {
         statNbt.setInteger("AOE", value);
@@ -38,9 +36,9 @@ public interface IAOETool {
         return statNbt.getInteger("AOE");
     }
 
-    default int breakBlockAround(int side,int xStartPos ,int yStartPos,int xLength, int yLenghth, IToolStats stats, ItemStack stack, World world, int x, int y, int z,
-                                       EntityPlayerMP player) {
-        int harvsestleve = stack.getItem().getHarvestLevel(stack,"");
+    default float breakBlockAround(int side,int xStartPos ,int yStartPos,int xLength, int yLenghth, IToolStats stats, ItemStack stack, World world, int x, int y, int z,
+                                       EntityPlayerMP player, float damgePerBlock) {
+        int harvestLevel = stack.getItem().getHarvestLevel(stack,"");
 
         int DX;
         int DY;
@@ -153,7 +151,7 @@ public interface IAOETool {
                 }
             }
         }
-        int broken = 0;
+        float tooldamage = 0;
         for (int Y = yStartPos; yCheck.apply(Y,yLenghth); Y+=yIterate) {
             for (int X = xStartPos;xCheck.apply(X,xLength); X+=xIterate) {
                 if (Y != 0 || X != 0) {
@@ -171,21 +169,23 @@ public interface IAOETool {
                         DY = y + Y;
                         DZ = z + X;
                     }
-                    if (breakBlock(stack, stats, harvsestleve, world, DX, DY, DZ, player))
-                        broken++;
+                    Block block = world.getBlock(x, y, z);
+                    if (breakBlock(stack, stats, harvestLevel, world, DX, DY, DZ, player,block))
+                        tooldamage += block.getBlockHardness(world, DX, DY, DZ) * damgePerBlock;
                 }
             }
         }
-        return broken;
+        return tooldamage;
     }
 
-    default boolean breakBlock(ItemStack aStack, IToolStats stats, int harvestLevel, World world, int x, int y, int z, EntityPlayerMP player) {
+    default boolean breakBlock(ItemStack aStack, IToolStats stats, int harvestLevel, World world, int x, int y, int z,
+                               EntityPlayerMP player, Block block) {
         // most of this code is stolen from TiC
         if (world.isAirBlock(x, y, z))
             return false;
-        Block block = world.getBlock(x, y, z);
         int blockMeta = world.getBlockMetadata(x, y, z);
-        if (!canHarvest(harvestLevel, block, blockMeta, stats)) return false;
+        int blockHarvestLevel = block.getHarvestLevel(blockMeta);
+        if (!canHarvest(harvestLevel,blockHarvestLevel,block, blockMeta, stats)) return false;
         BlockEvent.BreakEvent event = ForgeHooks.onBlockBreakEvent(world, player.theItemInWorldManager.getGameType(), player, x, y, z);
         if (event.isCanceled())
             return false;
@@ -204,10 +204,9 @@ public interface IAOETool {
 
     //a fast version of get digSpeed
     //and block stats dont matter for the get digSpeed mult or even matter for this function
-    static boolean canHarvest(int toolHarvestLevel, Block block, int meta, IToolStats stats) {
-        int blockHarvestLevel = block.getHarvestLevel(meta);
-        if (toolHarvestLevel < blockHarvestLevel || blockHarvestLevel < 0) return false;
+    static boolean canHarvest(int toolHarvestLevel,int harvestLevel, Block block, int meta, IToolStats stats) {
+        if (toolHarvestLevel < harvestLevel || harvestLevel < 0) return false;
         boolean isMineble = stats.isMinableBlock(block, (byte) meta);
-        return isMineble || blockHarvestLevel == 0;
+        return isMineble || harvestLevel == 0;
     }
 }
