@@ -301,7 +301,7 @@ public abstract class GT_MetaGenerated_Tool extends GT_MetaBase_Item implements 
             if (tStats.canBlock())
                 aPlayer.setItemInUse(aStack, 72000);
             if (tStats instanceof IAOETool) {
-                ((IAOETool) tStats).onRightClick(aStack,aPlayer);
+                ((IAOETool) tStats).onRightClick(aStack, aPlayer);
             }
         }
         return super.onItemRightClick(aStack, aWorld, aPlayer);
@@ -504,13 +504,13 @@ public abstract class GT_MetaGenerated_Tool extends GT_MetaBase_Item implements 
         IToolStats tStats = getToolStats(aStack);
         if (tStats == null) return false;
         GT_Utility.doSoundAtClient(tStats.getMiningSound(), 1, 1.0F);
-        doDamage(aStack, (int) Math.max(1, aBlock.getBlockHardness(aWorld, aX, aY, aZ) * tStats.getToolDamagePerBlockBreak()));
+        int damgePerBlockBreak = tStats.getToolDamagePerBlockBreak();
+        float damageDone = aBlock.getBlockHardness(aWorld, aX, aY, aZ) * damgePerBlockBreak;
         float digSpeed = getDigSpeed(aStack, aBlock, aWorld.getBlockMetadata(aX, aY, aZ));
-        int damgeMult = 1;
         if (tStats instanceof IAOETool) {
-             damgeMult += ((IAOETool) tStats).onBlockDestroyed(aStack,tStats,aWorld,aBlock,aX,aY,aZ,aPlayer);
+            damageDone += ((IAOETool) tStats).onBlockDestroyed(aStack, tStats, damgePerBlockBreak, aWorld, aBlock, aX, aY, aZ, aPlayer);
         }
-        doDamage(aStack,(long)aBlock.getBlockHardness(aWorld,aX,aY,aZ)* tStats.getToolDamagePerBlockBreak()*damgeMult);
+        doDamage(aStack, (long) damageDone);
         return digSpeed > 0;
     }
 
@@ -554,7 +554,7 @@ public abstract class GT_MetaGenerated_Tool extends GT_MetaBase_Item implements 
             NBTTagCompound toolNBT = aNBT.getCompoundTag("GT.ToolStats");
             if (toolNBT == null) {
                 toolNBT = new NBTTagCompound();
-                aNBT.setTag("GT.ToolStats",toolNBT);
+                aNBT.setTag("GT.ToolStats", toolNBT);
             }
             return toolNBT;
         }
