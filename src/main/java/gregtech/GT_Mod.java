@@ -1,7 +1,6 @@
 package gregtech;
 
 import com.google.common.base.Stopwatch;
-import com.gtnewhorizon.structurelib.StructureLib;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.registry.EntityRegistry;
@@ -795,7 +794,7 @@ public class GT_Mod implements IGT_Mod {
         stopwatch.start();
         // remove gemIridium exploit
         ItemStack iridiumOre = GT_ModHandler.getIC2Item("iridiumOre", 1);
-        aCompressorRecipeList.entrySet().parallelStream()
+        aCompressorRecipeList.entrySet().stream()
                 .filter(e -> e.getKey().getInputs().size() == 1 && e.getKey().getInputs().get(0).isItemEqual(iridiumOre))
                 .findAny()
                 .ifPresent(e -> aCompressorRecipeList.remove(e.getKey()));
