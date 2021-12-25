@@ -175,8 +175,8 @@ public class GT_Tool_Drill_LV extends GT_Tool implements IAOETool {
         return 3;
     }
 
-    static int xStart[] = {0, 0, -1, -1, -2, -2};
-    static int yStart[] = {0, 0, -1, -1, -2, -2};
+    static int xStart[] = {0, 0, 0, -1, -1, -2, -2};
+    static int yStart[] = {0, 0, 0, -1, -1, -2, -2};
     static int xLen[] = {1, 1, 2, 3, 4, 5, 6};
     static int yLen[] = {1, 2, 2, 3, 4, 5, 6};
 
