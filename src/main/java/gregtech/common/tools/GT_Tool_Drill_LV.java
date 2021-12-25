@@ -20,6 +20,8 @@ import net.minecraft.stats.AchievementList;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public class GT_Tool_Drill_LV extends GT_Tool implements IAOETool {
     @Override
     public int getToolDamagePerBlockBreak() {
@@ -170,13 +172,13 @@ public class GT_Tool_Drill_LV extends GT_Tool implements IAOETool {
 
     @Override
     public int getMaxAOESize() {
-        return 2;
+        return 3;
     }
 
-    static int xStart[] = {0, 0, -1, -1, -2, -2};
-    static int yStart[] = {0, 0, -1, -1, -2, -2};
-    static int xLen[] = {1, 2, 3, 4, 5, 6};
-    static int yLen[] = {1, 2, 3, 4, 5, 6};
+    static int xStart[] = {0, 0, 0, -1, -1, -2, -2};
+    static int yStart[] = {0, 0, 0, -1, -1, -2, -2};
+    static int xLen[] = {1, 1, 2, 3, 4, 5, 6};
+    static int yLen[] = {1, 2, 2, 3, 4, 5, 6};
 
     @Override
     public float onBlockDestroyed(ItemStack stack, IToolStats stats, float damagePerBlock, World world, Block block, int x, int y, int z, EntityLivingBase player) {
@@ -200,7 +202,16 @@ public class GT_Tool_Drill_LV extends GT_Tool implements IAOETool {
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, World world, int x, int y, int z, int sidehit, EntityPlayer playerEntity,float hitX, float hitY, float hitZ) {
-        return placeSideBlock(stack,world,x,y,z,sidehit,playerEntity,hitX,hitY,hitZ);
+    public boolean onItemUse(ItemStack stack, World world, int x, int y, int z, int sidehit, EntityPlayer playerEntity, float hitX, float hitY, float hitZ) {
+        return placeSideBlock(stack, world, x, y, z, sidehit, playerEntity, hitX, hitY, hitZ);
+    }
+
+    @Override
+    public void toolTip(List aList, ItemStack aStack, EntityPlayer aPlayer, IToolStats stats) {
+        NBTTagCompound nbtStats = GT_MetaGenerated_Tool.getStatNbt(aStack);
+        if (nbtStats != null) {
+            int aoe = ((GT_Tool_Drill_LV) stats).getAOE(nbtStats);
+            aList.add(EnumChatFormatting.WHITE + "AOE " + EnumChatFormatting.GREEN + xLen[aoe] + "X" + yLen[aoe]);
+        }
     }
 }

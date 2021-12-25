@@ -409,6 +409,7 @@ public abstract class GT_MetaGenerated_Tool extends GT_MetaBase_Item implements 
                     }
                 }
             }
+            tStats.toolTip(aList, aStack, aPlayer, tStats);
         }
     }
 

@@ -49,7 +49,7 @@ public class GT_Tool_Drill_HV extends GT_Tool_Drill_LV {
 
     @Override
     public int getMaxAOESize() {
-        return 5;
+        return 6;
     }
 
     @Override
