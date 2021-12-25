@@ -229,12 +229,16 @@ public abstract class GT_Tool implements IToolStats {
                     if (playerBounds.intersectsWith(blockBounds))
                         return false;
                 }
-                used = item.onItemUse(nearbyStack,playerEntity,world,x,y,z,sidehit,hitX,hitY,hitZ);
+                used = item.onItemUse(nearbyStack, playerEntity, world, x, y, z, sidehit, hitX, hitY, hitZ);
                 if (nearbyStack.stackSize < 1) {
-                    playerEntity.inventory.setInventorySlotContents(hotBarSlot+1, null);
+                    playerEntity.inventory.setInventorySlotContents(hotBarSlot + 1, null);
                 }
             }
         }
         return used;
+    }
+
+    @Override
+    public void toolTip(List aList, ItemStack aStack, EntityPlayer aPlayer, IToolStats stats) {
     }
 }

@@ -63,6 +63,9 @@ public interface IAOETool {
             //y = east-west
 
             if (south) {
+                int tempX = xLength;
+                xLength = yLenghth;
+                yLenghth = tempX;
                 //invert Y direction
                 yLenghth *= -1;
                 yLenghth -= yStartPos;
@@ -71,7 +74,7 @@ public interface IAOETool {
                 if (side == 0) {
                     xLength += xStartPos;
                 } else {
-                    xCheck = (value,len) -> value>len;
+                    xCheck = (value, len) -> value > len;
                     xLength *= -1;
                     xLength -= xStartPos;
                     xIterate = -1;
@@ -95,14 +98,17 @@ public interface IAOETool {
                     yLenghth += yStartPos;
                 }
             } else if (north) {
+                int tempX = xLength;
+                xLength = yLenghth;
+                yLenghth = tempX;
                 //dont invert Y direction
-                yCheck = (value,len) -> value<len;
+                yCheck = (value, len) -> value < len;
                 yIterate = 1;
                 yLenghth += yStartPos;
 
                 //invert X direction when looking UP
                 if (side == 0) {
-                    xCheck = (value,len) -> value>len;
+                    xCheck = (value, len) -> value > len;
                     xLength *= -1;
                     xLength -= xStartPos;
                     xIterate = -1;
