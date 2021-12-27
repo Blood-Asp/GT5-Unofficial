@@ -161,6 +161,7 @@ public interface IToolStats {
 
     float getMiningSpeed(Block aBlock, byte aMetaData, float aDefault, EntityPlayer aPlayer, World worldObj, int aX, int aY, int aZ);
 
+    //returning true here will overwite item behaviour onItemUse
     boolean onItemUse(ItemStack stack, World world, int x, int y, int z, int sidehit, EntityPlayer playerEntity, float hitX, float hitY, float hitZ);
 
     void toolTip(List aList, ItemStack aStack, EntityPlayer aPlayer, IToolStats stats);
