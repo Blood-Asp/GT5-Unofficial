@@ -219,7 +219,7 @@ public interface IAOETool {
     //and block stats dont matter for the get digSpeed mult or even matter for this function
     static boolean canHarvest(int toolHarvestLevel, int blockHarvestLevel, float blockHardness, float timeToTakeCenter, float digSpeed, Block block, int meta, IToolStats stats) {
         if (toolHarvestLevel < blockHarvestLevel || blockHardness < 0) return false;
-        boolean isMineble = stats.isMinableBlock(block, (byte) meta) && (((IAOETool) stats).getTimeToBreak(digSpeed, blockHardness) < timeToTakeCenter * 5);
-        return isMineble;
+        return stats.isMinableBlock(block, (byte) meta) &&
+                (((IAOETool) stats).getTimeToBreak(digSpeed, blockHardness) * 12 > timeToTakeCenter);
     }
 }
