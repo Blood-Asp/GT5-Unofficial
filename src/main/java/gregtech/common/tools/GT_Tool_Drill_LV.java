@@ -156,7 +156,7 @@ public class GT_Tool_Drill_LV extends GT_Tool implements IAOETool {
     public float getDigSpeed(float digSpeed, IToolStats stats, ItemStack stack) {
         NBTTagCompound nbtStats = GT_MetaGenerated_Tool.getStatNbt(stack);
         int aoe = getAOE(nbtStats);
-        if (aoe > 0) return digSpeed / getSpeedReduction() * aoe;
+        if (aoe > 0) return digSpeed / (getSpeedReduction() * aoe);
         return digSpeed;
     }
 
@@ -167,7 +167,7 @@ public class GT_Tool_Drill_LV extends GT_Tool implements IAOETool {
 
     @Override
     public float getSpeedReduction() {
-        return 2.5f;
+        return 1.5f;
     }
 
     @Override

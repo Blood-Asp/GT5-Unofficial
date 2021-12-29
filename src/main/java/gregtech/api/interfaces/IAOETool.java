@@ -1,6 +1,5 @@
 package gregtech.api.interfaces;
 
-import gregtech.api.items.GT_MetaGenerated_Tool;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -209,7 +208,6 @@ public interface IAOETool {
 //
 //                //block.dropXpOnBlockBreak(world, x, y, z, event.getExpToDrop());
 //            }
-            ((GT_MetaGenerated_Tool) aStack.getItem()).doDamage(aStack, (int) Math.max(1, block.getBlockHardness(world, x, y, z) * stats.getToolDamagePerBlockBreak()));
             player.playerNetServerHandler.sendPacket(new S23PacketBlockChange(x, y, z, world));
         }
         return true;
