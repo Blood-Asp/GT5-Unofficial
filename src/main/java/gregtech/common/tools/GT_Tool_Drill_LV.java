@@ -181,7 +181,7 @@ public class GT_Tool_Drill_LV extends GT_Tool implements IAOETool {
     static int yLen[] = {1, 2, 2, 3, 4, 5, 6};
 
     @Override
-    public float onBlockDestroyed(ItemStack stack, IToolStats stats, float damagePerBlock, World world, Block block, int x, int y, int z, EntityLivingBase player) {
+    public float onBlockDestroyed(ItemStack stack, IToolStats stats, float damagePerBlock, float timeToTakeCenter, float digSpeed, World world, Block block, int x, int y, int z, EntityLivingBase player) {
         if (!(player instanceof EntityPlayerMP))
             return 0;
         MovingObjectPosition mop = GT_Utility.raytraceFromEntity(player.worldObj, player, false, 5);
@@ -192,7 +192,8 @@ public class GT_Tool_Drill_LV extends GT_Tool implements IAOETool {
         int aoe = getAOE(nbt);
         if (aoe == 0) return 0;
         damagePerBlock *= getDamageMultiplyer();
-        float broken = breakBlockAround(side, xStart[aoe], yStart[aoe], xLen[aoe], yLen[aoe], stats, stack, world, x, y, z, playerMP, damagePerBlock);
+        float broken = breakBlockAround(side, xStart[aoe], yStart[aoe], xLen[aoe], yLen[aoe], stats, stack, world, x, y,
+                z, playerMP, damagePerBlock, timeToTakeCenter, digSpeed);
         return broken;
     }
 

@@ -311,7 +311,7 @@ public abstract class GT_MetaGenerated_Tool extends GT_MetaBase_Item implements 
     public boolean onItemUse(ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float hitX, float hitY, float hitZ) {
         IToolStats tStats = getToolStats(aStack);
         if (tStats != null) {
-            return tStats.onItemUse(aStack, aWorld,aX,aY,aZ,aSide,aPlayer,hitX,hitY,hitZ);
+            return tStats.onItemUse(aStack, aWorld, aX, aY, aZ, aSide, aPlayer, hitX, hitY, hitZ);
         }
         return false;
     }
@@ -506,10 +506,13 @@ public abstract class GT_MetaGenerated_Tool extends GT_MetaBase_Item implements 
         if (tStats == null) return false;
         GT_Utility.doSoundAtClient(tStats.getMiningSound(), 1, 1.0F);
         int damgePerBlockBreak = tStats.getToolDamagePerBlockBreak();
-        float damageDone = aBlock.getBlockHardness(aWorld, aX, aY, aZ) * damgePerBlockBreak;
+        float blockHardness = aBlock.getBlockHardness(aWorld, aX, aY, aZ);
+        float damageDone = blockHardness * damgePerBlockBreak;
         float digSpeed = getDigSpeed(aStack, aBlock, aWorld.getBlockMetadata(aX, aY, aZ));
         if (tStats instanceof IAOETool) {
-            damageDone += ((IAOETool) tStats).onBlockDestroyed(aStack, tStats, damgePerBlockBreak, aWorld, aBlock, aX, aY, aZ, aPlayer);
+            IAOETool iaoeTool = (IAOETool) tStats;
+            float timeToTake = iaoeTool.getTimeToBreak(digSpeed, blockHardness);
+            damageDone += ((IAOETool) tStats).onBlockDestroyed(aStack, tStats, damgePerBlockBreak, timeToTake, digSpeed, aWorld, aBlock, aX, aY, aZ, aPlayer);
         }
         doDamage(aStack, (long) damageDone);
         return digSpeed > 0;
