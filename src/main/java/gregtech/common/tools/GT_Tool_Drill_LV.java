@@ -25,7 +25,7 @@ import java.util.List;
 public class GT_Tool_Drill_LV extends GT_Tool implements IAOETool {
     @Override
     public int getToolDamagePerBlockBreak() {
-        return GT_Mod.gregtechproxy.mHardRock ? 25 : 50;
+        return GT_Mod.gregtechproxy.mHardRock ? 15 : 35;
     }
 
     @Override
