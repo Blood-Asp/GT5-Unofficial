@@ -6,12 +6,7 @@ import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.ConfigCategories;
-import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.OreDictNames;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.enums.ToolDictNames;
+import gregtech.api.enums.*;
 import gregtech.api.interfaces.IDamagableItem;
 import gregtech.api.interfaces.IItemContainer;
 import gregtech.api.interfaces.internal.IGT_CraftingRecipe;
@@ -36,11 +31,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.item.crafting.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
@@ -49,28 +40,12 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static gregtech.GT_Mod.GT_FML_LOGGER;
-import static gregtech.api.enums.GT_Values.B;
-
-import static gregtech.api.enums.GT_Values.D1;
-import static gregtech.api.enums.GT_Values.DW;
-import static gregtech.api.enums.GT_Values.E;
-import static gregtech.api.enums.GT_Values.M;
-import static gregtech.api.enums.GT_Values.RA;
-import static gregtech.api.enums.GT_Values.V;
-import static gregtech.api.enums.GT_Values.W;
+import static gregtech.api.enums.GT_Values.*;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!
@@ -1353,8 +1328,8 @@ public class GT_ModHandler {
     public static void bulkRemoveByRecipe(List<InventoryCrafting> toRemove) {
         ArrayList<IRecipe> tList = (ArrayList<IRecipe>) CraftingManager.getInstance().getRecipeList();
         GT_FML_LOGGER.info("BulkRemoveByRecipe: tList: " + tList.size() + " toRemove: " + toRemove.size() );
-        
-        Set<IRecipe> tListToRemove = tList.parallelStream().filter(tRecipe -> {
+
+        Set<IRecipe> tListToRemove = tList.stream().filter(tRecipe -> {
             if ((tRecipe instanceof IGT_CraftingRecipe) && !((IGT_CraftingRecipe) tRecipe).isRemovable()) return false;
             return toRemove.stream().anyMatch(aCrafting -> tRecipe.matches(aCrafting, DW));
         }).collect(Collectors.toSet());
@@ -1417,11 +1392,11 @@ public class GT_ModHandler {
     public static boolean bulkRemoveRecipeByOutput(List<ItemStack> toRemove) {
         ArrayList<IRecipe> tList = (ArrayList<IRecipe>) CraftingManager.getInstance().getRecipeList();
 
-        Set<ItemStack> setToRemove = toRemove.parallelStream().map(GT_OreDictUnificator::get_nocopy).collect(Collectors.toSet());
+        Set<ItemStack> setToRemove = toRemove.stream().map(GT_OreDictUnificator::get_nocopy).collect(Collectors.toSet());
         
         GT_FML_LOGGER.info("BulkRemoveRecipeByOutput: tList: " + tList.size() + " setToRemove: " + setToRemove.size() );
-        
-        Set<IRecipe> tListToRemove = tList.parallelStream().filter(tRecipe -> {
+
+        Set<IRecipe> tListToRemove = tList.stream().filter(tRecipe -> {
             if ((tRecipe instanceof IGT_CraftingRecipe) && !((IGT_CraftingRecipe) tRecipe).isRemovable()) return false;
             if (sSpecialRecipeClasses.contains(tRecipe.getClass().getName())) return false;
             final ItemStack tStack = GT_OreDictUnificator.get_nocopy(tRecipe.getRecipeOutput());
