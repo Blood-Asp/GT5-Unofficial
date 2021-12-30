@@ -311,9 +311,11 @@ public abstract class GT_MetaGenerated_Tool extends GT_MetaBase_Item implements 
     public boolean onItemUse(ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float hitX, float hitY, float hitZ) {
         IToolStats tStats = getToolStats(aStack);
         if (tStats != null) {
-            return tStats.onItemUse(aStack, aWorld, aX, aY, aZ, aSide, aPlayer, hitX, hitY, hitZ);
+            if (tStats.onItemUse(aStack, aWorld, aX, aY, aZ, aSide, aPlayer, hitX, hitY, hitZ)) {
+                return true;
+            }
         }
-        return false;
+        return super.onItemUse(aStack, aPlayer, aWorld, aX, aY, aZ, aSide, hitX, hitY, hitZ);
     }
 
     @Override
