@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 public class GT_Tool_Drill_HV extends GT_Tool_Drill_LV {
     @Override
     public int getToolDamagePerBlockBreak() {
-        return GT_Mod.gregtechproxy.mHardRock ? 400 : 800;
+        return GT_Mod.gregtechproxy.mHardRock ? 250 : 400;
     }
 
     @Override

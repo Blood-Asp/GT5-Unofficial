@@ -25,7 +25,7 @@ import java.util.List;
 public class GT_Tool_Drill_LV extends GT_Tool implements IAOETool {
     @Override
     public int getToolDamagePerBlockBreak() {
-        return GT_Mod.gregtechproxy.mHardRock ? 25 : 50;
+        return GT_Mod.gregtechproxy.mHardRock ? 15 : 35;
     }
 
     @Override
@@ -156,7 +156,7 @@ public class GT_Tool_Drill_LV extends GT_Tool implements IAOETool {
     public float getDigSpeed(float digSpeed, IToolStats stats, ItemStack stack) {
         NBTTagCompound nbtStats = GT_MetaGenerated_Tool.getStatNbt(stack);
         int aoe = getAOE(nbtStats);
-        if (aoe > 0) return digSpeed / getSpeedReduction() * aoe;
+        if (aoe > 0) return digSpeed / (getSpeedReduction() * aoe);
         return digSpeed;
     }
 
@@ -167,7 +167,7 @@ public class GT_Tool_Drill_LV extends GT_Tool implements IAOETool {
 
     @Override
     public float getSpeedReduction() {
-        return 2.5f;
+        return 1.5f;
     }
 
     @Override
@@ -176,12 +176,12 @@ public class GT_Tool_Drill_LV extends GT_Tool implements IAOETool {
     }
 
     static int xStart[] = {0, 0, 0, -1, -1, -2, -2};
-    static int yStart[] = {0, 0, 0, -1, -1, -2, -2};
+    static int yStart[] = {0, 0, 0, -1, -2, -3, -4};
     static int xLen[] = {1, 1, 2, 3, 4, 5, 6};
     static int yLen[] = {1, 2, 2, 3, 4, 5, 6};
 
     @Override
-    public float onBlockDestroyed(ItemStack stack, IToolStats stats, float damagePerBlock, World world, Block block, int x, int y, int z, EntityLivingBase player) {
+    public float onBlockDestroyed(ItemStack stack, IToolStats stats, float damagePerBlock, float timeToTakeCenter, float digSpeed, World world, Block block, int x, int y, int z, EntityLivingBase player) {
         if (!(player instanceof EntityPlayerMP))
             return 0;
         MovingObjectPosition mop = GT_Utility.raytraceFromEntity(player.worldObj, player, false, 5);
@@ -192,7 +192,8 @@ public class GT_Tool_Drill_LV extends GT_Tool implements IAOETool {
         int aoe = getAOE(nbt);
         if (aoe == 0) return 0;
         damagePerBlock *= getDamageMultiplyer();
-        float broken = breakBlockAround(side, xStart[aoe], yStart[aoe], xLen[aoe], yLen[aoe], stats, stack, world, x, y, z, playerMP, damagePerBlock);
+        float broken = breakBlockAround(side, xStart[aoe], yStart[aoe], xLen[aoe], yLen[aoe], stats, stack, world, x, y,
+                z, playerMP, damagePerBlock, timeToTakeCenter, digSpeed);
         return broken;
     }
 
@@ -203,7 +204,11 @@ public class GT_Tool_Drill_LV extends GT_Tool implements IAOETool {
 
     @Override
     public boolean onItemUse(ItemStack stack, World world, int x, int y, int z, int sidehit, EntityPlayer playerEntity, float hitX, float hitY, float hitZ) {
-        return placeSideBlock(stack, world, x, y, z, sidehit, playerEntity, hitX, hitY, hitZ);
+        if (playerEntity.isSneaking()) {
+            return false;
+        } else {
+            return placeSideBlock(stack, world, x, y, z, sidehit, playerEntity, hitX, hitY, hitZ);
+        }
     }
 
     @Override
