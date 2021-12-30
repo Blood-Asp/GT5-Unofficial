@@ -8,6 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.function.BiFunction;
 
@@ -195,21 +197,17 @@ public interface IAOETool {
         int blockHarvestLevel = block.getHarvestLevel(blockMeta);
         if (!canHarvest(harvestLevel, blockHarvestLevel, blockHardness, timeToTakeCenter, digSpeed, block, blockMeta, stats))
             return false;
-//        BlockEvent.BreakEvent event = ForgeHooks.onBlockBreakEvent(world, player.theItemInWorldManager.getGameType(), player, x, y, z);
-//        if (event.isCanceled())
-//            return false;
-        if (!world.isRemote) {
-            block.onBlockHarvested(world, x, y, z, blockMeta, player);
-            block.harvestBlock(world, player, x, y, z, blockMeta);
-            block.onBlockDestroyedByPlayer(world, x, y, z, blockMeta);
-            block.removedByPlayer(world, player, x, y, z, true);
-//            if (block.removedByPlayer(world, player, x, y, z, true)) {
-//                //
-//
-//                //block.dropXpOnBlockBreak(world, x, y, z, event.getExpToDrop());
-//            }
-            player.playerNetServerHandler.sendPacket(new S23PacketBlockChange(x, y, z, world));
+        BlockEvent.BreakEvent event = ForgeHooks.onBlockBreakEvent(world, player.theItemInWorldManager.getGameType(), player, x, y, z);
+        if (event.isCanceled())
+            return false;
+        block.onBlockHarvested(world, x, y, z, blockMeta, player);
+        block.harvestBlock(world, player, x, y, z, blockMeta);
+        block.onBlockDestroyedByPlayer(world, x, y, z, blockMeta);
+        if (block.removedByPlayer(world, player, x, y, z, true)) {
+            block.dropXpOnBlockBreak(world, x, y, z, event.getExpToDrop());
         }
+
+        player.playerNetServerHandler.sendPacket(new S23PacketBlockChange(x, y, z, world));
         return true;
     }
 
