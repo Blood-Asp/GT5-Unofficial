@@ -1,0 +1,51 @@
+apply plugin: "maven-publish"
+checkPropertyExists("repositoryURL")
+checkPropertyExists("repositoryName")
+checkPropertyExists("mavenGroupId")
+checkPropertyExists("mavenArtifactId")
+
+def getMavenSettingsCredentials = {
+    String userHome = System.getProperty( "user.home" );
+    File mavenSettings = new File(userHome, ".m2/settings.xml")
+    def xmlSlurper = new XmlSlurper()
+    def output = xmlSlurper.parse(mavenSettings)
+    return output."servers"."server"
+}
+
+def getCredentials = {
+    def entries = getMavenSettingsCredentials()
+    for (entry in entries) {
+        if ( entry."id".text() == repositoryName ) {
+            return [username: entry.username.text(), password: entry.password.text()]
+        }
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifact source: jar
+            artifact source: sourcesJar, classifier: "src"
+            artifact source: devJar, classifier: "dev"
+            if (apiPackage) {
+                artifact source: apiJar, classifier: "api"
+            }
+
+            groupId = mavenGroupId
+            artifactId = mavenArtifactId
+            version = project.version
+        }
+    }
+
+    repositories {
+        maven {
+            name = repositoryName
+            url = repositoryURL
+            def creds = getCredentials()
+            credentials {
+                username = creds == null ? "none" : creds.username
+                password = creds == null ? "none" : creds.password
+            }
+        }
+    }
+}
