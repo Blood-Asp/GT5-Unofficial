@@ -10,8 +10,11 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.internal.IGT_RecipeAdder;
 import gregtech.api.objects.GT_FluidStack;
 import gregtech.api.objects.ItemData;
-import gregtech.api.util.*;
+import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_AssemblyLine;
+import gregtech.api.util.GT_Utility;
 import gregtech.common.items.GT_IntegratedCircuit_Item;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.items.RailcraftToolItems;
@@ -364,6 +367,7 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
 
     @Override
     public boolean addCutterRecipe(ItemStack aInput, ItemStack aCircuit, ItemStack aOutput1, ItemStack aOutput2, int aDuration, int aEUt, boolean aCleanroom) {
+        if (aInput == null || (aOutput1 == null && aOutput2 == null)) return false;
         return addCutterRecipe(new ItemStack[]{aInput, aCircuit}, new ItemStack[]{aOutput1, aOutput2}, aDuration, aEUt, aCleanroom ? -200 : 0);
     }
 
