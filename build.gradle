@@ -459,6 +459,12 @@ artifacts {
         archives apiJar
     }
 }
+// NODELETE
+// This is used for invoking the publishing script. We cannot use addon.gradle,
+// as it is included too early in the buildscript. We need this below artifacts{}
+if(file("publishing.gradle").exists()) {
+    apply from: "publishing.gradle"
+}
 
 // Updating
 task updateBuildScript {
