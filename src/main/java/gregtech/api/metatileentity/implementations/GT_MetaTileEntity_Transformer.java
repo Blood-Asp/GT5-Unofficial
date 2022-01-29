@@ -2,6 +2,7 @@ package gregtech.api.metatileentity.implementations;
 
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyStorage;
+import com.enderio.core.common.util.BlockCoord;
 import crazypants.enderio.machine.capbank.TileCapBank;
 import crazypants.enderio.machine.capbank.network.ICapBankNetwork;
 import crazypants.enderio.power.IPowerContainer;
@@ -15,9 +16,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.List;
+
 import static gregtech.api.enums.GT_Values.V;
+import static net.minecraft.util.EnumChatFormatting.*;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!
@@ -26,6 +32,7 @@ import static gregtech.api.enums.GT_Values.V;
  * Extend this class to make a simple Machine
  */
 public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachineBlock {
+
     public GT_MetaTileEntity_Transformer(int aID, String aName, String aNameRegional, int aTier, String aDescription) {
         super(aID, aName, aNameRegional, aTier, 0, aDescription);
     }
@@ -42,16 +49,16 @@ public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachi
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
         ITexture[][][] rTextures = new ITexture[12][17][];
         for (byte i = -1; i < 16; i++) {
-            rTextures[ 0][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_OUT      [mTier]};
-            rTextures[ 1][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_OUT      [mTier]};
-            rTextures[ 2][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_OUT      [mTier]};
-            rTextures[ 3][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_IN_MULTI [mTier]};
-            rTextures[ 4][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_IN_MULTI [mTier]};
-            rTextures[ 5][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_IN_MULTI [mTier]};
-            rTextures[ 6][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_IN       [mTier]};
-            rTextures[ 7][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_IN       [mTier]};
-            rTextures[ 8][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_IN       [mTier]};
-            rTextures[ 9][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_OUT_MULTI[mTier]};
+            rTextures[0][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_OUT[mTier]};
+            rTextures[1][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_OUT[mTier]};
+            rTextures[2][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_OUT[mTier]};
+            rTextures[3][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_IN_MULTI[mTier]};
+            rTextures[4][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_IN_MULTI[mTier]};
+            rTextures[5][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_IN_MULTI[mTier]};
+            rTextures[6][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_IN[mTier]};
+            rTextures[7][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_IN[mTier]};
+            rTextures[8][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_IN[mTier]};
+            rTextures[9][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_OUT_MULTI[mTier]};
             rTextures[10][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_OUT_MULTI[mTier]};
             rTextures[11][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], Textures.BlockIcons.OVERLAYS_ENERGY_OUT_MULTI[mTier]};
         }
@@ -155,12 +162,12 @@ public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachi
                         aBaseMetaTileEntity.injectEnergyUnits((byte) 6, Math.min(tEU, maxEUInput()), 1);
                     } else if (GregTech_API.meIOLoaded && tTileEntity instanceof IPowerContainer && ((IPowerContainer) tTileEntity).getEnergyStored() > 0) {
                         int storedRF = ((IPowerContainer) tTileEntity).getEnergyStored();
-                        int  extractRF = GT_Utility.safeInt(maxEUInput() * 100L / GregTech_API.mRFtoEU);
+                        int extractRF = GT_Utility.safeInt(maxEUInput() * 100L / GregTech_API.mRFtoEU);
                         long tEU = 0;
                         if (tTileEntity instanceof TileCapBank) {
                             ICapBankNetwork network = ((TileCapBank) tTileEntity).getNetwork();
                             if (network != null && network.getEnergyStoredL() > 0) {
-                                tEU = Math.min((Math.min(Math.min(network.getEnergyStoredL(), storedRF - extractRF), network.getMaxOutput())) * (long)GregTech_API.mRFtoEU / 100L, maxEUInput());
+                                tEU = Math.min((Math.min(Math.min(network.getEnergyStoredL(), storedRF - extractRF), network.getMaxOutput())) * (long) GregTech_API.mRFtoEU / 100L, maxEUInput());
                                 network.addEnergy(GT_Utility.safeInt(-(tEU * 100 / GregTech_API.mRFtoEU)));
                             }
                         } else {
@@ -169,7 +176,7 @@ public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachi
                                 tEU = maxEUInput();
                             } else {
                                 ((IPowerContainer) tTileEntity).setEnergyStored(0);
-                                tEU = storedRF * (long)GregTech_API.mRFtoEU / 100L;
+                                tEU = storedRF * (long) GregTech_API.mRFtoEU / 100L;
                             }
                         }
                         aBaseMetaTileEntity.injectEnergyUnits((byte) 6, Math.min(tEU, maxEUInput()), 1);
@@ -196,29 +203,60 @@ public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachi
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         return false;
-    } 
-    
-    @Override
-    public boolean hasAlternativeModeText(){
-    	return true;
     }
-    
+
     @Override
-    public String getAlternativeModeText(){
-    	return
-                (getBaseMetaTileEntity().isAllowedToWork() ? trans("145","Step Down, In: ") : trans("146","Step Up, In: ")) +
+    public boolean hasAlternativeModeText() {
+        return true;
+    }
+
+    @Override
+    public String getAlternativeModeText() {
+        return
+                (getBaseMetaTileEntity().isAllowedToWork() ? trans("145", "Step Down, In: ") : trans("146", "Step Up, In: ")) +
                         maxEUInput() +
-                        trans("148","V ") +
+                        trans("148", "V ") +
                         maxAmperesIn() +
-                        trans("147","A, Out: ") +
+                        trans("147", "A, Out: ") +
                         maxEUOutput() +
-                        trans("148","V ") +
+                        trans("148", "V ") +
                         maxAmperesOut() +
-                        trans("149","A");
+                        trans("149", "A");
     }
 
     @Override
     public boolean shouldJoinIc2Enet() {
         return true;
+    }
+
+    @Override
+    public void getWailaBody(ItemStack stack, List<String> currentTip, MovingObjectPosition pos, NBTTagCompound tag, int side) {
+        boolean allowedToWork = tag.getBoolean("isAllowedToWork");
+        currentTip.add(
+                String.format(
+                        "%s %d(%dA) -> %d(%dA)",
+                        (allowedToWork ? (GREEN + "Step Down") : (RED + "Step Up")) + RESET,
+                        tag.getLong("maxEUInput"),
+                        tag.getLong("maxAmperesIn"),
+                        tag.getLong("maxEUOutput"),
+                        tag.getLong("maxAmperesOut")
+                )
+        );
+        final int facing = getBaseMetaTileEntity().getFrontFacing();
+
+        if ((side == facing && allowedToWork) || (side != facing && !allowedToWork)) {
+            currentTip.add(String.format(GOLD + "Input:" + RESET + " %d(%dA)", tag.getLong("maxEUInput"), tag.getLong("maxAmperesIn")));
+        } else {
+            currentTip.add(String.format(BLUE + "Output:" + RESET + " %d(%dA)", tag.getLong("maxEUOutput"), tag.getLong("maxAmperesOut")));
+        }
+    }
+
+    @Override
+    public void getWailaNBT(NBTTagCompound tag, World world, BlockCoord pos) {
+        tag.setBoolean("isAllowedToWork", getBaseMetaTileEntity().isAllowedToWork());
+        tag.setLong("maxEUInput", maxEUInput());
+        tag.setLong("maxAmperesIn", maxAmperesIn());
+        tag.setLong("maxEUOutput", maxEUOutput());
+        tag.setLong("maxAmperesOut", maxAmperesOut());
     }
 }

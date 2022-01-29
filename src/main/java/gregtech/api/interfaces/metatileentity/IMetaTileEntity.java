@@ -1,5 +1,6 @@
 package gregtech.api.interfaces.metatileentity;
 
+import com.enderio.core.common.util.BlockCoord;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.interfaces.ITexture;
@@ -18,6 +19,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -409,7 +411,7 @@ public interface IMetaTileEntity extends ISidedInventory, IFluidTank, IFluidHand
      * The Machine Update, which is called when the Machine needs an Update of its Parts.
      * I suggest to wait 1-5 seconds before actually checking the Machine Parts.
      * RP-Frames could for example cause Problems when you instacheck the Machine Parts.
-     *
+     * <p>
      * just do stuff since we are already in meta tile...
      */
     @Override
@@ -419,8 +421,14 @@ public interface IMetaTileEntity extends ISidedInventory, IFluidTank, IFluidHand
      * just return in should recurse since we are already in meta tile...
      */
     @Override
-    default boolean isMachineBlockUpdateRecursive(){
+    default boolean isMachineBlockUpdateRecursive() {
         return true;
+    }
+
+    default void getWailaBody(ItemStack stack, List<String> currentTip, MovingObjectPosition pos, NBTTagCompound tag, int side) {
+    }
+
+    default void getWailaNBT(NBTTagCompound tag, World world, BlockCoord pos) {
     }
 
 }

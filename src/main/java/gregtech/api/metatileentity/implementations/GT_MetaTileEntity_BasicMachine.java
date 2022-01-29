@@ -1,5 +1,6 @@
 package gregtech.api.metatileentity.implementations;
 
+import com.enderio.core.common.util.BlockCoord;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ItemList;
@@ -10,13 +11,8 @@ import gregtech.api.interfaces.metatileentity.IMachineCallback;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_CoverBehaviorBase;
-import gregtech.api.util.GT_Log;
-import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.*;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
-import gregtech.api.util.GT_Utility;
-import gregtech.api.util.GT_ClientPreference;
 import gregtech.common.tileentities.machines.multi.GT_MetaTileEntity_Cleanroom;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -24,13 +20,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static gregtech.api.enums.GT_Values.V;
 import static gregtech.api.enums.GT_Values.debugCleanroom;
@@ -949,13 +948,28 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
                     mOutputItems[i] = null;
                 }
         mOutputFluid = tRecipe.getFluidOutput(0);
-        if(!skipOC){
+        if (!skipOC) {
             calculateOverclockedNess(tRecipe);
             //In case recipe is too OP for that machine
             if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
                 return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         }
         return FOUND_AND_SUCCESSFULLY_USED_RECIPE;
+    }
+
+    @Override
+    public void getWailaBody(ItemStack stack, List<String> currentTip, MovingObjectPosition pos, NBTTagCompound tag, int side) {
+        super.getWailaBody(stack, currentTip, pos, tag, side);
+        currentTip.add(String.format("Progress: %d s / %d s", tag.getInteger("progressSingleBlock"), tag.getInteger("maxProgressSingleBlock")));
+    }
+
+    @Override
+    public void getWailaNBT(NBTTagCompound tag, World world, BlockCoord pos) {
+        super.getWailaNBT(tag, world, pos);
+        final int progressSingleBlock = mProgresstime / 20;
+        final int maxProgressSingleBlock = mMaxProgresstime / 20;
+        tag.setInteger("progressSingleBlock", progressSingleBlock);
+        tag.setInteger("maxProgressSingleBlock", maxProgressSingleBlock);
     }
 
     public ITexture[] getSideFacingActive(byte aColor) {

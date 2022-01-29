@@ -1,5 +1,6 @@
 package gregtech.api.metatileentity;
 
+import com.enderio.core.common.util.BlockCoord;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.GregTech_API;
@@ -12,6 +13,7 @@ import gregtech.api.metatileentity.BaseMetaTileEntity.ClientEvents;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.*;
 import gregtech.common.GT_Client;
+import gregtech.common.covers.GT_Cover_Fluidfilter;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -24,6 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -878,5 +881,23 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
     }
 
     public void reloadLocks() {
+    }
+
+    @Override
+    public void getWailaBody(ItemStack stack, List<String> currentTip, MovingObjectPosition pos, NBTTagCompound tag, int side) {
+        final String filterKey = "filterInfo" + side;
+        if (tag.hasKey(filterKey)) {
+            currentTip.add(tag.getString(filterKey));
+        }
+    }
+
+    @Override
+    public void getWailaNBT(NBTTagCompound tag, World world, BlockCoord pos) {
+        BaseMetaPipeEntity base = (BaseMetaPipeEntity) getBaseMetaTileEntity();
+        for (byte side = 0; side < 6; side++) {
+            if (base.getComplexCoverDataAtSide(side) instanceof GT_Cover_Fluidfilter) {
+                tag.setString("filterInfo" + side, ((GT_Cover_Fluidfilter) base.getComplexCoverDataAtSide(side)).getDescription(side, base.getCoverIDAtSide(side), base.getComplexCoverDataAtSide(side), base));
+            }
+        }
     }
 }
