@@ -2,6 +2,7 @@ package gregtech.api.metatileentity;
 
 import appeng.api.util.AECableType;
 import appeng.me.helpers.AENetworkProxy;
+import com.enderio.core.common.util.BlockCoord;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -24,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -953,16 +955,32 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
     public boolean hasAlternativeModeText(){
     	return false;
     }
-    
+
     @Override
-    public String getAlternativeModeText(){
-    	return "";
+    public String getAlternativeModeText() {
+        return "";
     }
 
     @Override
-    public boolean shouldJoinIc2Enet() { return false; }
-    
-    public boolean shouldTriggerBlockUpdate() { return false; }
+    public boolean shouldJoinIc2Enet() {
+        return false;
+    }
+
+    public boolean shouldTriggerBlockUpdate() {
+        return false;
+    }
+
+    @Override
+    public void getWailaBody(ItemStack stack, List<String> currentTip, MovingObjectPosition pos, NBTTagCompound tag, int side) {
+        String facingStr = "Facing";
+        final int facing = mBaseMetaTileEntity.getFrontFacing();
+        currentTip.add(String.format("%s: %s", facingStr, ForgeDirection.getOrientation(facing).name()));
+    }
+
+    @Override
+    public void getWailaNBT(NBTTagCompound tag, World world, BlockCoord pos) {
+        IMetaTileEntity.super.getWailaNBT(tag, world, pos);
+    }
 
     @Optional.Method(modid = "appliedenergistics2")
     public AECableType getCableConnectionType(ForgeDirection forgeDirection) {

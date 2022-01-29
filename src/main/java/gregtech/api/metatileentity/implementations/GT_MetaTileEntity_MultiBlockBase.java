@@ -1,5 +1,6 @@
 package gregtech.api.metatileentity.implementations;
 
+import com.enderio.core.common.util.BlockCoord;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ConfigCategories;
@@ -21,7 +22,9 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.input.Keyboard;
 
@@ -30,6 +33,7 @@ import java.util.List;
 
 import static gregtech.api.enums.GT_Values.V;
 import static gregtech.api.enums.GT_Values.VN;
+import static net.minecraft.util.EnumChatFormatting.*;
 
 public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
 
@@ -978,24 +982,24 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         }
 
         return new String[]{
-        /* 1*/       	StatCollector.translateToLocal("GT5U.multiblock.Progress") + ": " +
-                                EnumChatFormatting.GREEN + GT_Utility.formatNumbers(mProgresstime/20) + EnumChatFormatting.RESET + " s / " +
-                                EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(mMaxProgresstime/20) + EnumChatFormatting.RESET + " s",
-         /* 2*/         StatCollector.translateToLocal("GT5U.multiblock.energy") + ": " +
-                                EnumChatFormatting.GREEN + GT_Utility.formatNumbers(storedEnergy) + EnumChatFormatting.RESET + " EU / " +
-                                EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(maxEnergy) + EnumChatFormatting.RESET + " EU",
-         /* 3*/         StatCollector.translateToLocal("GT5U.multiblock.usage") + ": " +
-                                EnumChatFormatting.RED + GT_Utility.formatNumbers(-mEUt) + EnumChatFormatting.RESET + " EU/t",
-         /* 4*/         StatCollector.translateToLocal("GT5U.multiblock.mei") + ": " +
-                                EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(getMaxInputVoltage()) + EnumChatFormatting.RESET + " EU/t(*2A) " +
-                                StatCollector.translateToLocal("GT5U.machines.tier") + ": " +
-                                EnumChatFormatting.YELLOW + VN[GT_Utility.getTier(getMaxInputVoltage())] + EnumChatFormatting.RESET,
-          /* 5*/        StatCollector.translateToLocal("GT5U.multiblock.problems") + ": " +
-                                EnumChatFormatting.RED + (getIdealStatus() - getRepairStatus()) + EnumChatFormatting.RESET + " " +
-                                StatCollector.translateToLocal("GT5U.multiblock.efficiency") + ": " +
-                                EnumChatFormatting.YELLOW + Float.toString(mEfficiency / 100.0F) + EnumChatFormatting.RESET + " %",
-            /* 6*/      StatCollector.translateToLocal("GT5U.multiblock.pollution") + ": " +
-                                EnumChatFormatting.GREEN + mPollutionReduction + EnumChatFormatting.RESET + " %"
+                /* 1*/        StatCollector.translateToLocal("GT5U.multiblock.Progress") + ": " +
+                EnumChatFormatting.GREEN + GT_Utility.formatNumbers(mProgresstime / 20) + EnumChatFormatting.RESET + " s / " +
+                EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(mMaxProgresstime / 20) + EnumChatFormatting.RESET + " s",
+                /* 2*/         StatCollector.translateToLocal("GT5U.multiblock.energy") + ": " +
+                EnumChatFormatting.GREEN + GT_Utility.formatNumbers(storedEnergy) + EnumChatFormatting.RESET + " EU / " +
+                EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(maxEnergy) + EnumChatFormatting.RESET + " EU",
+                /* 3*/         StatCollector.translateToLocal("GT5U.multiblock.usage") + ": " +
+                RED + GT_Utility.formatNumbers(-mEUt) + EnumChatFormatting.RESET + " EU/t",
+                /* 4*/         StatCollector.translateToLocal("GT5U.multiblock.mei") + ": " +
+                EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(getMaxInputVoltage()) + EnumChatFormatting.RESET + " EU/t(*2A) " +
+                StatCollector.translateToLocal("GT5U.machines.tier") + ": " +
+                EnumChatFormatting.YELLOW + VN[GT_Utility.getTier(getMaxInputVoltage())] + EnumChatFormatting.RESET,
+                /* 5*/        StatCollector.translateToLocal("GT5U.multiblock.problems") + ": " +
+                RED + (getIdealStatus() - getRepairStatus()) + EnumChatFormatting.RESET + " " +
+                StatCollector.translateToLocal("GT5U.multiblock.efficiency") + ": " +
+                EnumChatFormatting.YELLOW + Float.toString(mEfficiency / 100.0F) + EnumChatFormatting.RESET + " %",
+                /* 6*/      StatCollector.translateToLocal("GT5U.multiblock.pollution") + ": " +
+                EnumChatFormatting.GREEN + mPollutionReduction + EnumChatFormatting.RESET + " %"
         };
     }
 
@@ -1055,5 +1059,32 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
             }
         }
         return tFluidList.toArray(new FluidStack[0]);
+    }
+
+    @Override
+    public void getWailaBody(ItemStack stack, List<String> currentTip, MovingObjectPosition pos, NBTTagCompound tag, int side) {
+        super.getWailaBody(stack, currentTip, pos, tag, side);
+        if (tag.getBoolean("incompleteStructure")) {
+            currentTip.add(RED + "** INCOMPLETE STRUCTURE **" + RESET);
+        }
+        currentTip.add((tag.getBoolean("hasProblems") ? (RED + "** HAS PROBLEMS **") : GREEN + "Running Fine") + RESET
+                + "  Efficiency: " + tag.getFloat("efficiency") + "%");
+
+        currentTip.add(String.format("Progress: %d s / %d s", tag.getInteger("progress"), tag.getInteger("maxProgress")));
+    }
+
+    @Override
+    public void getWailaNBT(NBTTagCompound tag, World world, BlockCoord pos) {
+        super.getWailaNBT(tag, world, pos);
+        final int problems = getIdealStatus() - getRepairStatus();
+        final float efficiency = mEfficiency / 100.0F;
+        final int progress = mProgresstime / 20;
+        final int maxProgress = mMaxProgresstime / 20;
+
+        tag.setBoolean("hasProblems", problems > 0);
+        tag.setFloat("efficiency", efficiency);
+        tag.setInteger("progress", progress);
+        tag.setInteger("maxProgress", maxProgress);
+        tag.setBoolean("incompleteStructure", (getBaseMetaTileEntity().getErrorDisplayID() & 64) != 0);
     }
 }

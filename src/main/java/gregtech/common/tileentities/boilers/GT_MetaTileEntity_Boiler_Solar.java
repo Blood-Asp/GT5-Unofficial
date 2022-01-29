@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.boilers;
 
+import com.enderio.core.common.util.BlockCoord;
 import gregtech.api.enums.Dyes;
 import gregtech.api.enums.Textures.BlockIcons;
 import gregtech.api.interfaces.ITexture;
@@ -11,13 +12,19 @@ import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_Container_Boiler;
 import gregtech.common.gui.GT_GUIContainer_Boiler;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.List;
+
 import static gregtech.api.GregTech_API.sMachineFile;
 import static gregtech.api.enums.ConfigCategories.machineconfig;
+import static net.minecraft.util.EnumChatFormatting.GOLD;
+import static net.minecraft.util.EnumChatFormatting.RESET;
 
 public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
     public static final String LPS_FMT = "%s L/s";
@@ -313,5 +320,18 @@ public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
         public int getMaxRuntimeTicks() {
             return maxRuntimeTicks;
         }
+    }
+
+    @Override
+    public void getWailaBody(ItemStack stack, List<String> currentTip, MovingObjectPosition pos, NBTTagCompound tag, int side) {
+        currentTip.add(String.format((GOLD + "Solar Boiler Output: " + RESET + "%d/%d L/s"), tag.getInteger("calcificationOutput"), tag.getInteger("maxCalcificationOutput")));
+        super.getWailaBody(stack, currentTip, pos, tag, side);
+    }
+
+    @Override
+    public void getWailaNBT(NBTTagCompound tag, World world, BlockCoord pos) {
+        tag.setInteger("calcificationOutput", (getProductionPerSecond()));
+        tag.setInteger("maxCalcificationOutput", (getMaxOutputPerSecond()));
+        super.getWailaNBT(tag, world, pos);
     }
 }
