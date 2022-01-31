@@ -1,4 +1,4 @@
-//version: 1641429628-falsepattern
+//version: 1641429628falsepattern
 /*
 DO NOT CHANGE THIS FILE!
 
@@ -363,31 +363,31 @@ tasks.withType(JavaExec).configureEach {
 }
 
 processResources
-        {
-            // this will ensure that this task is redone when the versions change.
-            inputs.property "version", project.version
-            inputs.property "mcversion", project.minecraft.version
+{
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
 
-            // replace stuff in mcmod.info, nothing else
-            from(sourceSets.main.resources.srcDirs) {
-                include 'mcmod.info'
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
 
-                // replace version and mcversion
-                expand "minecraftVersion": project.minecraft.version,
-                        "modVersion": versionDetails().lastTag,
-                        "modId": modId,
-                        "modName": modName
-            }
+        // replace version and mcversion
+        expand "minecraftVersion": project.minecraft.version,
+                "modVersion": versionDetails().lastTag,
+                "modId": modId,
+                "modName": modName
+    }
 
-            if(usesMixins.toBoolean()) {
-                from refMap
-            }
+    if(usesMixins.toBoolean()) {
+        from refMap
+    }
 
-            // copy everything else, thats not the mcmod.info
-            from(sourceSets.main.resources.srcDirs) {
-                exclude 'mcmod.info'
-            }
-        }
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
 
 def getManifestAttributes() {
     def manifestAttributes = [:]
@@ -503,11 +503,15 @@ def getMavenSettingsCredentials = {
 }
 
 def getCredentials = {
-    def entries = getMavenSettingsCredentials()
-    for (entry in entries) {
-        if ( entry."id".text() == repositoryName ) {
-            return [username: entry.username.text(), password: entry.password.text()]
+    try {
+        def entries = getMavenSettingsCredentials()
+        for (entry in entries) {
+            if (entry."id".text() == repositoryName) {
+                return [username: entry.username.text(), password: entry.password.text()]
+            }
         }
+    } catch (Exception ignored) {
+        return [username: "none", password: "none"]
     }
 }
 
