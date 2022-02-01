@@ -1,4 +1,4 @@
-//version: 1641429628falsepattern
+//version: 1641429628falsepattern4
 /*
 DO NOT CHANGE THIS FILE!
 
@@ -32,7 +32,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.github.GTNewHorizons:ForgeGradle:1.2.5'
+        classpath 'com.github.GTNewHorizons:ForgeGradle:1.2.6'
     }
 }
 
@@ -88,6 +88,8 @@ checkPropertyExists("containsMixinsAndOrCoreModOnly")
 checkPropertyExists("usesShadowedDependencies")
 checkPropertyExists("developmentEnvironmentUserName")
 
+//Properties added in fork
+checkPropertyExists("skipBuildScriptUpdateCheck")
 checkPropertyExists("repositoryURL")
 checkPropertyExists("repositoryName")
 checkPropertyExists("mavenGroupId")
@@ -158,7 +160,7 @@ configurations.all {
 'git config core.fileMode false'.execute()
 // Pulls version from git tag
 try {
-    version = gitVersion() + "-mc" + minecraftVersion
+    version = gitVersion()
 }
 catch (Exception e) {
     throw new IllegalStateException("This mod must be version controlled by Git AND the repository must provide at least one tag!");
@@ -171,6 +173,7 @@ if(project.hasProperty("customArchiveBaseName") && customArchiveBaseName) {
 else {
     archivesBaseName = modId
 }
+archivesBaseName += "-mc" + minecraftVersion
 
 minecraft {
     version = minecraftVersion + "-" + forgeVersion + "-" + minecraftVersion
@@ -190,6 +193,33 @@ minecraft {
         if(gradleTokenGroupName) {
             replace gradleTokenGroupName, modGroup
         }
+    }
+
+    def arguments = []
+    def jvmArguments = []
+
+    if(usesMixins.toBoolean()) {
+        arguments += [
+                "--mods=../build/libs/$modId-${version}.jar",
+                "--tweakClass org.spongepowered.asm.launch.MixinTweaker"
+        ]
+        jvmArguments += [
+                "-Dmixin.debug=true", "-Dmixin.debug.countInjections=true", "-Dmixin.debug.verbose=true", "-Dmixin.debug.export=true"
+        ]
+    }
+
+    clientRunConfig {
+        args(arguments)
+        jvmArgs(jvmArguments)
+
+        if(developmentEnvironmentUserName) {
+            args("--username", developmentEnvironmentUserName)
+        }
+    }
+
+    serverRunConfig {
+        args(arguments)
+        jvmArgs(jvmArguments)
     }
 }
 
@@ -319,39 +349,6 @@ afterEvaluate {
             ]
         }
     }
-}
-
-runClient {
-    def arguments = []
-
-    if(usesMixins.toBoolean()) {
-        arguments += [
-                "--mods=../build/libs/$modId-${version}.jar",
-                "--tweakClass org.spongepowered.asm.launch.MixinTweaker"
-        ]
-    }
-
-    if(developmentEnvironmentUserName) {
-        arguments += [
-                "--username",
-                developmentEnvironmentUserName
-        ]
-    }
-
-    args(arguments)
-}
-
-runServer {
-    def arguments = []
-
-    if (usesMixins.toBoolean()) {
-        arguments += [
-                "--mods=../build/libs/$modId-${version}.jar",
-                "--tweakClass org.spongepowered.asm.launch.MixinTweaker"
-        ]
-    }
-
-    args(arguments)
 }
 
 tasks.withType(JavaExec).configureEach {
@@ -527,7 +524,7 @@ publishing {
             }
 
             groupId = mavenGroupId
-            artifactId = mavenArtifactId
+            artifactId = mavenArtifactId + "-mc" + minecraftVersion
             version = gitVersion()
         }
     }
@@ -554,7 +551,7 @@ task updateBuildScript {
     }
 }
 
-if (isNewBuildScriptVersionAvailable(projectDir.toString())) {
+if (!skipBuildScriptUpdateCheck.toBoolean() && isNewBuildScriptVersionAvailable(projectDir.toString())) {
     if (autoUpdateBuildScript.toBoolean()) {
         performBuildScriptUpdate(projectDir.toString())
     } else {
