@@ -1,7 +1,7 @@
 // Add your dependencies here
 
 dependencies {
-    compile("com.github.GTNewHorizons:StructureLib:master-SNAPSHOT:dev")
+    compile("com.github.GTMEGA:StructureLib:0237ab2549:deobf")
     compile("com.github.GTNewHorizons:NotEnoughItems:master-SNAPSHOT:dev")
 
     compile("net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev")
