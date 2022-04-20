@@ -24,84 +24,47 @@ public class GT_MetaGenerated_Item_03
         int tLastID = 0;
         Object[] o = new Object[0];
 
-        /**
-         * circuit boards tier 1-7:
-         * coated circuit board / wood plate + resin
-         * Plastic Circuit Board / Plastic + Copper Foil + Sulfuric Acid
-         * phenolic circuit board /carton+glue+chemical bath
-         * epoxy circuit board /epoxy plate + copper foil + sulfuric acid
-         * fiberglass circuit board (simple + multilayer) / glass + plastic + electrum foil + sulfurci acid
-         * wetware lifesupport board / fiberglass CB + teflon +
-         */
         ItemList.Circuit_Board_Wetware.set(addItem(tLastID = 6, "Wetware Lifesupport Circuit Board", "The Board that keeps life", o));
         ItemList.Circuit_Board_Plastic.set(addItem(tLastID = 7, "Plastic Circuit Board", "A Good Board", o));
         ItemList.Circuit_Board_Bio.set(addItem(tLastID = 8, "Bio Circuit Board", "Bio genetic mutated Board", o));
 
-        /**
-         * electronic components:
-         * vacuum tube (glass tube + red alloy cables)
-         * basic electronic circuits normal+smd
-         * coils
-         * diodes normal+smd
-         * transistors normal+smd
-         * capacitors normal+smd
-         * Glass Fibers
-         */
-        ItemList.Circuit_Parts_ResistorSMD.set(addItem(tLastID = 11, "SMD Resistor", "Electronic Component", o));
-        ItemList.Circuit_Parts_Glass_Tube.set(addItem(tLastID = 12, "Glass Tube", "", o));
-        ItemList.Circuit_Parts_Coil.set(addItem(tLastID = 14, "Small Coil", "Basic Electronic Component", o));
-        ItemList.Circuit_Parts_DiodeSMD.set(addItem(tLastID = 16, "SMD Diode", "Electronic Component", o));
-        ItemList.Circuit_Parts_TransistorSMD.set(addItem(tLastID = 18, "SMD Transistor", "Electronic Component", o));
-        ItemList.Circuit_Parts_CapacitorSMD.set(addItem(tLastID = 20, "SMD Capacitor", "Electronic Component", o));
-        ItemList.Circuit_Parts_GlassFiber.set(addItem(tLastID = 21, "Glass Fiber", Materials.BorosilicateGlass.mChemicalFormula, o));
+        ItemList.Circuit_Parts_ResistorSMD.set(addItem(tLastID = 11, "3216 SMD Resistor", "Impedes Electrical Current", o));
+        ItemList.Circuit_Parts_Glass_Tube.set(addItem(tLastID = 12, "Glass Tube", "Wrangles the nixie pixies", o));
+        ItemList.Circuit_Parts_Coil.set(addItem(tLastID = 14, "Small Through-Hole Inductor", "Henry would be proud", o));
+        ItemList.Circuit_Parts_DiodeSMD.set(addItem(tLastID = 16, "3216 SMD Rectifier Diode", "A one way wire", o));
+        ItemList.Circuit_Parts_TransistorSMD.set(addItem(tLastID = 18, "3216 SMD Transistor", "Amplifies and switches signals", o));
+        ItemList.Circuit_Parts_CapacitorSMD.set(addItem(tLastID = 20, "3216 SMD Capacitor", "Electrical shock-absorber", o));
+        ItemList.Circuit_Parts_GlassFiber.set(addItem(tLastID = 21, "Glass Fiber",  Materials.BorosilicateGlass.mChemicalFormula, o));
         ItemList.Circuit_Parts_PetriDish.set(addItem(tLastID = 22, "Petri Dish", "For cultivating cells", o));
         ItemList.Circuit_Parts_Reinforced_Glass_Tube.set(addItem(tLastID = 23, "Reinforced Glass Tube", "", o));
-        ItemList.Circuit_Parts_ResistorASMD.set(addItem(tLastID = 24, "Advanced SMD Resistor", "Advanced Electronic Component", o));
-        ItemList.Circuit_Parts_DiodeASMD.set(addItem(tLastID = 25, "Advanced SMD Diode", "Advanced Electronic Component", o));
-        ItemList.Circuit_Parts_TransistorASMD.set(addItem(tLastID = 26, "Advanced SMD Transistor", "Advanced Electronic Component", o));
-        ItemList.Circuit_Parts_CapacitorASMD.set(addItem(tLastID = 27, "Advanced SMD Capacitor", "Advanced Electronic Component", o));
+        ItemList.Circuit_Parts_ResistorASMD.set(addItem(tLastID = 24, "0402 SMD Resistor", "High precision current limiter", o));
+        ItemList.Circuit_Parts_DiodeASMD.set(addItem(tLastID = 25, "0402 SMD Diode", "Minified rectificaton", o));
+        ItemList.Circuit_Parts_TransistorASMD.set(addItem(tLastID = 26, "0402 SMD Transistor", "Takes the thinking out of it", o));
+        ItemList.Circuit_Parts_CapacitorASMD.set(addItem(tLastID = 27, "0402 SMD Capacitor", "Like a battery on a diet", o));
 
-        /**
-         * ICs
-         * Lenses made from perfect crystals first instead of plates
-         * Monocrystalline silicon ingot (normal+glowstone+naquadah) EBF, normal silicon no EBF need anymore
-         * wafer(normal+glowstone+naquadah) cut mono silicon ingot in cutting machine
-         *
-         * Integrated Logic Circuit(8bit DIP)
-         * RAM
-         * NAND Memory
-         * NOR Memory
-         * CPU (4 sizes)
-         * SoCs(2 sizes, high tier cheap low tech component)
-         * Power IC/High Power IC/Ultra High power
-         *
-         * nanotube interconnected circuit (H-IC + nanotubes)
-         *
-         * quantum chips
-         */
-        ItemList.Circuit_Silicon_Ingot.set(addItem(tLastID = 30, "Monocrystalline Silicon Boule", "Raw Circuit", o));
-        ItemList.Circuit_Silicon_Ingot2.set(addItem(tLastID = 31, "Glowstone doped Monocrystalline Silicon Boule", "Raw Circuit", o));
-        ItemList.Circuit_Silicon_Ingot3.set(addItem(tLastID = 32, "Naquadah doped Monocrystalline Silicon Boule", "Raw Circuit", o));
-        ItemList.Circuit_Silicon_Ingot4.set(addItem(tLastID = 150, "Europium doped Monocrystalline Silicon Boule", "Raw Circuit", o));
-        ItemList.Circuit_Silicon_Ingot5.set(addItem(tLastID = 152, "Americium doped Monocrystalline Silicon Boule", "Raw Circuit", o));
+        ItemList.Circuit_Silicon_Ingot.set(addItem(tLastID = 30, "Monocrystalline Silicon Boule", "The first step in tricking a rock into thinking.", o));
+        ItemList.Circuit_Silicon_Ingot2.set(addItem(tLastID = 31, "Glowstone doped Silicon Boule", "The first step in tricking a rock into thinking.", o));
+        ItemList.Circuit_Silicon_Ingot3.set(addItem(tLastID = 32, "Naquadah doped Silicon Boule", "The first step in tricking a rock into thinking.", o));
+        ItemList.Circuit_Silicon_Ingot4.set(addItem(tLastID = 150, "Europium doped Silicon Boule", "The first step in tricking a rock into thinking.", o));
+        ItemList.Circuit_Silicon_Ingot5.set(addItem(tLastID = 152, "Americium doped Silicon Boule", "Not to oversimplify, you gotta put lightning into the rock first.", o));
 
-        ItemList.Circuit_Silicon_Wafer.set(addItem(tLastID = 33, "Wafer", "Raw Circuit", o));
-        ItemList.Circuit_Silicon_Wafer2.set(addItem(tLastID = 34, "Glowstone doped Wafer", "Raw Circuit", o));
-        ItemList.Circuit_Silicon_Wafer3.set(addItem(tLastID = 35, "Naquadah doped Wafer", "Raw Circuit", o));
-        ItemList.Circuit_Silicon_Wafer4.set(addItem(tLastID = 151, "Europium doped Wafer", "Raw Circuit", o));
-        ItemList.Circuit_Silicon_Wafer5.set(addItem(tLastID = 153, "Americium doped Wafer", "Raw Circuit", o));
+        ItemList.Circuit_Silicon_Wafer.set(addItem(tLastID = 33, "Raw Silicon Wafer", "Ready for lithography", o));
+        ItemList.Circuit_Silicon_Wafer2.set(addItem(tLastID = 34, "Raw Silicon Wafer", "Ready for lithography", o));
+        ItemList.Circuit_Silicon_Wafer3.set(addItem(tLastID = 35, "Raw Naquadah Silicon Wafer", "Ready for lithography", o));
+        ItemList.Circuit_Silicon_Wafer4.set(addItem(tLastID = 151, "Raw Europium Silicon Wafer", "Ready for lithography", o));
+        ItemList.Circuit_Silicon_Wafer5.set(addItem(tLastID = 153, "Raw Americium Silicon Wafer", "Ready for lithography", o));
 
-        ItemList.Circuit_Wafer_ILC.set(addItem(tLastID = 36, "Integrated Logic Circuit (Wafer)", "Raw Circuit", o));
-        ItemList.Circuit_Chip_ILC.set(addItem(tLastID = 37, "Integrated Logic Circuit", "Integrated Circuit", o));
+        ItemList.Circuit_Wafer_ILC.set(addItem(tLastID = 36, "Etched Integrated Logic Circuit", "Ready for final cutting", o));
+        ItemList.Circuit_Chip_ILC.set(addItem(tLastID = 37, "Integrated Logic Circuit", "Basic Computing Component", o));
 
-        ItemList.Circuit_Wafer_Ram.set(addItem(tLastID = 38, "Random Access Memory Chip (Wafer)", "Raw Circuit", o));
-        ItemList.Circuit_Chip_Ram.set(addItem(tLastID = 39, "Random Access Memory Chip", "Integrated Circuit", o));
+        ItemList.Circuit_Wafer_Ram.set(addItem(tLastID = 38, "Etched RAM Circuit Wafer", "Ready for final cutting", o));
+        ItemList.Circuit_Chip_Ram.set(addItem(tLastID = 39, "Raw RAM Circuit", "Low capacity volatile memory", o));
 
-        ItemList.Circuit_Wafer_NAND.set(addItem(tLastID = 40, "NAND Memory Chip (Wafer)", "Raw Circuit", o));
-        ItemList.Circuit_Chip_NAND.set(addItem(tLastID = 41, "NAND Memory Chip", "Integrated Circuit", o));
+        ItemList.Circuit_Wafer_NAND.set(addItem(tLastID = 40, "Etched NAND Circuit", "Ready for final cutting", o));
+        ItemList.Circuit_Chip_NAND.set(addItem(tLastID = 41, "NAND Chip", "Makes the tough decisions", o));
 
-        ItemList.Circuit_Wafer_NOR.set(addItem(tLastID = 42, "NOR Memory Chip (Wafer)", "Raw Circuit", o));
-        ItemList.Circuit_Chip_NOR.set(addItem(tLastID = 43, "NOR Memory Chip", "Integrated Circuit", o));
+        ItemList.Circuit_Wafer_NOR.set(addItem(tLastID = 42, "Etched NOR Circuit", "Ready for final cutting", o));
+        ItemList.Circuit_Chip_NOR.set(addItem(tLastID = 43, "NOR Memory Chip", "Makes the tough decisions", o));
 
         ItemList.Circuit_Wafer_CPU.set(addItem(tLastID = 44, "Central Processing Unit (Wafer)", "Raw Circuit", o));
         ItemList.Circuit_Chip_CPU.set(addItem(tLastID = 45, "Central Processing Unit", "Integrated Circuit", o));
@@ -144,13 +107,7 @@ public class GT_MetaGenerated_Item_03
 
         ItemList.Circuit_Wafer_QPIC.set(addItem(tLastID = 164, "QPIC Wafer", "Raw Circuit", o));
         ItemList.Circuit_Chip_QPIC.set(addItem(tLastID = 165, "Quantum Power IC", "Quantum Power Circuit", o));
-        /**
-         * Engraved Crystal Chip
-         * Engraved Lapotron Chip
-         * Crystal CPU
-         * SoCrystal
-         * stem cells (disassemble eggs)
-         */
+
         ItemList.Circuit_Chip_CrystalSoC2.set(addItem(tLastID = 68, "Raw Advanced Crystal Chip", "Raw Advanced Crystal Processor", o));
         ItemList.Circuit_Parts_RawCrystalChip.set(addItem(tLastID = 69, "Raw Crystal Chip", "Raw Crystal Processor", o));
         ItemList.Circuit_Chip_CrystalCPU.set(addItem(tLastID = 70, "Crystal Processing Unit", "Crystal CPU", o)); //Crystal chip elite part
@@ -161,28 +118,17 @@ public class GT_MetaGenerated_Item_03
         ItemList.Circuit_Chip_Biocell.set(addItem(tLastID = 76, "Biocells", "Mutated Raw inteligence", o));
         ItemList.Circuit_Chip_BioCPU.set(addItem(tLastID = 77, "Bio Processing Unit", "Bio CPU", o));
 
-        //Nand Chip
         ItemList.NandChip.set(addItem(tLastID = 75, "NAND Chip", "A very simple Circuit", OrePrefixes.circuit.get(Materials.Primitive), SubTag.NO_UNIFICATION));
 
-        //Vacuum Tube				Item01
-        //Basic Circuit				IC2
-        //Good Circuit				Item01
-
-        //Integrated Logic Circuit  Item01
         ItemList.Circuit_Integrated_Good.set(addItem(tLastID = 79, "Good Integrated Circuit", "Good Circuit", OrePrefixes.circuit.get(Materials.Good), SubTag.NO_UNIFICATION));
-        //Good Integrated Circuit   Item01
-        //Advanced Circuit			IC2
 
         ItemList.Circuit_Microprocessor.set(addItem(tLastID = 78, "Microprocessor", "A Basic Circuit", OrePrefixes.circuit.get(Materials.Basic), SubTag.NO_UNIFICATION));
         ItemList.Circuit_Processor.set(addItem(tLastID = 80, "Integrated Processor", "A Good Circuit", OrePrefixes.circuit.get(Materials.Good), SubTag.NO_UNIFICATION));
         //ItemList.Circuit_Computer.set(addItem(tLastID = 81, "Processor Assembly", "Advanced Circuit",  new Object[]{OrePrefixes.circuit.get(Materials.Advanced), SubTag.NO_UNIFICATION}));
-        //Workstation/          	Item01 Datacircuit
-        //Mainframe					Item01 DataProcessor
 
         ItemList.Circuit_Nanoprocessor.set(addItem(tLastID = 82, "Nanoprocessor", "An Advanced Circuit", OrePrefixes.circuit.get(Materials.Advanced), SubTag.NO_UNIFICATION));
         ItemList.Circuit_Nanocomputer.set(addItem(tLastID = 83, "Nanoprocessor Assembly", "An Extreme Circuit", OrePrefixes.circuit.get(Materials.Data), SubTag.NO_UNIFICATION));
         ItemList.Circuit_Elitenanocomputer.set(addItem(tLastID = 84, "Elite Nanocomputer", "An Elite Circuit", OrePrefixes.circuit.get(Materials.Elite), SubTag.NO_UNIFICATION));
-        //Nanoprocessor Mainframe  	Item01 Energy Flow Circuit
 
         ItemList.Circuit_Quantumprocessor.set(addItem(tLastID = 85, "Quantumprocessor", "An Extreme Circuit", OrePrefixes.circuit.get(Materials.Data), SubTag.NO_UNIFICATION));
         ItemList.Circuit_Quantumcomputer.set(addItem(tLastID = 86, "Quantumprocessor Assembly", "An Elite Circuit", OrePrefixes.circuit.get(Materials.Elite), SubTag.NO_UNIFICATION));
@@ -204,13 +150,13 @@ public class GT_MetaGenerated_Item_03
 
         ItemList.Circuit_Bioprocessor.set(addItem(tLastID = 97, "Bioprocessor", "An Ultimate Circuit", OrePrefixes.circuit.get(Materials.Ultimate), SubTag.NO_UNIFICATION));
 
-        ItemList.Circuit_Board_Coated_Basic.set(addItem(tLastID = 100, "Circuit Board", "A basic Circuit Board", o));
-        ItemList.Circuit_Board_Phenolic_Good.set(addItem(tLastID = 101, "Good Circuit Board", "A good Circuit Board", o));
-        ItemList.Circuit_Board_Epoxy_Advanced.set(addItem(tLastID = 102, "Advanced Circuit Board", "A advanced Circuit Board", o));
+        ItemList.Circuit_Board_Coated_Basic.set(addItem(tLastID = 100, "Etched Crude Circuit Board", "[LV] A somewhat sturdy place to put some electronics", o));
+        ItemList.Circuit_Board_Phenolic_Good.set(addItem(tLastID = 101, "Etched Basic Circuit Board", "[MV] A decent foundation for some electronics", o));
+        ItemList.Circuit_Board_Epoxy_Advanced.set(addItem(tLastID = 102, "Etched Epoxy Circuit Board", "[EV] A sturdy foundation for most circuits!", o));
         ItemList.Circuit_Board_Fiberglass_Advanced.set(addItem(tLastID = 103, "More Advanced Circuit Board", "A more advanced Circuit Board", o));
         ItemList.Circuit_Board_Multifiberglass_Elite.set(addItem(tLastID = 104, "Elite Circuit Board", "A elite Circuit Board", o));
         ItemList.Circuit_Board_Wetware_Extreme.set(addItem(tLastID = 105, "Extreme Wetware Lifesupport Circuit Board", "The Board that keeps life", o));
-        ItemList.Circuit_Board_Plastic_Advanced.set(addItem(tLastID = 106, "Plastic Circuit Board", "A good Board", o));
+        ItemList.Circuit_Board_Plastic_Advanced.set(addItem(tLastID = 106, "Etched Polyethylene Circuit Board", "[HV] A cheap foundation for some electronics", o));
         ItemList.Circuit_Board_Bio_Ultra.set(addItem(tLastID = 107, "Ultra Bio Mutated Circuit Board", "Bio genetic mutated Board", o));
         ItemList.Circuit_Biomainframe.set(addItem(tLastID = 120, "Bio Mainframe", "A Bio Circuit", OrePrefixes.circuit.get(Materials.Bio), SubTag.NO_UNIFICATION));
 
