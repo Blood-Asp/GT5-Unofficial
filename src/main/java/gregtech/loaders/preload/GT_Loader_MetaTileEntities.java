@@ -1019,7 +1019,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         ItemList.OreDrill4.set(new GT_MetaTileEntity_OreDrillingPlant4(1179, "multimachine.oredrill4", "Ore Drilling Rig MKVII").getStackForm(1));
 
         ItemList.PyrolyseOven.set(new GT_MetaTileEntity_PyrolyseOven(1159, "multimachine.pyro", "Pyrolyse Oven").getStackForm(1));
-        GT_ModHandler.addCraftingRecipe(ItemList.PyrolyseOven.get(1L), bitsd, new Object[]{"WEP", "EME", "WCP", 'M', ItemList.Hull_MV, 'W', ItemList.Electric_Piston_MV, 'P', OrePrefixes.wireGt04.get(Materials.Cupronickel), 'E', OrePrefixes.circuit.get(Materials.Good), 'C', ItemList.Electric_Pump_MV});
+        GT_ModHandler.addCraftingRecipe(ItemList.PyrolyseOven.get(1L), bitsd, new Object[]{"WEP", "EME", "WCP", 'M', ItemList.Hull_LV, 'W', ItemList.Electric_Piston_LV, 'P', OrePrefixes.wireGt04.get(Materials.Cupronickel), 'E', OrePrefixes.circuit.get(Materials.Basic), 'C', ItemList.Electric_Pump_LV});
 
         ItemList.OilCracker.set(new GT_MetaTileEntity_OilCracker(1160, "multimachine.cracker", "Oil Cracking Unit").getStackForm(1));
         GT_ModHandler.addCraftingRecipe(ItemList.OilCracker.get(1L), bitsd, new Object[]{aTextWireCoil, "EME", aTextWireCoil, 'M', ItemList.Hull_HV, 'W', ItemList.Casing_Coil_Cupronickel, 'E', OrePrefixes.circuit.get(Materials.Advanced), 'C', ItemList.Electric_Pump_HV});
