@@ -24,10 +24,8 @@ import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
     private static final String localizedDescFormat = GT_LanguageManager.addStringLocalization(
             "gt.blockmachines.hatch.muffler.desc.format",
-            "Outputs the Pollution (Might cause ... things)%n" +
-                    "DO NOT OBSTRUCT THE OUTPUT!%n" +
-                    "Reduces Pollution to %d%%%n" +
-                    "Recovers %d%% of CO2/CO/SO2");
+            "Do not obstruct the output.%n" +
+                    "Reduces Pollution to %d%%%n");
     private final int pollutionReduction = calculatePollutionReduction(100);
     private final int pollutionRecover = 100 - pollutionReduction;
     private final String[] description = String.format(localizedDescFormat, pollutionReduction, pollutionRecover)

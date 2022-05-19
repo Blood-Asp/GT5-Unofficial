@@ -320,7 +320,7 @@ public class GT_LanguageManager {
     	addStringLocalization("Interaction_DESCRIPTION_Index_201", "Nothing");
     	addStringLocalization("Interaction_DESCRIPTION_Index_202", "Pollution in Chunk: ");
     	addStringLocalization("Interaction_DESCRIPTION_Index_203", " gibbl");
-    	addStringLocalization("Interaction_DESCRIPTION_Index_204", "No Pollution in Chunk! HAYO!");
+    	addStringLocalization("Interaction_DESCRIPTION_Index_204", "Can you believe there are people who think the pollution mechanic is good?");
     	addStringLocalization("Interaction_DESCRIPTION_Index_205", " of ");
 		addStringLocalization("Interaction_DESCRIPTION_Index_206", "Scan for Assembly Line");
 //    	addStringLocalization("Interaction_DESCRIPTION_Index_207", "Grab");
