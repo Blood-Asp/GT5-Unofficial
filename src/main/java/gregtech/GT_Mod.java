@@ -130,7 +130,7 @@ public class GT_Mod implements IGT_Mod {
     public static GT_Achievements achievements;
     private final String aTextGeneral = "general";
     private final String aTextIC2 = "ic2_";
-    public static final Logger GT_FML_LOGGER = LogManager.getLogger("GregTech GTNH");
+    public static final Logger GT_FML_LOGGER = LogManager.getLogger("GregTech MEGA");
 
 
     static {
