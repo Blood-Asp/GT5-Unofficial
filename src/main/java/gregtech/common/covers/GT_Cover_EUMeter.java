@@ -5,6 +5,7 @@ import gregtech.api.gui.GT_GUICover;
 import gregtech.api.gui.widgets.GT_GuiIcon;
 import gregtech.api.gui.widgets.GT_GuiIconCheckButton;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.tileentity.IBatteryContainer;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.items.GT_MetaBase_Item;
@@ -69,26 +70,25 @@ public class GT_Cover_EUMeter extends GT_CoverBehavior {
             if (aTileEntity instanceof IGregTechTileEntity) {
                 IGregTechTileEntity tTileEntity = (IGregTechTileEntity) aTileEntity;
                 IMetaTileEntity mTileEntity = tTileEntity.getMetaTileEntity();
-                if (mTileEntity instanceof GT_MetaTileEntity_BasicBatteryBuffer) {
-                    GT_MetaTileEntity_BasicBatteryBuffer buffer = (GT_MetaTileEntity_BasicBatteryBuffer) mTileEntity;
-                    if (buffer.mInventory != null) {
-                        for (ItemStack aStack : buffer.mInventory) {
-                            if (GT_ModHandler.isElectricItem(aStack)) {
-
-                                if (aStack.getItem() instanceof GT_MetaBase_Item) {
-                                    Long[] stats = ((GT_MetaBase_Item) aStack.getItem()).getElectricStats(aStack);
-                                    if (stats != null) {
-                                        tScale = tScale + stats[0];
-                                        tStored = tStored + ((GT_MetaBase_Item) aStack.getItem()).getRealCharge(aStack);
-                                    }
-                                } else if (aStack.getItem() instanceof IElectricItem) {
-                                    tStored = tStored + (long) ic2.api.item.ElectricItem.manager.getCharge(aStack);
-                                    tScale = tScale + (long) ((IElectricItem) aStack.getItem()).getMaxCharge(aStack);
-                                }
-                            }
-                        }
-
-                    }
+                if (mTileEntity instanceof IBatteryContainer) {
+                    tScale += ((IBatteryContainer) mTileEntity).getBatteryCapacity();
+                    tStored += ((IBatteryContainer) mTileEntity).getBatteryEnergyStored();
+                }
+            }
+            tScale = tScale / 15L;
+            if (tScale > 0L) {
+                aTileEntity.setOutputRedstoneSignal(aSide, aCoverVariable % 2 == 0 ? (byte) (int) (tStored / tScale) : (byte) (int) (15L - tStored / tScale));
+            } else {
+                aTileEntity.setOutputRedstoneSignal(aSide, (byte) (aCoverVariable % 2 == 0 ? 0 : 15));
+            }
+        } else if (aCoverVariable < 14) {
+            long tStored = aTileEntity.getStoredEU();
+            if (aTileEntity instanceof IGregTechTileEntity) {
+                IGregTechTileEntity tTileEntity = (IGregTechTileEntity) aTileEntity;
+                IMetaTileEntity mTileEntity = tTileEntity.getMetaTileEntity();
+                if (mTileEntity instanceof IBatteryContainer) {
+                    tScale = ((IBatteryContainer) mTileEntity).getBatteryCapacity();
+                    tStored = ((IBatteryContainer) mTileEntity).getBatteryEnergyStored();
                 }
             }
             tScale = tScale / 15L;
@@ -103,8 +103,8 @@ public class GT_Cover_EUMeter extends GT_CoverBehavior {
 
     @Override
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % 12;
-        if(aCoverVariable <0){aCoverVariable = 11;}
+        aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % 14;
+        if(aCoverVariable <0){aCoverVariable = 13;}
         switch(aCoverVariable) {
             case 0: GT_Utility.sendChatToPlayer(aPlayer, trans("031", "Normal Universal Storage")); break;
             case 1: GT_Utility.sendChatToPlayer(aPlayer, trans("032", "Inverted Universal Storage")); break;
@@ -118,6 +118,8 @@ public class GT_Cover_EUMeter extends GT_CoverBehavior {
             case 9: GT_Utility.sendChatToPlayer(aPlayer, trans("040", "Inverted Average Electric Output")); break;
             case 10: GT_Utility.sendChatToPlayer(aPlayer, trans("041", "Normal Electricity Storage(Including Batteries)")); break;
             case 11: GT_Utility.sendChatToPlayer(aPlayer, trans("042", "Inverted Electricity Storage(Including Batteries)")); break;
+            case 12: GT_Utility.sendChatToPlayer(aPlayer, trans("043", "Normal Electricity Storage(Only Batteries)")); break;
+            case 13: GT_Utility.sendChatToPlayer(aPlayer, trans("044", "Inverted Electricity Storage(Only Batteries)")); break;
         }
         return aCoverVariable;
     }
@@ -205,7 +207,9 @@ public class GT_Cover_EUMeter extends GT_CoverBehavior {
                     .setTooltipText(trans("260", "Average Electric Output"));
             b = new GT_GuiIconCheckButton(this, 5, startX + spaceX*4, startY+spaceY*0, GT_GuiIcon.CHECKMARK, null)
                     .setTooltipText(trans("261", "Electricity Storage(Including Batteries)"));
-            b = new GT_GuiIconCheckButton(this, 6, startX + spaceX*0, startY+spaceY*3+4, GT_GuiIcon.REDSTONE_ON, GT_GuiIcon.REDSTONE_OFF);
+            b = new GT_GuiIconCheckButton(this, 6, startX + spaceX*0, startY+spaceY*3, GT_GuiIcon.CHECKMARK, null)
+                    .setTooltipText(trans("262", "Electricity Storage(Only Batteries)"));
+            b = new GT_GuiIconCheckButton(this, 7, startX + spaceX*4, startY+spaceY*3+4, GT_GuiIcon.REDSTONE_ON, GT_GuiIcon.REDSTONE_OFF);
         }
 
         @Override
@@ -216,7 +220,7 @@ public class GT_Cover_EUMeter extends GT_CoverBehavior {
                 s2 = trans("INVERTED","Inverted");
             else
                 s2 = trans("NORMAL","Normal");
-            this.fontRendererObj.drawString(s2,  startX + spaceX*1, 8+startY+spaceY*3, 0xFF555555);
+            this.fontRendererObj.drawString(s2,  startX + spaceX*5, 8+startY+spaceY*3, 0xFF555555);
 
             this.fontRendererObj.drawString("Universal",
                     startX + spaceX*1, 4+startY+spaceY*1, 0xFF555555);
@@ -230,6 +234,8 @@ public class GT_Cover_EUMeter extends GT_CoverBehavior {
                     startX + spaceX*5, 4+startY+spaceY*2, 0xFF555555);
             this.fontRendererObj.drawString("EU stored",
                     startX + spaceX*5, 4+startY+spaceY*0, 0xFF555555);
+            this.fontRendererObj.drawString("Bat stored",
+                    startX + spaceX*1, 4+startY+spaceY*3, 0xFF555555);
         }
 
         @Override
@@ -239,7 +245,7 @@ public class GT_Cover_EUMeter extends GT_CoverBehavior {
 
         @Override
         public void buttonClicked(GuiButton btn){
-            if (btn.id == 6 || !isEnabled(btn.id)){
+            if (btn.id == 7 || !isEnabled(btn.id)){
                 coverVariable = getNewCoverVariable(btn.id, ((GT_GuiIconCheckButton) btn).isChecked());
                 GT_Values.NW.sendToServer(new GT_Packet_TileEntityCover(side, coverID, coverVariable, tile));
             }
@@ -252,7 +258,7 @@ public class GT_Cover_EUMeter extends GT_CoverBehavior {
         }
 
         private int getNewCoverVariable(int id, boolean checked) {
-            if (id == 6) {
+            if (id == 7) {
                 if (checked)
                     return coverVariable & ~0x1;
                 else
@@ -262,7 +268,7 @@ public class GT_Cover_EUMeter extends GT_CoverBehavior {
         }
 
         private boolean isEnabled(int id) {
-            if (id == 6)
+            if (id == 7)
                 return (coverVariable & 0x1) > 0;
             return (coverVariable >> 1) == id;
         }
