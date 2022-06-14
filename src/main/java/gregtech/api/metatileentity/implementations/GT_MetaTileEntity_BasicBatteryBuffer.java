@@ -4,6 +4,7 @@ import gregtech.api.enums.Textures;
 import gregtech.api.gui.*;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.tileentity.IBatteryContainer;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.items.GT_MetaBase_Item;
 import gregtech.api.util.GT_ModHandler;
@@ -23,7 +24,7 @@ import static gregtech.api.enums.GT_Values.V;
  * This is the main construct for my Basic Machines such as the Automatic Extractor
  * Extend this class to make a simple Machine
  */
-public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_TieredMachineBlock {
+public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_TieredMachineBlock implements IBatteryContainer {
     public boolean mCharge = false, mDecharge = false;
     public int mBatteryCount = 0, mChargeableCount = 0;
     private long count = 0;
@@ -326,6 +327,49 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
                 GT_Utility.formatNumbers(getBaseMetaTileEntity().getAverageElectricInput())+" EU/t",
                 "Average output:",
                 GT_Utility.formatNumbers(getBaseMetaTileEntity().getAverageElectricOutput())+" EU/t"};
+    }
+
+    @Override
+    public long getBatteryCapacity() {
+        long capacity = 0;
+        if (mInventory != null) {
+            for (ItemStack aStack : mInventory) {
+                if (GT_ModHandler.isElectricItem(aStack)) {
+
+                    if (aStack.getItem() instanceof GT_MetaBase_Item) {
+                        Long[] stats = ((GT_MetaBase_Item) aStack.getItem()).getElectricStats(aStack);
+                        if (stats != null) {
+                            capacity = capacity + stats[0];
+                            //tStored = tStored + ((GT_MetaBase_Item) aStack.getItem()).getRealCharge(aStack);
+                        }
+                    } else if (aStack.getItem() instanceof IElectricItem) {
+                        //tStored = tStored + (long) ic2.api.item.ElectricItem.manager.getCharge(aStack);
+                        capacity = capacity + (long) ((IElectricItem) aStack.getItem()).getMaxCharge(aStack);
+                    }
+                }
+            }
+        }
+        return capacity;
+    }
+
+    @Override
+    public long getBatteryEnergyStored() {
+        long stored = 0;
+        if (mInventory != null) {
+            for (ItemStack aStack : mInventory) {
+                if (GT_ModHandler.isElectricItem(aStack)) {
+                    if (aStack.getItem() instanceof GT_MetaBase_Item) {
+                        Long[] stats = ((GT_MetaBase_Item) aStack.getItem()).getElectricStats(aStack);
+                        if (stats != null) {
+                            stored = stored + ((GT_MetaBase_Item) aStack.getItem()).getRealCharge(aStack);
+                        }
+                    } else if (aStack.getItem() instanceof IElectricItem) {
+                        stored = stored + (long) ic2.api.item.ElectricItem.manager.getCharge(aStack);
+                    }
+                }
+            }
+        }
+        return stored;
     }
 
     @Override
