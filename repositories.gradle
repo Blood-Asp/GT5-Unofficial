@@ -45,4 +45,8 @@ repositories {
         name = "Sponge Maven"
         url = "https://repo.spongepowered.org/repository/maven-public"
     }
+    maven {
+        name = "gtmega-mavenpattern"
+        url = "https://gtmega.falsepattern.com/"
+    }
 }
