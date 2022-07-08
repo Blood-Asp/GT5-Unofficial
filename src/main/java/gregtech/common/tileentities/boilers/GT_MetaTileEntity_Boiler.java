@@ -255,14 +255,14 @@ public abstract class GT_MetaTileEntity_Boiler
 
     public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         if (GT_Mod.gregtechproxy.mAllowSmallBoilerAutomation)
-        return true;
+        return aIndex == 1 || aIndex == 3;
         else
             return false;
     }
 
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         if(GT_Mod.gregtechproxy.mAllowSmallBoilerAutomation)
-        return true;
+        return aIndex == 2;
         else
             return false;
     }
