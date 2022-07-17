@@ -2,6 +2,8 @@
 
 dependencies {
     compile("com.github.GTMEGA:StructureLib:0237ab2549:deobf")
+    compile("codechicken:codechickencore-mc1.7.10:1.0.9-gtmega:dev")
+    compile("codechicken:codechickenlib-mc1.7.10:1.1.4-gtmega:dev")
     compile("codechicken:notenoughitems-mc1.7.10:2.1.5-gtmega:dev")
 
     compile("net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev")
@@ -53,14 +55,19 @@ dependencies {
     compileOnly("thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev") {
         transitive = false
     }
-    compileOnly("org.projectlombok:lombok:1.18.22") {
+    compileOnly("com.github.GTMEGA:Chisel:2.9.19-mega:dev") {
         transitive = false
     }
-    annotationProcessor("org.projectlombok:lombok:1.18.22")
+    compileOnly("org.projectlombok:lombok:1.18.24") {
+        transitive = false
+    }
+    annotationProcessor('org.projectlombok:lombok:1.18.24')
 
     // Dev for better TileEntities
     //implementation("org.reflections:reflections:0.10.2")
-    compileOnly("com.github.basdxz:Apparatus:2.11.1:dev")
+    compileOnly("com.github.basdxz:Apparatus:2.12.3:dev") {
+        transitive = false
+    }
     //compile("com.github.GTMEGA:CTMLib:17cd6ebc23:deobf")
     //compile("com.github.GTMEGA:Chisel:2.9.14-GTMEGA:deobf")
 }
