@@ -47,5 +47,5 @@ jobs:
       - name: Publish to Maven
         run: ./gradlew publish
         env:
-          MAVEN_USER: ${{ secrets.MAVEN_DEPLOY_USER }}
-          MAVEN_PASSWORD: ${{ secrets.MAVEN_DEPLOY_PASSWORD }}
+          MAVEN_DEPLOY_USER: ${{ secrets.MAVEN_DEPLOY_USER }}
+          MAVEN_DEPLOY_PASSWORD: ${{ secrets.MAVEN_DEPLOY_PASSWORD }}
