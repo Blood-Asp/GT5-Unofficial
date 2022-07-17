@@ -7,15 +7,15 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.ResourceLocation;
 
-public class GT_GUIContainer_IntegartedCircuit extends GuiContainer {
+public class GT_GUIContainer_IntegratedCircuit extends GuiContainer {
 
     private static final ResourceLocation BACKGROUND = new ResourceLocation("gregtech:textures/gui/Botworks_Circuitprogrammer.png");
     //the gui seems to be a few pixels to much to the left
-    private static int guiOffsett = 24;
+    private static int guiOffset = 24;
 
     private GT_Container_IntegratedCircuit container;
 
-    public GT_GUIContainer_IntegartedCircuit(GT_Container_IntegratedCircuit container) {
+    public GT_GUIContainer_IntegratedCircuit(GT_Container_IntegratedCircuit container) {
         super(container);
         this.container = container;
     }
@@ -24,9 +24,9 @@ public class GT_GUIContainer_IntegartedCircuit extends GuiContainer {
     public void initGui() {
         super.initGui();
         for (int i = 0; i < 5; i++) {
-            for (int j = 0; j <5 ; j++) {
-                int value = j*5+i;
-                buttonList.add(new GT_GuiButtonNumber(0,value,guiLeft+16+i*20+guiOffsett,guiTop+16+j*22,16,20,""+value));
+            for (int j = 0; j < 5; j++) {
+                int value = j * 5 + i;
+                buttonList.add(new GT_GuiButtonNumber(0, value, guiLeft + 16 + i * 20 + guiOffset, guiTop + 16 + j * 22, 16, 20, "" + value));
             }
         }
     }
@@ -34,9 +34,8 @@ public class GT_GUIContainer_IntegartedCircuit extends GuiContainer {
     @Override
     protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_) {
         mc.getTextureManager().bindTexture(BACKGROUND);
-        drawTexturedModalRect(guiLeft+24,guiTop,0,0,xSize,ySize);
+        drawTexturedModalRect(guiLeft + 24, guiTop, 0, 0, xSize, ySize);
     }
-
 
 
     @Override

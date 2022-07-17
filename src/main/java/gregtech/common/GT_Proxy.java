@@ -28,7 +28,7 @@ import gregtech.common.gui.GT_ContainerVolumetricFlask;
 import gregtech.common.gui.GT_Container_IntegratedCircuit;
 import gregtech.common.gui.GT_GUIContainerVolumetricFlask;
 import gregtech.common.items.GT_MetaGenerated_Item_98;
-import gregtech.common.gui.GT_GUIContainer_IntegartedCircuit;
+import gregtech.common.gui.GT_GUIContainer_IntegratedCircuit;
 import gregtech.common.items.GT_IntegratedCircuit_Item;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import net.minecraft.block.Block;
@@ -1700,7 +1700,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
             } else if (ID == 11) {
                 ItemStack heldStack = aPlayer.inventory.mainInventory[aPlayer.inventory.currentItem];
                 if (heldStack != null && heldStack.getItem() instanceof GT_IntegratedCircuit_Item) {
-                    return new GT_GUIContainer_IntegartedCircuit(new GT_Container_IntegratedCircuit(heldStack));
+                    return new GT_GUIContainer_IntegratedCircuit(new GT_Container_IntegratedCircuit(heldStack));
                 }
             }
             return null;
