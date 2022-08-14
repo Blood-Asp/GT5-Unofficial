@@ -216,7 +216,8 @@ public class GT_Tool_Drill_LV extends GT_Tool implements IAOETool {
         NBTTagCompound nbtStats = GT_MetaGenerated_Tool.getStatNbt(aStack);
         if (nbtStats != null) {
             int aoe = ((GT_Tool_Drill_LV) stats).getAOE(nbtStats);
-            aList.add(EnumChatFormatting.WHITE + "AOE " + EnumChatFormatting.GREEN + xLen[aoe] + "X" + yLen[aoe]);
+            aList.add(EnumChatFormatting.GRAY + "Shift + RMB to change AOE size.");
+            aList.add(EnumChatFormatting.WHITE + "AOE: " + EnumChatFormatting.GREEN + xLen[aoe] + "X" + yLen[aoe]);
         }
     }
 }
