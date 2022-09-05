@@ -82,7 +82,7 @@ public class GT_ModHandler {
     public static volatile int VERSION = 509;
     public static Collection<String> sNativeRecipeClasses = new HashSet<String>(), sSpecialRecipeClasses = new HashSet<String>();
     public static GT_HashSet<GT_ItemStack> sNonReplaceableItems = new GT_HashSet<GT_ItemStack>();
-    public static Object sBoxableWrapper = GT_Utility.callConstructor("gregtechmod.api.util.GT_IBoxableWrapper", 0, null, false);
+    public static Object sBoxableWrapper = new GT_IBoxableWrapper();
     private static Map<IRecipeInput, RecipeOutput> sExtractorRecipes = new /*Concurrent*/HashMap<IRecipeInput, RecipeOutput>();
     private static Map<IRecipeInput, RecipeOutput> sMaceratorRecipes = new /*Concurrent*/HashMap<IRecipeInput, RecipeOutput>();
     private static Map<IRecipeInput, RecipeOutput> sCompressorRecipes = new /*Concurrent*/HashMap<IRecipeInput, RecipeOutput>();
@@ -1886,11 +1886,13 @@ public class GT_ModHandler {
         if (aStack != null) registerBoxableItemToToolBox(aStack.getItem());
     }
 
-    public static void registerBoxableItemToToolBox(Item aItem) {
+    public static void registerBoxableItemToToolBox(Item aItem) {    	
         if (aItem != null && sBoxableWrapper != null) {
             try {
                 ic2.api.item.ItemWrapper.registerBoxable(aItem, (IBoxable) sBoxableWrapper);
-            } catch (Throwable e) {/*Do nothing*/}
+            } catch (Throwable e) {
+            	e.printStackTrace();
+            }
         }
     }
 
