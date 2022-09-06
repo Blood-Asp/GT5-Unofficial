@@ -112,6 +112,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.IFluidHandler;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!
@@ -2422,6 +2423,16 @@ public class GT_Utility {
                 aEnchantment.func_151368_a(mPlayer, mEntity, aLevel);
             }
         }
+    }
+
+    private static final String NORMAL_NUMERICS = "0123456789-";
+    private static final String UNICODE_SUBSCRIPT_NUMERICS = "\u2080\u2081\u2082\u2083\u2084\u2085\u2086\u2087\u2088\u2089\u208B";
+
+    /**
+     * Converts an integer into a subscript string, such as might be used in a chemical formula, using unicode characters.
+     */
+    public static String makeSubscript(int aValue) {
+        return StringUtils.replaceChars(String.valueOf(aValue), NORMAL_NUMERICS, UNICODE_SUBSCRIPT_NUMERICS);
     }
 
 }

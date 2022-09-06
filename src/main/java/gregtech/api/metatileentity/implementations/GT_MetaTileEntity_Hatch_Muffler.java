@@ -146,4 +146,14 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
         if(chk3)
             aWorld.spawnParticle(name, xPos + ran3*0.5F, yPos + floatGen.nextFloat()*0.5F, zPos + floatGen.nextFloat()*0.5F, xSpd, ySpd, zSpd);
     }
+    
+    @Override
+    public boolean isGivingInformation() {
+        return true;
+    }
+    
+    @Override
+    public String[] getInfoData() {
+        return new String[]{"Pollution: " + GT_Pollution.getPollution(getBaseMetaTileEntity())};
+    }
 }
