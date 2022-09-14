@@ -80,3 +80,4 @@ gradlew.bat
 # Linux
 *~
 
+/.nb-gradle/
