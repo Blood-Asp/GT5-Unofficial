@@ -296,6 +296,7 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.ic2EnergySourceCompat = tMainConfig.get("general", "Ic2EnergySourceCompat", true).getBoolean(true);
         gregtechproxy.costlyCableConnection = tMainConfig.get("general", "CableConnectionRequiresSolderingMaterial", false).getBoolean(false);
         gregtechproxy.mHardRadonRecipe = tMainConfig.get("general","HardRadonRecipe",false).getBoolean(false);
+        gregtechproxy.mHardCoreInputTanks = tMainConfig.get("general", "HardCoreInputTanks",false).getBoolean(false);
         GT_LanguageManager.i18nPlaceholder = tMainConfig.get("general", "UsePlaceholderForMaterialNamesInLangFile", true).getBoolean(true);
 
         Materials[] tDisableOres = new Materials[]{Materials.Chrome, Materials.Naquadria, Materials.Silicon, Materials.Cobalt, Materials.Cadmium, Materials.Indium, Materials.Tungsten,
