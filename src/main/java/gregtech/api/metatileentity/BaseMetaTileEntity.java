@@ -2086,4 +2086,70 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     	return slotIndex + indexShift;
     }
 
+   /**
+     * Helper matrix for rotating all covers concurrently.
+     * First index is old facing.
+     * Second index is new facing.
+     * Third index is original cover side.
+     * Value is new cover side.
+     * Rotating between opposite horizontal facings will leave top/bottom alone, and 
+     * rotating between top/bottom will leave north/south alone.
+     * 0=Up, 1=Down, 2=North, 3=South, 4=West, 5=East
+     */
+    private final int[][][] COVER_ROTATION_MATRIX = {
+        {{0, 1, 2, 3, 4, 5}, // Up to Up
+         {1, 0, 2, 3, 5, 4}, // Up to Down
+         {2, 3, 1, 0, 4, 5}, // Up to North
+         {3, 2, 0, 1, 4, 5}, // Up to South
+         {4, 5, 2, 3, 1, 0}, // Up to West
+         {5, 4, 2, 3, 0, 1}}, // Up to East
+         
+        {{1, 0, 2, 3, 5, 4}, // Down to Up
+         {0, 1, 2, 3, 4, 5}, // Down to Down
+         {3, 2, 0, 1, 4, 5}, // Down to North
+         {2, 3, 1, 0, 4, 5}, // Down to South
+         {5, 4, 2, 3, 0, 1}, // Down to West
+         {4, 5, 2, 3, 1, 0}}, // Down to East
+         
+        {{3, 2, 0, 1, 4, 5}, // North to Up
+         {2, 3, 1, 0, 4, 5}, // North to Down
+         {0, 1, 2, 3, 4, 5}, // North to North
+         {0, 1, 3, 2, 5, 4}, // North to South
+         {0, 1, 4, 5, 3, 2}, // North to West
+         {0, 1, 5, 4, 2, 3}}, // North to East
+         
+        {{2, 3, 1, 0, 4, 5}, // South to Up
+         {3, 2, 0, 1, 4, 5}, // South to Down
+         {0, 1, 3, 2, 5, 4}, // South to North
+         {0, 1, 2, 3, 4, 5}, // South to South
+         {0, 1, 5, 4, 2, 3}, // South to West
+         {0, 1, 4, 5, 3, 2}}, // South to East
+         
+        {{5, 4, 2, 3, 0, 1}, // West to Up
+         {4, 5, 2, 3, 1, 0}, // West to Down
+         {0, 1, 5, 4, 2, 3}, // West to North
+         {0, 1, 4, 5, 3, 2}, // West to South
+         {0, 1, 2, 3, 4, 5}, // West to West
+         {0, 1, 3, 2, 5, 4}}, // West to East
+         
+        {{4, 5, 2, 3, 1, 0}, // East to Up
+         {5, 4, 2, 3, 0, 1}, // East to Down
+         {0, 1, 4, 5, 3, 2}, // East to North
+         {0, 1, 5, 4, 2, 3}, // East to South
+         {0, 1, 3, 2, 5, 4}, // East to West
+         {0, 1, 2, 3, 4, 5}} // East to East
+    };
+
+    public void rotateCovers(int oldFacing, int newFacing) {
+        if (oldFacing < 0 || oldFacing >= 6 || newFacing < 0 || newFacing >= 6) return;
+        int[] tCoverSides = new int[6];
+        int[] tCoverData = new int[6];
+        for (int i = 0; i < 6; i++) {
+            tCoverSides[COVER_ROTATION_MATRIX[oldFacing][newFacing][i]] = mCoverSides[i];
+            tCoverData[COVER_ROTATION_MATRIX[oldFacing][newFacing][i]] = mCoverData[i];
+        }
+        mCoverSides = tCoverSides;
+        mCoverData = tCoverData;
+    }
+
 }
